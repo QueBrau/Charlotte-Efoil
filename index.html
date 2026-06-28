@@ -2,11 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#194055" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" href="/photos/CharlotteEfoil.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/photos/CharlotteEfoil.png" />
     <meta
       name="description"
-      content="CharlotteEfoil — the Charlotte area's only mobile eFoil rental and lesson experience on Lake Norman and beyond."
+      content="CharlotteEfoil — the Charlotte area's only mobile eFoil rental and lesson experience on Lake Norman, Lake Wylie, and beyond. Call 704-421-8778."
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CharlotteEfoil | Efoil Lessons" />
+    <meta property="og:description" content="Private eFoil lessons, family outings, and corporate adventures in the Charlotte lakes area. Book your flight over water today." />
+    <meta property="og:image" content="/photos/CharlotteEfoil.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <title>CharlotteEfoil | Efoil Lessons</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +26,19 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SportsActivityLocation",
+        "name": "CharlotteEfoil",
+        "description": "Mobile eFoil lessons and rentals serving Lake Norman, Mountain Island Lake, Lake Wylie, and the Charlotte area.",
+        "telephone": "+1-704-421-8778",
+        "email": "hello@CharlotteEfoil.com",
+        "url": "https://www.charlotteefoil.com",
+        "areaServed": ["Charlotte NC", "Lake Norman", "Lake Wylie", "Mountain Island Lake"],
+        "priceRange": "$$"
+      }
+    </script>
   </head>
   <body class="page-welcome">
     <div data-site-header></div>
@@ -29,16 +53,11 @@
             muted
             loop
             playsinline
-            poster="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=80"
+            preload="auto"
+            poster="/photos/lakenorman.jpg"
           >
             <source src="/videos/hero-efoil.mp4" type="video/mp4" />
           </video>
-          <div class="hero-video-placeholder" data-video-placeholder>
-            <div class="placeholder-inner">
-              <span class="placeholder-badge">Video Placeholder</span>
-              <p>Drop your eFoil hero video at <code>public/videos/hero-efoil.mp4</code></p>
-            </div>
-          </div>
           <div class="hero-gradient"></div>
         </div>
 
@@ -67,8 +86,8 @@
             <p class="eyebrow">Wave Hello</p>
             <h2>The Charlotte area's only place to experience flight over water.</h2>
             <p>
-              Our goal is to make this unique experience accessible to everyone — with low hourly
-              lesson pricing, location adaptability, and expert guided instruction on top-of-the-line
+              Our goal is to make this unique experience accessible to everyone with low hourly
+              lesson pricing, location adaptability, and expert guided instruction on top of the line
               Lift eFoil products.
             </p>
             <ul class="check-list">
@@ -83,9 +102,11 @@
           <div class="split-visual" data-reveal>
             <div class="image-card">
               <img
-                src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=900&q=80"
-                alt="Person gliding over calm lake water"
-                loading="lazy"
+                src="/photos/lakenorman.jpg"
+                alt="Lake Norman shoreline"
+                width="900"
+                height="1125"
+                decoding="async"
               />
             </div>
           </div>
@@ -183,7 +204,7 @@
             <a class="experience-card" href="flight-lessons.html" data-reveal>
               <span class="experience-num">01</span>
               <h3>Private Efoil Lessons</h3>
-              <p>90-minute one-on-one sessions with expert instruction through our 4-step learning process.</p>
+              <p>90-minute one on one sessions with expert instruction through our 4-step learning process.</p>
               <span class="text-link">Learn how it works &rarr;</span>
             </a>
             <a class="experience-card" href="reservation-details.html" data-reveal>
@@ -246,6 +267,19 @@
           <div class="cta-banner-actions">
             <a class="btn btn-primary" href="reservation-request.html">Request a Reservation</a>
             <a class="btn btn-outline-light" href="contact.html">Contact Us</a>
+            <a
+              class="btn btn-outline-light btn-with-icon"
+              href="https://www.instagram.com/charlotteefoil"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+              </svg>
+              Instagram
+            </a>
           </div>
         </div>
       </section>

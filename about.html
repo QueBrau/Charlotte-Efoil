@@ -2,8 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="About CharlotteEfoil — meet your flight crew and learn about the Charlotte area's only mobile eFoil business." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#194055" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" href="/photos/CharlotteEfoil.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/photos/CharlotteEfoil.png" />
+    <meta name="description" content="About CharlotteEfoil — meet Daniel and learn about the Charlotte area's only mobile eFoil business." />
     <title>About Us | CharlotteEfoil</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,32 +23,35 @@
         <div class="container">
           <p class="eyebrow">About Us</p>
           <h1>Meet your flight crew.</h1>
-          <p class="page-lead">Daniel · Donna · Isabella · Sofia — we believe in safe family fun, and our family is committed to you and yours.</p>
+          <p class="page-lead">Led by Daniel — we believe in safe family fun and are committed to you and yours.</p>
         </div>
       </section>
 
       <section class="section">
         <div class="container about-layout">
           <div class="about-visual" data-reveal>
-            <img
-              src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1000&q=80"
-              alt="Calm lake at sunrise"
-              loading="lazy"
-            />
+            <video
+              class="about-video"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+            >
+              <source src="/videos/dan.mov" type="video/mp4" />
+              <source src="/videos/dan.mov" type="video/quicktime" />
+            </video>
             <blockquote>
               <p>"Are you ready to fly?"</p>
-              <cite>Your Flight Attendants</cite>
+              <cite>Daniel, Fearless Leader</cite>
             </blockquote>
           </div>
           <div class="about-copy" data-reveal>
             <h2>Your fearless leader, Daniel</h2>
             <p>CharlotteEfoil is the only mobile eFoil rental business in the Charlotte area. We live, work, and play here — and we're grateful for the responsibility of producing a safe, fun experience for everyone to enjoy.</p>
             <p>We look forward to this fun challenge and can't wait to see many of you out foiling. Carving a way to an experience like no other!</p>
-            <div class="crew-grid">
+            <div class="crew-grid crew-grid--single">
               <div class="crew-card"><strong>Daniel</strong><span>Fearless Leader</span></div>
-              <div class="crew-card"><strong>Donna</strong><span>Flight Crew</span></div>
-              <div class="crew-card"><strong>Isabella</strong><span>Flight Crew</span></div>
-              <div class="crew-card"><strong>Sofia</strong><span>Flight Crew</span></div>
             </div>
             <a class="btn btn-primary" href="reservation-request.html">Come Fly With Us</a>
           </div>
