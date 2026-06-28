@@ -54,17 +54,17 @@ export function renderNav(activePage = "welcome") {
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
-        <ul class="nav-links" id="nav-menu">
-          ${links}
-          <li class="nav-mobile-actions">
-            <a class="btn btn-primary" href="tel:7044218778">Call 704-421-8778</a>
-            <a class="btn btn-secondary" href="reservation-request.html">Request Reservation</a>
-          </li>
-        </ul>
-        <div class="nav-overlay" data-nav-overlay hidden></div>
         <a class="nav-phone" href="tel:7044218778">704-421-8778</a>
       </nav>
-    </header>`;
+    </header>
+    <ul class="nav-links" id="nav-menu">
+      ${links}
+      <li class="nav-mobile-actions">
+        <a class="btn btn-primary" href="tel:7044218778">Call 704-421-8778</a>
+        <a class="btn btn-secondary" href="reservation-request.html">Request Reservation</a>
+      </li>
+    </ul>
+    <div class="nav-overlay" data-nav-overlay hidden></div>`;
 }
 
 export function renderFooter() {
@@ -125,6 +125,35 @@ export function initShell(activePage) {
   initForms();
   initReveal();
   initMobileActionBar();
+  initDesktopNavPlacement();
+}
+
+function initDesktopNavPlacement() {
+  const nav = document.querySelector(".nav");
+  const menu = document.querySelector(".nav-links");
+  const overlay = document.querySelector("[data-nav-overlay]");
+  const phone = document.querySelector(".nav-phone");
+  if (!nav || !menu || !overlay || !phone) return;
+
+  const mq = window.matchMedia("(min-width: 861px)");
+
+  const apply = () => {
+    if (mq.matches) {
+      if (!nav.contains(menu)) {
+        nav.insertBefore(menu, phone);
+        nav.insertBefore(overlay, phone);
+      }
+      return;
+    }
+
+    if (menu.parentElement !== document.body) {
+      document.body.appendChild(overlay);
+      document.body.appendChild(menu);
+    }
+  };
+
+  apply();
+  mq.addEventListener("change", apply);
 }
 
 function initMobileActionBar() {
@@ -155,6 +184,9 @@ function initNavigation() {
     document.body.classList.toggle("nav-open", open);
     header?.classList.toggle("nav-menu-open", open);
     overlay?.toggleAttribute("hidden", !open);
+    if (open) {
+      menu.scrollTop = 0;
+    }
   };
 
   toggle.addEventListener("click", () => {
