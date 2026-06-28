@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Contact CharlotteEfoil — questions, reservations, and eFoil information." />
+    <title>Contact Us | CharlotteEfoil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div data-site-header></div>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <p class="eyebrow">Contact Us</p>
+          <h1>We love helping our customers.</h1>
+          <p class="page-lead">Contact us with any questions or for more information. We're based in Charlotte, NC.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container form-layout">
+          <aside class="form-aside" data-reveal>
+            <div class="contact-info-card">
+              <span class="contact-label">Phone</span>
+              <a href="tel:7044218778">704-421-8778</a>
+            </div>
+            <div class="contact-info-card">
+              <span class="contact-label">Email</span>
+              <a href="mailto:hello@CharlotteEfoil.com">hello@CharlotteEfoil.com</a>
+            </div>
+            <div class="contact-info-card">
+              <span class="contact-label">Location</span>
+              <p>Charlotte, NC<br />Serving Lake Norman &amp; surrounding areas</p>
+            </div>
+            <a class="btn btn-secondary btn-full" href="reservation-request.html">Request Reservation</a>
+          </aside>
+
+          <form class="reservation-form" data-form data-success="Thanks! We'll be in touch soon!" data-reveal>
+            <div class="form-row">
+              <label for="name">Name *</label>
+              <input id="name" name="name" type="text" required />
+            </div>
+            <div class="form-row">
+              <label for="email">Email *</label>
+              <input id="email" name="email" type="email" required />
+            </div>
+            <div class="form-row form-row-full">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="6" required></textarea>
+            </div>
+            <button class="btn btn-primary btn-full" type="submit">Submit</button>
+            <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+    <div data-site-footer></div>
+    <script type="module">
+      import { initShell } from "/js/shell.js";
+      initShell("contact");
+    </script>
+  </body>
+</html>

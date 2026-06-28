@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Request a CharlotteEfoil reservation — lessons, demonstrations, corporate events, and family outings." />
+    <title>Reservation Request | CharlotteEfoil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div data-site-header></div>
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <p class="eyebrow">Reservation Request</p>
+          <h1>Schedule your eFoil adventure.</h1>
+          <p class="page-lead">We use top-of-the-line Lift eFoils for demos and lessons. Fill out the form below and we'll contact you to schedule your lesson, demonstration, or event. This is a request — we'll confirm dates, locations, and details with you directly.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container form-layout">
+          <aside class="form-aside" data-reveal>
+            <h2>What happens next?</h2>
+            <ol class="numbered-list">
+              <li>Submit your request with preferred dates and session type.</li>
+              <li>We call you to compare schedules and discuss details.</li>
+              <li>Review and sign safety waivers before your first flight.</li>
+              <li>Show up ready to fly — we bring boards, helmets, and life jackets.</li>
+            </ol>
+            <p class="form-note-block">Reservations are not confirmed until we contact you and all documents are reviewed and signed.</p>
+            <a class="text-link" href="tel:7044218778">Prefer to call? 704-421-8778</a>
+          </aside>
+
+          <form class="reservation-form" data-form data-success="Thanks for submitting! We'll be in touch soon!" data-reveal>
+            <div class="form-row">
+              <label for="firstName">First Name *</label>
+              <input id="firstName" name="firstName" type="text" required />
+            </div>
+            <div class="form-row">
+              <label for="lastName">Last Name *</label>
+              <input id="lastName" name="lastName" type="text" required />
+            </div>
+            <div class="form-row">
+              <label for="email">Email *</label>
+              <input id="email" name="email" type="email" required />
+            </div>
+            <div class="form-row">
+              <label for="phone">Phone *</label>
+              <input id="phone" name="phone" type="tel" required />
+            </div>
+
+            <fieldset class="form-fieldset">
+              <legend>Preferred session time</legend>
+              <label class="checkbox-label"><input type="radio" name="sessionTime" value="morning" /> Morning Session (8am–10am)</label>
+              <label class="checkbox-label"><input type="radio" name="sessionTime" value="afternoon" /> Afternoon Session (5pm–7pm)</label>
+              <label class="checkbox-label"><input type="radio" name="sessionTime" value="flexible" checked /> Something different — we're flexible</label>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+              <legend>Launch location</legend>
+              <label class="checkbox-label"><input type="radio" name="launchLocation" value="public" /> Public location</label>
+              <label class="checkbox-label"><input type="radio" name="launchLocation" value="private" /> Private location with owner permission</label>
+              <label class="checkbox-label"><input type="radio" name="launchLocation" value="unsure" checked /> Not sure — let's discuss</label>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+              <legend>Interested in *</legend>
+              <label class="checkbox-label"><input type="checkbox" name="interest" value="lesson" /> One-on-one or 2-rider private session</label>
+              <label class="checkbox-label"><input type="checkbox" name="interest" value="demo" /> Lift eFoil purchase demonstration</label>
+              <label class="checkbox-label"><input type="checkbox" name="interest" value="corporate" /> Corporate event / team building</label>
+              <label class="checkbox-label"><input type="checkbox" name="interest" value="family" /> Family gathering or outing</label>
+            </fieldset>
+
+            <div class="form-row form-row-full">
+              <label for="preferredDate">Preferred date &amp; questions</label>
+              <textarea id="preferredDate" name="preferredDate" rows="4" placeholder="Let us know your preferred date and any questions."></textarea>
+            </div>
+
+            <label class="checkbox-label terms-label">
+              <input type="checkbox" name="terms" required />
+              I accept terms &amp; conditions and understand additional legal and safety waivers will be reviewed and signed. I understand reservations are not set until confirmed.
+            </label>
+
+            <button class="btn btn-primary btn-full" type="submit">Submit Request</button>
+            <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+    <div data-site-footer></div>
+    <script type="module">
+      import { initShell } from "/js/shell.js";
+      initShell("reservation-request");
+    </script>
+  </body>
+</html>
