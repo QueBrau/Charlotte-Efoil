@@ -18,6 +18,12 @@ const NAV_ITEMS = [
 
 const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" decoding="async" />`;
 
+const INSTAGRAM_URL = "https://www.instagram.com/charlotteefoil";
+
+const INSTAGRAM_SVG = `<svg class="social-link__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
+
+const INSTAGRAM_LINK = `<a class="social-link" href="${INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">${INSTAGRAM_SVG}<span>@charlotteefoil</span></a>`;
+
 export function renderNav(activePage = "welcome") {
   const links = NAV_ITEMS.map((item) => {
     if (item.children) {
@@ -68,6 +74,7 @@ export function renderFooter() {
         <div class="footer-brand">
           <a class="logo" href="index.html">${LOGO_MARKUP}</a>
           <p>The Charlotte area's only mobile eFoil experience. Carving your way to an adventure like no other.</p>
+          <div class="footer-social">${INSTAGRAM_LINK}</div>
         </div>
         <div>
           <h3>Explore</h3>
@@ -91,6 +98,7 @@ export function renderFooter() {
           <ul>
             <li><a href="tel:7044218778">704-421-8778</a></li>
             <li><a href="mailto:hello@CharlotteEfoil.com">hello@CharlotteEfoil.com</a></li>
+            <li><a href="${INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">Instagram @charlotteefoil</a></li>
             <li>Charlotte, NC</li>
           </ul>
         </div>
@@ -282,20 +290,13 @@ export function initParallax() {
 
 export function initHeroVideo() {
   const video = document.querySelector("[data-hero-video]");
-  const placeholder = document.querySelector("[data-video-placeholder]");
   if (!video) return;
 
   video.addEventListener("loadeddata", () => {
     video.classList.add("is-ready");
-    placeholder?.classList.add("is-hidden");
-  });
-
-  video.addEventListener("error", () => {
-    placeholder?.classList.remove("is-hidden");
   });
 
   if (video.readyState >= 2) {
     video.classList.add("is-ready");
-    placeholder?.classList.add("is-hidden");
   }
 }
