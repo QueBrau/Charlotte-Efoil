@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   },
 ];
 
-const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" />`;
+const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" decoding="async" />`;
 
 export function renderNav(activePage = "welcome") {
   const links = NAV_ITEMS.map((item) => {
@@ -48,7 +48,14 @@ export function renderNav(activePage = "welcome") {
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
-        <ul class="nav-links" id="nav-menu">${links}</ul>
+        <ul class="nav-links" id="nav-menu">
+          ${links}
+          <li class="nav-mobile-actions">
+            <a class="btn btn-primary" href="tel:7044218778">Call 704-421-8778</a>
+            <a class="btn btn-secondary" href="reservation-request.html">Request Reservation</a>
+          </li>
+        </ul>
+        <div class="nav-overlay" data-nav-overlay hidden></div>
         <a class="nav-phone" href="tel:7044218778">704-421-8778</a>
       </nav>
     </header>`;
@@ -109,28 +116,51 @@ export function initShell(activePage) {
   initHeaderScroll();
   initForms();
   initReveal();
+  initMobileActionBar();
+}
+
+function initMobileActionBar() {
+  if (document.querySelector("[data-mobile-bar]")) return;
+
+  const bar = document.createElement("div");
+  bar.className = "mobile-action-bar";
+  bar.dataset.mobileBar = "";
+  bar.setAttribute("aria-label", "Quick actions");
+  bar.innerHTML = `
+    <a class="mobile-action-bar__call" href="tel:7044218778">Call</a>
+    <a class="mobile-action-bar__book" href="reservation-request.html">Book Now</a>
+  `;
+  document.body.appendChild(bar);
 }
 
 function initNavigation() {
   const toggle = document.querySelector(".nav-toggle");
   const menu = document.querySelector(".nav-links");
+  const overlay = document.querySelector("[data-nav-overlay]");
+  const header = document.querySelector("[data-header]");
   if (!toggle || !menu) return;
 
+  const setMenuOpen = (open) => {
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menu.classList.toggle("is-open", open);
+    document.body.classList.toggle("nav-open", open);
+    header?.classList.toggle("nav-menu-open", open);
+    overlay?.toggleAttribute("hidden", !open);
+  };
+
   toggle.addEventListener("click", () => {
-    const open = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!open));
-    toggle.setAttribute("aria-label", open ? "Open menu" : "Close menu");
-    menu.classList.toggle("is-open", !open);
-    document.body.classList.toggle("nav-open", !open);
+    setMenuOpen(toggle.getAttribute("aria-expanded") !== "true");
   });
 
+  overlay?.addEventListener("click", () => setMenuOpen(false));
+
   menu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.setAttribute("aria-label", "Open menu");
-      menu.classList.remove("is-open");
-      document.body.classList.remove("nav-open");
-    });
+    link.addEventListener("click", () => setMenuOpen(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenuOpen(false);
   });
 
   document.querySelectorAll(".nav-dropdown-toggle").forEach((btn) => {
@@ -202,30 +232,47 @@ export function initParallax() {
   const hero = document.querySelector("[data-parallax-hero]");
   if (!hero) return;
 
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isMobile = window.matchMedia("(max-width: 860px), (hover: none) and (pointer: coarse)").matches;
+
+  if (prefersReducedMotion || isMobile) {
+    hero.classList.add("parallax-disabled");
+    return;
+  }
+
   const videoWrap = hero.querySelector(".hero-video-wrap");
   const content = hero.querySelector(".hero-content");
   const layers = document.querySelectorAll("[data-parallax-layer]");
 
+  let ticking = false;
+
   const onScroll = () => {
-    const scrollY = window.scrollY;
-    const heroHeight = hero.offsetHeight;
+    if (ticking) return;
+    ticking = true;
 
-    if (scrollY <= heroHeight) {
-      const progress = scrollY / heroHeight;
-      if (videoWrap) {
-        videoWrap.style.transform = `translate3d(0, ${scrollY * 0.45}px, 0) scale(${1 + progress * 0.08})`;
-      }
-      if (content) {
-        content.style.transform = `translate3d(0, ${scrollY * 0.2}px, 0)`;
-        content.style.opacity = String(Math.max(0, 1 - progress * 1.4));
-      }
-    }
+    requestAnimationFrame(() => {
+      const scrollY = window.scrollY;
+      const heroHeight = hero.offsetHeight;
 
-    layers.forEach((layer) => {
-      const speed = Number(layer.dataset.parallaxLayer) || 0.15;
-      const rect = layer.getBoundingClientRect();
-      const offset = (window.innerHeight - rect.top) * speed;
-      layer.style.transform = `translate3d(0, ${offset}px, 0)`;
+      if (scrollY <= heroHeight) {
+        const progress = scrollY / heroHeight;
+        if (videoWrap) {
+          videoWrap.style.transform = `translate3d(0, ${scrollY * 0.45}px, 0) scale(${1 + progress * 0.08})`;
+        }
+        if (content) {
+          content.style.transform = `translate3d(0, ${scrollY * 0.2}px, 0)`;
+          content.style.opacity = String(Math.max(0, 1 - progress * 1.4));
+        }
+      }
+
+      layers.forEach((layer) => {
+        const speed = Number(layer.dataset.parallaxLayer) || 0.15;
+        const rect = layer.getBoundingClientRect();
+        const offset = (window.innerHeight - rect.top) * speed;
+        layer.style.transform = `translate3d(0, ${offset}px, 0)`;
+      });
+
+      ticking = false;
     });
   };
 
