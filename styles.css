@@ -813,14 +813,20 @@ h1, h2, h3 {
 }
 
 .reservation-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   padding: 2rem;
   border-radius: var(--radius-lg);
   background: var(--white);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
 }
 
 .form-row {
@@ -829,10 +835,14 @@ h1, h2, h3 {
   gap: 0.45rem;
 }
 
-.form-row-full,
-.form-fieldset,
-.terms-label,
-.form-status { grid-column: 1 / -1; }
+/* Honeypot anti-spam field — visually hidden, kept out of the tab order. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 
 .form-row label,
 .form-fieldset legend {
@@ -1110,6 +1120,7 @@ h1, h2, h3 {
   .locations-inner,
   .about-layout,
   .form-layout,
+  .form-grid,
   .content-grid {
     grid-template-columns: 1fr;
   }

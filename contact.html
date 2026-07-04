@@ -49,7 +49,11 @@
             <a class="btn btn-secondary btn-full" href="reservation-request.html">Request Reservation</a>
           </aside>
 
-          <form class="reservation-form" data-form data-success="Thanks! We'll be in touch soon!" data-reveal>
+          <form class="reservation-form" data-form data-form-type="contact" data-success="Thanks! We'll be in touch soon!" data-reveal>
+            <div class="hp-field" aria-hidden="true">
+              <label for="contact-company">Company</label>
+              <input id="contact-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+            </div>
             <div class="form-row">
               <label for="name">Name *</label>
               <input id="name" name="name" type="text" required />
