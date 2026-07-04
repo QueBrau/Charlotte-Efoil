@@ -1,9 +1,10 @@
+import { initAnalytics, trackEvent } from "/js/analytics.js";
+
 const NAV_ITEMS = [
   { href: "index.html", label: "Welcome", page: "welcome" },
   { href: "pricing.html", label: "Pricing", page: "pricing" },
-  { href: "reservation-details.html", label: "Reservation Details", page: "reservation-details" },
+  { href: "reservation-request.html", label: "Reservations", page: "reservation-request" },
   { href: "flight-lessons.html", label: "Flight Lesson Details", page: "flight-lessons" },
-  { href: "reservation-request.html", label: "Reservation Requests", page: "reservation-request" },
   {
     href: "more.html",
     label: "More",
@@ -81,8 +82,7 @@ export function renderFooter() {
           <ul>
             <li><a href="pricing.html">Pricing</a></li>
             <li><a href="flight-lessons.html">Flight Lessons</a></li>
-            <li><a href="reservation-details.html">Reservation Details</a></li>
-            <li><a href="reservation-request.html">Request a Reservation</a></li>
+            <li><a href="reservation-request.html">Reservations</a></li>
           </ul>
         </div>
         <div>
@@ -126,6 +126,7 @@ export function initShell(activePage) {
   initReveal();
   initMobileActionBar();
   initDesktopNavPlacement();
+  initAnalytics();
 }
 
 function initDesktopNavPlacement() {
@@ -230,11 +231,58 @@ function initHeaderScroll() {
   window.addEventListener("scroll", onScroll, { passive: true });
 }
 
+const API_BASE = window.CE_API_BASE || "/api";
+const FORM_ENDPOINTS = {
+  contact: `${API_BASE}/contact`,
+  reservation: `${API_BASE}/reservations`,
+};
+
+function buildContactPayload(form) {
+  const data = new FormData(form);
+  return {
+    name: data.get("name") || "",
+    email: data.get("email") || "",
+    message: data.get("message") || "",
+    company: data.get("company") || "", // honeypot
+  };
+}
+
+function buildReservationPayload(form) {
+  const data = new FormData(form);
+  return {
+    first_name: data.get("firstName") || "",
+    last_name: data.get("lastName") || "",
+    email: data.get("email") || "",
+    phone: data.get("phone") || "",
+    session_time: data.get("sessionTime") || "",
+    launch_location: data.get("launchLocation") || "",
+    preferred_date: data.get("preferredDate") || "",
+    interests: data.getAll("interest"),
+    terms_accepted: data.get("terms") === "on",
+    company: data.get("company") || "", // honeypot
+  };
+}
+
 function initForms() {
   document.querySelectorAll("form[data-form]").forEach((form) => {
-    form.addEventListener("submit", (event) => {
+    const type = form.dataset.formType || "contact";
+    let startedTracked = false;
+
+    form.addEventListener(
+      "focusin",
+      () => {
+        if (startedTracked) return;
+        startedTracked = true;
+        trackEvent("form_start", type);
+      },
+      { once: false }
+    );
+
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const status = form.querySelector("[data-form-status]");
+      const submitBtn = form.querySelector('button[type="submit"]');
+
       if (!form.checkValidity()) {
         if (status) {
           status.textContent = "Please complete all required fields.";
@@ -243,10 +291,46 @@ function initForms() {
         form.reportValidity();
         return;
       }
-      form.reset();
+
+      const endpoint = FORM_ENDPOINTS[type] || FORM_ENDPOINTS.contact;
+      const payload =
+        type === "reservation" ? buildReservationPayload(form) : buildContactPayload(form);
+
+      payload.source_path = window.location.pathname;
+      payload.referrer = document.referrer || "";
+
+      if (submitBtn) submitBtn.disabled = true;
       if (status) {
-        status.textContent = form.dataset.success || "Thanks for submitting! We'll be in touch soon.";
+        status.textContent = "Sending…";
         status.classList.remove("is-error");
+      }
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok || result.error) {
+          throw new Error(result.error || "Request failed");
+        }
+
+        form.reset();
+        if (status) {
+          status.textContent =
+            form.dataset.success || "Thanks for submitting! We'll be in touch soon.";
+          status.classList.remove("is-error");
+        }
+        trackEvent("form_submit", type);
+      } catch (err) {
+        if (status) {
+          status.textContent =
+            "We couldn't submit your request. Please try again or call 704-421-8778.";
+          status.classList.add("is-error");
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
   });
