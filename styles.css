@@ -873,7 +873,7 @@ h1, h2, h3 {
 
 .checkbox-label input { margin-top: 0.2rem; accent-color: var(--brand); }
 
-.reservation-form input,
+.reservation-form input:not([type="radio"]):not([type="checkbox"]),
 .reservation-form textarea {
   width: 100%;
   padding: 0.85rem 1rem;
@@ -883,11 +883,17 @@ h1, h2, h3 {
   font-size: 16px;
 }
 
-.reservation-form input:focus,
+.reservation-form input:not([type="radio"]):not([type="checkbox"]):focus,
 .reservation-form textarea:focus {
   outline: none;
   border-color: var(--brand);
   box-shadow: 0 0 0 4px rgba(25,64,85,0.12);
+}
+
+.checkbox-label input[type="radio"],
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  flex: 0 0 auto;
 }
 
 .form-status {

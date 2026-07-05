@@ -154,6 +154,21 @@
       .kv dd { margin: 0; }
       .section-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 1.25rem 0 0.5rem; }
       .loading { color: var(--muted); padding: 2rem 0; text-align: center; }
+
+      .campaign-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 0.5rem; }
+      .fld { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--muted); }
+      .fld input, .fld textarea {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.95rem;
+        font-family: inherit;
+      }
+      .fld textarea { resize: vertical; }
+      .campaign-actions { display: flex; align-items: center; gap: 0.9rem; }
+      .status-pill { text-transform: capitalize; }
     </style>
   </head>
   <body>
@@ -196,6 +211,31 @@
             <h2>Traffic sources</h2>
             <div data-sources><div class="loading">Loading…</div></div>
           </div>
+        </div>
+
+        <div class="card">
+          <h2>Email campaign</h2>
+          <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
+            Send a broadcast to all contacts who haven't unsubscribed
+            (<span data-audience-count>…</span> recipients). Basic HTML is allowed; an
+            unsubscribe footer is added automatically.
+          </p>
+          <form data-campaign-form class="campaign-form">
+            <label class="fld">
+              <span>Subject</span>
+              <input type="text" name="subject" placeholder="e.g. Flat water &amp; open dates this month" required />
+            </label>
+            <label class="fld">
+              <span>Message (HTML allowed)</span>
+              <textarea name="html" rows="8" placeholder="Write your update here. You can use &lt;b&gt;, &lt;a href&gt;, &lt;p&gt;, etc." required></textarea>
+            </label>
+            <div class="campaign-actions">
+              <button class="btn" type="submit" data-campaign-send>Send campaign</button>
+              <span class="error" data-campaign-status></span>
+            </div>
+          </form>
+          <div class="section-title">Campaign history</div>
+          <div data-campaigns><div class="loading">Loading…</div></div>
         </div>
 
         <div class="card">

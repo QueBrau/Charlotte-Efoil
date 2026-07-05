@@ -1,5 +1,5 @@
 import { getSupabase } from "./_shared/supabase.mjs";
-import { json, preflight } from "./_shared/http.mjs";
+import { json, preflight, readBody, clean } from "./_shared/http.mjs";
 
 /** Constant-time-ish comparison to avoid trivial timing leaks. */
 function safeEqual(a, b) {
@@ -120,6 +120,55 @@ async function recentEvents(supabase, url) {
   return data || [];
 }
 
+async function audienceCount(supabase) {
+  const { count } = await supabase
+    .from("email_audience")
+    .select("*", { count: "exact", head: true });
+  return { count: count || 0 };
+}
+
+async function campaigns(supabase) {
+  const { data, error } = await supabase
+    .from("email_campaigns")
+    .select("id, subject, status, total_recipients, sent_count, failed_count, created_at, sent_at, error")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  return data || [];
+}
+
+async function sendCampaign(supabase, req) {
+  const body = await readBody(req);
+  const subject = clean(body.subject, 300);
+  const html = clean(body.html, 200000);
+  if (!subject || !html) return { error: "Subject and message are required.", status: 400 };
+
+  const { data, error } = await supabase
+    .from("email_campaigns")
+    .insert({ subject, html, status: "sending" })
+    .select("id")
+    .single();
+  if (error) throw error;
+
+  // Fire the background sender (returns 202 quickly).
+  const base = (
+    Netlify.env.get("SITE_URL") ||
+    new URL(req.url).origin
+  ).replace(/\/$/, "");
+  const token = Netlify.env.get("ADMIN_PASSWORD");
+  try {
+    await fetch(`${base}/.netlify/functions/send-campaign-background`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ campaign_id: data.id, token }),
+    });
+  } catch (err) {
+    console.error("failed to trigger campaign sender:", err);
+  }
+
+  return { ok: true, id: data.id };
+}
+
 export default async (req) => {
   if (req.method === "OPTIONS") return preflight();
 
@@ -130,6 +179,18 @@ export default async (req) => {
 
   try {
     const supabase = getSupabase();
+
+    if (req.method === "POST") {
+      switch (action) {
+        case "send_campaign": {
+          const result = await sendCampaign(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        default:
+          return json({ error: "Unknown action" }, 400);
+      }
+    }
+
     switch (action) {
       case "overview":
         return json(await overview(supabase));
@@ -145,6 +206,10 @@ export default async (req) => {
         return json(await fromView(supabase, "analytics_traffic_sources", 50));
       case "events":
         return json(await recentEvents(supabase, url));
+      case "audience_count":
+        return json(await audienceCount(supabase));
+      case "campaigns":
+        return json(await campaigns(supabase));
       default:
         return json({ error: "Unknown action" }, 400);
     }
@@ -156,5 +221,5 @@ export default async (req) => {
 
 export const config = {
   path: "/api/admin",
-  method: ["GET", "OPTIONS"],
+  method: ["GET", "POST", "OPTIONS"],
 };
