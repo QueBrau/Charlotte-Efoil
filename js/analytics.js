@@ -290,9 +290,17 @@ function attachAutoEvents() {
 export function initAnalytics() {
   if (started) return;
   started = true;
-  // Prime tokens (creates visitor/session on first run).
-  getVisitorToken();
-  getSessionToken();
-  trackPageView();
-  attachAutoEvents();
+
+  const boot = () => {
+    getVisitorToken();
+    getSessionToken();
+    trackPageView();
+    attachAutoEvents();
+  };
+
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(boot, { timeout: 2000 });
+  } else {
+    setTimeout(boot, 1);
+  }
 }

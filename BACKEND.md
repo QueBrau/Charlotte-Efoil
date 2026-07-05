@@ -61,6 +61,15 @@ groups activity into sessions.
 - `analytics_lead_overview` — leads with submission/reservation counts
 - `analytics_daily_submissions` — contact vs reservation submissions per day
 
+### Dashboard aggregate (`0006_dashboard.sql`)
+
+- `admin_dashboard(p_days int)` — one `SECURITY DEFINER` RPC returning a single
+  JSON object of Wix-style metrics for a rolling window: KPIs (sessions, unique
+  visitors, page views, avg. session duration, avg. pages/session, bounce rate,
+  form submissions), new-vs-returning visitor split, sessions by device, traffic
+  channels (Marketing / Organic search / Direct / Referral), and a
+  sessions-over-time series. Exposed via `GET /api/admin?action=dashboard&days=N`.
+
 ## Setup
 
 ### 1. Create the database
@@ -68,7 +77,8 @@ groups activity into sessions.
 Create a project at [supabase.com](https://supabase.com), then apply the
 migrations in `supabase/migrations/` **in order**:
 
-**Option A — Supabase SQL editor:** paste and run each file (`0001`, `0002`, `0003`).
+**Option A — Supabase SQL editor:** paste and run each file in order
+(`0001` → `0006`).
 
 **Option B — Supabase CLI:**
 
