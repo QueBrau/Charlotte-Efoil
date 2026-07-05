@@ -5,6 +5,7 @@
 // =============================================================================
 
 import Chart from "chart.js/auto";
+import { isMockMode, mockApi, showDemoBanner } from "./admin-mock.js";
 
 Chart.defaults.color = "#93a7b0";
 Chart.defaults.borderColor = "rgba(255, 255, 255, 0.08)";
@@ -25,6 +26,8 @@ const app = $("[data-app]");
 let token = sessionStorage.getItem(TOKEN_KEY) || "";
 
 async function api(action, params = {}) {
+  if (isMockMode()) return mockApi(action, params, "GET");
+
   const url = new URL(`${API_BASE}/admin`, window.location.origin);
   url.searchParams.set("action", action);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
@@ -40,6 +43,8 @@ async function api(action, params = {}) {
 }
 
 async function apiPost(action, body = {}) {
+  if (isMockMode()) return mockApi(action, {}, "POST", body);
+
   const url = new URL(`${API_BASE}/admin`, window.location.origin);
   url.searchParams.set("action", action);
   const res = await fetch(url, {
@@ -157,6 +162,7 @@ function setEmpty(box, key) {
 const donutLegend = {
   position: "bottom",
   labels: {
+    color: "#ffffff",
     boxWidth: 12,
     padding: 14,
     generateLabels(chart) {
@@ -166,6 +172,7 @@ const donutLegend = {
         text: `${label} — ${Math.round((Number(ds.data[i]) / total) * 100)}%`,
         fillStyle: ds.backgroundColor[i],
         strokeStyle: ds.backgroundColor[i],
+        fontColor: "#ffffff",
         lineWidth: 0,
         index: i,
       }));
@@ -456,14 +463,244 @@ function renderCampaigns(rows) {
 
 async function loadCampaignSection() {
   try {
-    const [{ count }, list] = await Promise.all([api("audience_count"), api("campaigns")]);
+    const [{ count }, list, bounced, schedules] = await Promise.all([
+      api("audience_count"),
+      api("campaigns"),
+      api("bounced_contacts"),
+      api("schedules"),
+    ]);
     audienceCount = count || 0;
     const el = $("[data-audience-count]");
     if (el) el.textContent = fmtNum(audienceCount);
     renderCampaigns(list);
+    renderBouncedContacts(bounced);
+    renderSchedules(schedules);
   } catch (err) {
     if (err.code === 401) showLogin();
   }
+}
+
+const HOUR_LABELS = {
+  6: "6:00 AM",
+  7: "7:00 AM",
+  8: "8:00 AM",
+  9: "9:00 AM",
+  10: "10:00 AM",
+  11: "11:00 AM",
+  12: "12:00 PM",
+  13: "1:00 PM",
+  14: "2:00 PM",
+  15: "3:00 PM",
+  16: "4:00 PM",
+  17: "5:00 PM",
+  18: "6:00 PM",
+  19: "7:00 PM",
+  20: "8:00 PM",
+};
+
+function fmtHour(h) {
+  return HOUR_LABELS[Number(h)] || `${h}:00`;
+}
+
+function initScheduleForm() {
+  const form = $("[data-schedule-form]");
+  if (!form || form.dataset.bound) return;
+  form.dataset.bound = "1";
+
+  const daySel = form.day_of_month;
+  const hourSel = form.send_hour;
+  if (daySel && !daySel.options.length) {
+    for (let d = 1; d <= 28; d++) {
+      const opt = document.createElement("option");
+      opt.value = String(d);
+      opt.textContent = String(d);
+      if (d === 20) opt.selected = true;
+      daySel.appendChild(opt);
+    }
+  }
+  if (hourSel && !hourSel.options.length) {
+    Object.entries(HOUR_LABELS).forEach(([val, label]) => {
+      const opt = document.createElement("option");
+      opt.value = val;
+      opt.textContent = `${label} ET`;
+      if (val === "9") opt.selected = true;
+      hourSel.appendChild(opt);
+    });
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const statusEl = $("[data-schedule-status]");
+    const btn = $("[data-schedule-save]");
+    const payload = {
+      name: form.name.value.trim(),
+      subject: form.subject.value.trim(),
+      html: form.html.value.trim(),
+      day_of_month: Number(form.day_of_month.value),
+      send_hour: Number(form.send_hour.value),
+    };
+    if (!payload.subject || !payload.html) return;
+
+    btn.disabled = true;
+    if (statusEl) {
+      statusEl.classList.remove("error");
+      statusEl.style.color = "";
+      statusEl.textContent = "Saving…";
+    }
+
+    try {
+      await apiPost("create_schedule", payload);
+      if (statusEl) statusEl.textContent = "Schedule saved.";
+      form.reset();
+      if (daySel) daySel.value = "20";
+      if (hourSel) hourSel.value = "9";
+      panelLoaded.email = false;
+      await loadCampaignSection();
+    } catch (err) {
+      if (err.code === 401) return showLogin();
+      if (statusEl) {
+        statusEl.classList.add("error");
+        statusEl.textContent = err.message || "Could not save schedule.";
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+function renderSchedules(rows) {
+  const el = $("[data-schedules]");
+  if (!el) return;
+  if (!rows.length) {
+    el.innerHTML = '<p class="muted">No scheduled sends yet.</p>';
+    return;
+  }
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>Schedule</th><th>When</th><th>Next send</th><th>Last sent</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        ${rows
+          .map(
+            (s) => `<tr>
+              <td>${esc(s.name || s.subject)}${s.name ? `<br><span class="muted">${esc(s.subject)}</span>` : ""}</td>
+              <td>Day ${esc(s.day_of_month)} · ${fmtHour(s.send_hour)} ET</td>
+              <td class="muted">${esc(s.next_run || "—")}</td>
+              <td class="muted">${s.last_sent_at ? fmtDate(s.last_sent_at) : "Never"}</td>
+              <td><span class="pill status-pill ${s.enabled ? "" : "is-off"}">${s.enabled ? "Active" : "Paused"}</span></td>
+              <td style="white-space:nowrap">
+                <button class="btn btn-ghost" type="button" data-toggle-schedule="${esc(s.id)}" data-enabled="${s.enabled ? "1" : "0"}" style="padding:0.35rem 0.6rem;font-size:0.78rem">${s.enabled ? "Pause" : "Resume"}</button>
+                <button class="btn btn-ghost" type="button" data-delete-schedule="${esc(s.id)}" style="padding:0.35rem 0.6rem;font-size:0.78rem">Delete</button>
+              </td>
+            </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`;
+
+  el.querySelectorAll("[data-toggle-schedule]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      try {
+        await apiPost("update_schedule", {
+          id: btn.dataset.toggleSchedule,
+          enabled: btn.dataset.enabled !== "1",
+        });
+        panelLoaded.email = false;
+        await loadCampaignSection();
+      } catch (err) {
+        if (err.code === 401) showLogin();
+      }
+    });
+  });
+
+  el.querySelectorAll("[data-delete-schedule]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this scheduled send?")) return;
+      try {
+        await apiPost("delete_schedule", { id: btn.dataset.deleteSchedule });
+        panelLoaded.email = false;
+        await loadCampaignSection();
+      } catch (err) {
+        if (err.code === 401) showLogin();
+      }
+    });
+  });
+}
+
+function renderBouncedContacts(rows) {
+  const el = $("[data-bounced-contacts]");
+  if (!el) return;
+  if (!rows.length) {
+    el.innerHTML = '<p class="muted">No flagged bounces — your list is clean.</p>';
+    return;
+  }
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>Email</th><th>Kind</th><th>Reason</th><th>Flagged</th><th></th></tr></thead>
+      <tbody>
+        ${rows
+          .map(
+            (r) => `<tr>
+              <td>${esc(r.email)}${r.first_name ? `<br><span class="muted">${esc(r.first_name)} ${esc(r.last_name || "")}</span>` : ""}</td>
+              <td><span class="pill status-pill">${esc(r.bounce_kind || "bounce")}</span></td>
+              <td class="muted">${esc(r.bounce_reason || "—")}</td>
+              <td class="muted">${fmtDate(r.bounced_at)}</td>
+              <td><button class="btn btn-ghost" type="button" data-remove-contact="${esc(r.id)}" style="padding:0.35rem 0.7rem;font-size:0.8rem">Remove</button></td>
+            </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`;
+
+  el.querySelectorAll("[data-remove-contact]").forEach((btn) => {
+    btn.addEventListener("click", () => removeContact(btn.dataset.removeContact));
+  });
+}
+
+async function removeContact(id) {
+  if (!id || !confirm("Remove this contact from the database? This cannot be undone.")) return;
+  const statusEl = $("[data-bounced-status]");
+  try {
+    await apiPost("remove_contact", { id });
+    if (statusEl) {
+      statusEl.classList.remove("error");
+      statusEl.style.color = "";
+      statusEl.textContent = "Contact removed.";
+    }
+    panelLoaded.email = false;
+    await loadCampaignSection();
+  } catch (err) {
+    if (err.code === 401) return showLogin();
+    if (statusEl) {
+      statusEl.classList.add("error");
+      statusEl.textContent = err.message || "Could not remove contact.";
+    }
+  }
+}
+
+function initBouncedActions() {
+  const btn = $("[data-remove-all-bounced]");
+  if (!btn || btn.dataset.bound) return;
+  btn.dataset.bound = "1";
+  btn.addEventListener("click", async () => {
+    if (!confirm("Remove all flagged bounced contacts from the database?")) return;
+    const statusEl = $("[data-bounced-status]");
+    try {
+      const result = await apiPost("remove_all_bounced");
+      if (statusEl) {
+        statusEl.classList.remove("error");
+        statusEl.style.color = "";
+        statusEl.textContent = `Removed ${fmtNum(result.deleted)} contact(s).`;
+      }
+      panelLoaded.email = false;
+      await loadCampaignSection();
+    } catch (err) {
+      if (err.code === 401) return showLogin();
+      if (statusEl) {
+        statusEl.classList.add("error");
+        statusEl.textContent = err.message || "Could not remove contacts.";
+      }
+    }
+  });
 }
 
 function initCampaignForm() {
@@ -618,6 +855,8 @@ async function loadPanel(id) {
         break;
       case "email":
         initCampaignForm();
+        initScheduleForm();
+        initBouncedActions();
         await loadCampaignSection();
         break;
     }
@@ -665,19 +904,10 @@ async function loadAll() {
   initTabs();
 }
 
-$("[data-refresh]").addEventListener("click", async () => {
-  const active = document.querySelector("[data-tabs] button.active")?.dataset.tab || "overview";
-  panelLoaded[active] = false;
-  try {
-    await loadPanel(active);
-  } catch {
-    /* auth handled in loadPanel */
-  }
-});
-
 function showApp() {
   gate.classList.add("hidden");
   app.classList.remove("hidden");
+  if (isMockMode()) showDemoBanner();
   Object.keys(panelLoaded).forEach((k) => delete panelLoaded[k]);
   loadAll();
 }
@@ -696,6 +926,11 @@ $("[data-login-form]").addEventListener("submit", async (e) => {
   errEl.textContent = "";
   token = e.target.password.value;
   try {
+    if (isMockMode()) {
+      sessionStorage.setItem(TOKEN_KEY, token || "demo");
+      showApp();
+      return;
+    }
     await api("overview");
     sessionStorage.setItem(TOKEN_KEY, token);
     showApp();
@@ -712,8 +947,14 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeDrawer();
 });
 
-// Auto-enter if a token is already stored this session.
-if (token) {
+// Auto-enter if a token is already stored this session, or jump straight in for demo mode.
+if (isMockMode()) {
+  const demoHint = $("[data-demo-hint]");
+  if (demoHint) demoHint.classList.remove("hidden");
+  document.querySelector('a[href="?mock=1"]')?.closest("p")?.classList.add("hidden");
+  if (token) showApp();
+  else showLogin();
+} else if (token) {
   showApp();
 } else {
   showLogin();

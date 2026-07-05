@@ -1,5 +1,6 @@
 import { getSupabase } from "./_shared/supabase.mjs";
 import { json, preflight, readBody, clean } from "./_shared/http.mjs";
+import { computeNextRunLabel, triggerBackgroundCampaignSend } from "./_shared/campaign-send.mjs";
 
 /** Constant-time-ish comparison to avoid trivial timing leaks. */
 function safeEqual(a, b) {
@@ -144,6 +145,48 @@ async function campaigns(supabase) {
   return data || [];
 }
 
+async function bouncedContacts(supabase) {
+  const { data, error } = await supabase
+    .from("email_bounced_contacts")
+    .select("id, email, first_name, last_name, bounced_at, bounce_kind, bounce_reason")
+    .order("bounced_at", { ascending: false })
+    .limit(200);
+  if (error) throw error;
+  return data || [];
+}
+
+async function removeContact(supabase, req) {
+  const body = await readBody(req);
+  const id = body.id;
+  if (!id) return { error: "Missing contact id.", status: 400 };
+  const { data, error } = await supabase.rpc("admin_delete_lead", { p_id: id });
+  if (error) throw error;
+  if (data?.error) return { error: data.error, status: 404 };
+  return { ok: true, id };
+}
+
+async function removeAllBounced(supabase) {
+  const { data, error } = await supabase.rpc("admin_delete_bounced_leads");
+  if (error) throw error;
+  return { ok: true, deleted: data?.deleted || 0 };
+}
+
+async function markBounced(supabase, req) {
+  const body = await readBody(req);
+  const email = clean(body.email, 320);
+  const reason = clean(body.reason, 500) || "Marked bounced manually";
+  if (!email) return { error: "Email is required.", status: 400 };
+  const { data, error } = await supabase.rpc("handle_email_bounce", {
+    p_email: email,
+    p_reason: reason,
+    p_kind: "bounce",
+    p_permanent: Boolean(body.permanent),
+    p_raw: null,
+  });
+  if (error) throw error;
+  return data || { ok: true };
+}
+
 async function sendCampaign(supabase, req) {
   const body = await readBody(req);
   const subject = clean(body.subject, 300);
@@ -157,23 +200,93 @@ async function sendCampaign(supabase, req) {
     .single();
   if (error) throw error;
 
-  // Fire the background sender (returns 202 quickly).
   const base = (
     Netlify.env.get("SITE_URL") ||
     new URL(req.url).origin
   ).replace(/\/$/, "");
   const token = Netlify.env.get("ADMIN_PASSWORD");
   try {
-    await fetch(`${base}/.netlify/functions/send-campaign-background`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ campaign_id: data.id, token }),
-    });
+    await triggerBackgroundCampaignSend({ base, campaignId: data.id, token });
   } catch (err) {
     console.error("failed to trigger campaign sender:", err);
   }
 
   return { ok: true, id: data.id };
+}
+
+function parseScheduleBody(body) {
+  const subject = clean(body.subject, 300);
+  const html = clean(body.html, 200000);
+  const name = clean(body.name, 120) || null;
+  const day = Math.min(Math.max(Number(body.day_of_month) || 1, 1), 28);
+  const hour = Math.min(Math.max(Number(body.send_hour) ?? 9, 0), 23);
+  return { subject, html, name, day_of_month: day, send_hour: hour };
+}
+
+async function listSchedules(supabase) {
+  const { data, error } = await supabase
+    .from("email_schedules")
+    .select("id, name, subject, day_of_month, send_hour, timezone, enabled, last_sent_at, created_at, updated_at")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data || []).map((row) => ({
+    ...row,
+    next_run: computeNextRunLabel(row),
+  }));
+}
+
+async function createSchedule(supabase, req) {
+  const body = await readBody(req);
+  const { subject, html, name, day_of_month, send_hour } = parseScheduleBody(body);
+  if (!subject || !html) return { error: "Subject and message are required.", status: 400 };
+
+  const { data, error } = await supabase
+    .from("email_schedules")
+    .insert({
+      name,
+      subject,
+      html,
+      day_of_month,
+      send_hour,
+      enabled: body.enabled !== false,
+    })
+    .select("id")
+    .single();
+  if (error) throw error;
+  return { ok: true, id: data.id };
+}
+
+async function updateSchedule(supabase, req) {
+  const body = await readBody(req);
+  const id = body.id;
+  if (!id) return { error: "Missing schedule id.", status: 400 };
+
+  const patch = {};
+  if (body.enabled !== undefined) patch.enabled = Boolean(body.enabled);
+  if (body.subject !== undefined) patch.subject = clean(body.subject, 300);
+  if (body.html !== undefined) patch.html = clean(body.html, 200000);
+  if (body.name !== undefined) patch.name = clean(body.name, 120) || null;
+  if (body.day_of_month !== undefined) {
+    patch.day_of_month = Math.min(Math.max(Number(body.day_of_month) || 1, 1), 28);
+  }
+  if (body.send_hour !== undefined) {
+    patch.send_hour = Math.min(Math.max(Number(body.send_hour) ?? 9, 0), 23);
+  }
+
+  if (!Object.keys(patch).length) return { error: "Nothing to update.", status: 400 };
+
+  const { error } = await supabase.from("email_schedules").update(patch).eq("id", id);
+  if (error) throw error;
+  return { ok: true, id };
+}
+
+async function deleteSchedule(supabase, req) {
+  const body = await readBody(req);
+  const id = body.id;
+  if (!id) return { error: "Missing schedule id.", status: 400 };
+  const { error } = await supabase.from("email_schedules").delete().eq("id", id);
+  if (error) throw error;
+  return { ok: true, id };
 }
 
 export default async (req) => {
@@ -191,6 +304,29 @@ export default async (req) => {
       switch (action) {
         case "send_campaign": {
           const result = await sendCampaign(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "remove_contact": {
+          const result = await removeContact(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "remove_all_bounced": {
+          return json(await removeAllBounced(supabase));
+        }
+        case "mark_bounced": {
+          const result = await markBounced(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "create_schedule": {
+          const result = await createSchedule(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "update_schedule": {
+          const result = await updateSchedule(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "delete_schedule": {
+          const result = await deleteSchedule(supabase, req);
           return json(result, result.status || (result.error ? 400 : 200));
         }
         default:
@@ -219,6 +355,10 @@ export default async (req) => {
         return json(await audienceCount(supabase));
       case "campaigns":
         return json(await campaigns(supabase));
+      case "bounced_contacts":
+        return json(await bouncedContacts(supabase));
+      case "schedules":
+        return json(await listSchedules(supabase));
       default:
         return json({ error: "Unknown action" }, 400);
     }
