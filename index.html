@@ -24,8 +24,14 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+    </noscript>
     <link rel="stylesheet" href="/styles.css" />
+    <link rel="preload" as="video" href="/videos/hero-efoil.mp4" type="video/mp4" fetchpriority="high" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -54,7 +60,8 @@
             loop
             playsinline
             preload="auto"
-            poster="/photos/lakenorman.jpg"
+            fetchpriority="high"
+            disablepictureinpicture
           >
             <source src="/videos/hero-efoil.mp4" type="video/mp4" />
           </video>
@@ -106,6 +113,7 @@
                 alt="Lake Norman shoreline"
                 width="900"
                 height="1125"
+                loading="lazy"
                 decoding="async"
               />
             </div>
@@ -127,7 +135,10 @@
                 <img
                   src="/photos/5%274liftcruiser.png"
                   alt="Lift 5'4 F3 Cruiser eFoil board"
+                  width="640"
+                  height="480"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div class="fleet-body">
@@ -150,7 +161,10 @@
                 <img
                   src="/photos/5%272liftx.png"
                   alt="Lift 5'2 Lift X eFoil board"
+                  width="640"
+                  height="480"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div class="fleet-body">
@@ -173,7 +187,10 @@
                 <img
                   src="/photos/blowfish.png"
                   alt="Lift Blowfish stability attachment"
+                  width="640"
+                  height="480"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div class="fleet-body">

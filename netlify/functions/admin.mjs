@@ -103,6 +103,13 @@ async function visitorDetail(supabase, url) {
   };
 }
 
+async function dashboard(supabase, url) {
+  const days = Math.min(Math.max(Number(url.searchParams.get("days")) || 30, 1), 365);
+  const { data, error } = await supabase.rpc("admin_dashboard", { p_days: days });
+  if (error) throw error;
+  return data || {};
+}
+
 async function fromView(supabase, view, limit = 100) {
   const { data, error } = await supabase.from(view).select("*").limit(limit);
   if (error) throw error;
@@ -194,6 +201,8 @@ export default async (req) => {
     switch (action) {
       case "overview":
         return json(await overview(supabase));
+      case "dashboard":
+        return json(await dashboard(supabase, url));
       case "visitors":
         return json(await visitors(supabase, url));
       case "visitor":

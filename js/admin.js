@@ -4,8 +4,19 @@
 // in sessionStorage and sent as a bearer token; all data stays server-side.
 // =============================================================================
 
+import Chart from "chart.js/auto";
+
+Chart.defaults.color = "#93a7b0";
+Chart.defaults.borderColor = "rgba(255, 255, 255, 0.08)";
+Chart.defaults.font.family =
+  'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+
 const API_BASE = window.CE_API_BASE || "/api";
 const TOKEN_KEY = "ce_admin_token";
+const PALETTE = ["#4fb0d4", "#46c78f", "#e8b04b", "#b57edc", "#e87b7b", "#7bc4e8", "#9ad46f"];
+
+let rangeDays = 30;
+const charts = {};
 
 const $ = (sel) => document.querySelector(sel);
 const gate = $("[data-gate]");
@@ -78,6 +89,27 @@ function esc(s) {
 function shortToken(t) {
   return t ? `${String(t).slice(0, 8)}…` : "—";
 }
+function fmtSeconds(s) {
+  s = Math.round(Number(s) || 0);
+  if (s <= 0) return "0s";
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ${s % 60}s`;
+  const h = Math.floor(m / 60);
+  return `${h}h ${m % 60}m`;
+}
+function fmtPct(ratio) {
+  return `${((Number(ratio) || 0) * 100).toFixed(1)}%`;
+}
+function pctOf(part, total) {
+  total = Number(total) || 0;
+  if (!total) return "0%";
+  return `${Math.round((Number(part) / total) * 100)}%`;
+}
+function cap(s) {
+  s = String(s || "");
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
 
 // ----- renderers ------------------------------------------------------------
 function renderStats(o) {
@@ -97,6 +129,182 @@ function renderStats(o) {
         `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div></div>`
     )
     .join("");
+}
+
+// ----- Wix-style dashboard (KPIs + charts) ----------------------------------
+const chartBox = (sel) => document.querySelector(sel)?.closest(".chart-box") || null;
+const boxes = {
+  sessions: chartBox("[data-chart-sessions]"),
+  newret: chartBox("[data-chart-newret]"),
+  device: chartBox("[data-chart-device]"),
+  channels: chartBox("[data-chart-channels]"),
+};
+
+function ensureCanvas(box) {
+  let c = box.querySelector("canvas");
+  if (!c) {
+    box.innerHTML = "";
+    c = document.createElement("canvas");
+    box.appendChild(c);
+  }
+  return c;
+}
+function setEmpty(box, key) {
+  if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+  if (box) box.innerHTML = '<div class="chart-empty">No data in this range yet.</div>';
+}
+
+const donutLegend = {
+  position: "bottom",
+  labels: {
+    boxWidth: 12,
+    padding: 14,
+    generateLabels(chart) {
+      const ds = chart.data.datasets[0];
+      const total = ds.data.reduce((a, b) => a + Number(b), 0) || 1;
+      return chart.data.labels.map((label, i) => ({
+        text: `${label} — ${Math.round((Number(ds.data[i]) / total) * 100)}%`,
+        fillStyle: ds.backgroundColor[i],
+        strokeStyle: ds.backgroundColor[i],
+        lineWidth: 0,
+        index: i,
+      }));
+    },
+  },
+};
+const donutTooltip = {
+  callbacks: {
+    label(ctx) {
+      const ds = ctx.dataset;
+      const total = ds.data.reduce((a, b) => a + Number(b), 0) || 1;
+      const v = Number(ctx.parsed) || 0;
+      return ` ${ctx.label}: ${v.toLocaleString()} (${Math.round((v / total) * 100)}%)`;
+    },
+  },
+};
+
+function drawDoughnut(box, key, items) {
+  if (!box) return;
+  const clean = (items || []).filter((it) => Number(it.value) > 0);
+  const total = clean.reduce((a, it) => a + Number(it.value), 0);
+  if (!total) return setEmpty(box, key);
+  if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+  const canvas = ensureCanvas(box);
+  charts[key] = new Chart(canvas, {
+    type: "doughnut",
+    data: {
+      labels: clean.map((it) => it.label),
+      datasets: [
+        {
+          data: clean.map((it) => Number(it.value)),
+          backgroundColor: clean.map((_, i) => PALETTE[i % PALETTE.length]),
+          borderColor: "#142027",
+          borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "62%",
+      plugins: { legend: donutLegend, tooltip: donutTooltip },
+    },
+  });
+}
+
+function drawSessions(box, key, rows) {
+  if (!box) return;
+  if (!rows || !rows.length) return setEmpty(box, key);
+  if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+  const canvas = ensureCanvas(box);
+  charts[key] = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: rows.map((r) => fmtDay(r.day)),
+      datasets: [
+        {
+          label: "Sessions",
+          data: rows.map((r) => Number(r.sessions) || 0),
+          borderColor: "#4fb0d4",
+          backgroundColor: "rgba(79, 176, 212, 0.16)",
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+          borderWidth: 2,
+        },
+        {
+          label: "Unique visitors",
+          data: rows.map((r) => Number(r.unique_visitors) || 0),
+          borderColor: "#46c78f",
+          backgroundColor: "transparent",
+          tension: 0.3,
+          pointRadius: 2,
+          borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 14 } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, ticks: { precision: 0 } },
+      },
+    },
+  });
+}
+
+function renderKpis(d) {
+  const t = d.totals || {};
+  const nr = d.new_vs_returning || {};
+  const totalVisitors = (Number(nr.new) || 0) + (Number(nr.returning) || 0);
+  const cards = [
+    ["Site sessions", fmtNum(t.sessions), ""],
+    ["Unique visitors", fmtNum(t.unique_visitors), ""],
+    ["Avg. session duration", fmtSeconds(d.avg_session_duration_seconds), ""],
+    ["Avg. pages / session", d.avg_pages_per_session ?? 0, ""],
+    ["Bounce rate", fmtPct(d.bounce_rate), "single-page sessions"],
+    ["Form submissions", fmtNum(d.form_submissions), `${fmtNum(d.contact_submissions)} contact · ${fmtNum(d.reservation_requests)} reservation`],
+    ["Page views", fmtNum(t.page_views), ""],
+    ["New visitors", pctOf(nr.new, totalVisitors), `${fmtNum(nr.new)} new · ${fmtNum(nr.returning)} returning`],
+  ];
+  const el = $("[data-kpis]");
+  if (el) {
+    el.innerHTML = cards
+      .map(
+        ([label, value, sub]) =>
+          `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div>${
+            sub ? `<div class="sub">${sub}</div>` : ""
+          }</div>`
+      )
+      .join("");
+  }
+}
+
+async function loadDashboard() {
+  try {
+    const d = await api("dashboard", { days: rangeDays });
+    renderKpis(d);
+    drawSessions(boxes.sessions, "sessions", d.sessions_over_time || []);
+    drawDoughnut(boxes.newret, "newret", [
+      { label: "New", value: d.new_vs_returning?.new },
+      { label: "Returning", value: d.new_vs_returning?.returning },
+    ]);
+    drawDoughnut(
+      boxes.device,
+      "device",
+      (d.sessions_by_device || []).map((x) => ({ label: cap(x.label), value: Number(x.sessions) }))
+    );
+    drawDoughnut(
+      boxes.channels,
+      "channels",
+      (d.channels || []).map((x) => ({ label: x.label, value: Number(x.sessions) }))
+    );
+  } catch (err) {
+    if (err.code === 401) showLogin();
+  }
 }
 
 function renderDaily(rows) {
@@ -367,32 +575,117 @@ async function openVisitor(id) {
   }
 }
 
+// ----- sidebar tabs + lazy panel loading ------------------------------------
+const panelLoaded = {};
+
+function showTab(id) {
+  const nav = $("[data-tabs]");
+  if (!nav) return;
+  nav.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.tab === id));
+  document.querySelectorAll("[data-panel]").forEach((panel) => {
+    panel.classList.toggle("hidden", panel.dataset.panel !== id);
+  });
+  if (id === "overview") Object.values(charts).forEach((c) => c?.resize());
+  window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  if (location.hash !== `#${id}`) {
+    history.replaceState(null, "", `#${id}`);
+  }
+  return loadPanel(id);
+}
+
+async function loadPanel(id) {
+  if (panelLoaded[id]) return;
+  panelLoaded[id] = true;
+
+  try {
+    switch (id) {
+      case "overview":
+        await loadDashboard();
+        break;
+      case "traffic":
+        await Promise.all([
+          api("overview").then(renderStats),
+          api("daily").then(renderDaily),
+          api("top_pages").then(renderTopPages),
+          api("sources").then(renderSources),
+        ]);
+        break;
+      case "visitors":
+        await api("visitors", { limit: 200 }).then(renderVisitors);
+        break;
+      case "behavior":
+        await api("events", { limit: 100 }).then(renderEvents);
+        break;
+      case "email":
+        initCampaignForm();
+        await loadCampaignSection();
+        break;
+    }
+  } catch (err) {
+    panelLoaded[id] = false;
+    if (err.code === 401) showLogin();
+    throw err;
+  }
+}
+
+function initTabs() {
+  const nav = $("[data-tabs]");
+  if (!nav || nav.dataset.bound) return;
+  nav.dataset.bound = "1";
+  nav.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-tab]");
+    if (!btn) return;
+    showTab(btn.dataset.tab);
+  });
+
+  const initial = location.hash.replace("#", "") || "overview";
+  const valid = ["overview", "traffic", "visitors", "behavior", "email"];
+  showTab(valid.includes(initial) ? initial : "overview");
+}
+
+// ----- date-range selector --------------------------------------------------
+function initRange() {
+  const wrap = $("[data-range]");
+  if (!wrap || wrap.dataset.bound) return;
+  wrap.dataset.bound = "1";
+  wrap.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-days]");
+    if (!btn) return;
+    rangeDays = Number(btn.dataset.days) || 30;
+    wrap.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+    const title = $("[data-range-title]");
+    if (title) title.textContent = `Overview · last ${rangeDays} days`;
+    loadDashboard();
+  });
+}
+
 // ----- load / auth ----------------------------------------------------------
 async function loadAll() {
-  const results = await Promise.allSettled([
-    api("overview").then(renderStats),
-    api("daily").then(renderDaily),
-    api("top_pages").then(renderTopPages),
-    api("sources").then(renderSources),
-    api("visitors", { limit: 200 }).then(renderVisitors),
-    api("events", { limit: 100 }).then(renderEvents),
-  ]);
-  const unauthorized = results.find((r) => r.status === "rejected" && r.reason?.code === 401);
-  if (unauthorized) showLogin();
-
-  initCampaignForm();
-  loadCampaignSection();
+  initRange();
+  initTabs();
 }
+
+$("[data-refresh]").addEventListener("click", async () => {
+  const active = document.querySelector("[data-tabs] button.active")?.dataset.tab || "overview";
+  panelLoaded[active] = false;
+  try {
+    await loadPanel(active);
+  } catch {
+    /* auth handled in loadPanel */
+  }
+});
 
 function showApp() {
   gate.classList.add("hidden");
   app.classList.remove("hidden");
+  Object.keys(panelLoaded).forEach((k) => delete panelLoaded[k]);
   loadAll();
 }
 
 function showLogin() {
   sessionStorage.removeItem(TOKEN_KEY);
   token = "";
+  Object.keys(panelLoaded).forEach((k) => delete panelLoaded[k]);
   app.classList.add("hidden");
   gate.classList.remove("hidden");
 }
@@ -412,7 +705,6 @@ $("[data-login-form]").addEventListener("submit", async (e) => {
   }
 });
 
-$("[data-refresh]").addEventListener("click", loadAll);
 $("[data-logout]").addEventListener("click", showLogin);
 $("[data-drawer-close]").addEventListener("click", closeDrawer);
 overlay.addEventListener("click", closeDrawer);

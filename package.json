@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.1079.0",
-    "@supabase/supabase-js": "^2.45.4"
+    "@supabase/supabase-js": "^2.45.4",
+    "chart.js": "^4.5.1"
   },
   "devDependencies": {
     "@netlify/functions": "^2.8.1",

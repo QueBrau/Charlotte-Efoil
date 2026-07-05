@@ -4,20 +4,13 @@ const NAV_ITEMS = [
   { href: "index.html", label: "Welcome", page: "welcome" },
   { href: "pricing.html", label: "Pricing", page: "pricing" },
   { href: "reservation-request.html", label: "Reservations", page: "reservation-request" },
-  { href: "flight-lessons.html", label: "Flight Lesson Details", page: "flight-lessons" },
-  {
-    href: "more.html",
-    label: "More",
-    page: "more",
-    children: [
-      { href: "corporate.html", label: "Corporate Outings" },
-      { href: "about.html", label: "About Us" },
-      { href: "contact.html", label: "Contact Us" },
-    ],
-  },
+  { href: "flight-lessons.html", label: "Flight Lessons", page: "flight-lessons" },
+  { href: "corporate.html", label: "Corporate Outings", page: "corporate" },
+  { href: "about.html", label: "About Us", page: "about" },
+  { href: "contact.html", label: "Contact Us", page: "contact" },
 ];
 
-const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" decoding="async" />`;
+const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" decoding="async" fetchpriority="high" />`;
 
 const INSTAGRAM_URL = "https://www.instagram.com/charlotteefoil";
 
@@ -27,25 +20,7 @@ const INSTAGRAM_LINK = `<a class="social-link" href="${INSTAGRAM_URL}" target="_
 
 export function renderNav(activePage = "welcome") {
   const links = NAV_ITEMS.map((item) => {
-    if (item.children) {
-      const isActive = item.page === activePage || item.children.some((c) => c.href.replace(".html", "") === activePage);
-      return `
-        <li class="nav-item nav-item--dropdown ${isActive ? "is-active" : ""}">
-          <a class="nav-dropdown-link" href="${item.href}">${item.label}</a>
-          <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-label="Open ${item.label} menu">
-            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          </button>
-          <ul class="nav-dropdown">
-            ${item.children.map((child) => {
-              const childPage = child.href.replace(".html", "");
-              return `<li><a href="${child.href}" ${childPage === activePage ? 'class="is-active"' : ""}>${child.label}</a></li>`;
-            }).join("")}
-          </ul>
-        </li>`;
-    }
-
-    const pageKey = item.href === "index.html" ? "welcome" : item.href.replace(".html", "");
-    return `<li class="nav-item ${pageKey === activePage ? "is-active" : ""}"><a href="${item.href}">${item.label}</a></li>`;
+    return `<li class="nav-item ${item.page === activePage ? "is-active" : ""}"><a href="${item.href}">${item.label}</a></li>`;
   }).join("");
 
   return `
@@ -83,11 +58,6 @@ export function renderFooter() {
             <li><a href="pricing.html">Pricing</a></li>
             <li><a href="flight-lessons.html">Flight Lessons</a></li>
             <li><a href="reservation-request.html">Reservations</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3>More</h3>
-          <ul>
             <li><a href="corporate.html">Corporate Outings</a></li>
             <li><a href="about.html">About Us</a></li>
             <li><a href="contact.html">Contact</a></li>
@@ -202,20 +172,6 @@ function initNavigation() {
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") setMenuOpen(false);
-  });
-
-  document.querySelectorAll(".nav-dropdown-toggle").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      document.querySelectorAll(".nav-dropdown-toggle").forEach((other) => {
-        if (other !== btn) {
-          other.setAttribute("aria-expanded", "false");
-          other.closest(".nav-item--dropdown")?.classList.remove("is-open");
-        }
-      });
-      btn.setAttribute("aria-expanded", String(!expanded));
-      btn.closest(".nav-item--dropdown")?.classList.toggle("is-open", !expanded);
-    });
   });
 }
 
@@ -408,11 +364,15 @@ export function initHeroVideo() {
   const video = document.querySelector("[data-hero-video]");
   if (!video) return;
 
-  video.addEventListener("loadeddata", () => {
+  const markReady = () => {
     video.classList.add("is-ready");
-  });
+  };
 
-  if (video.readyState >= 2) {
-    video.classList.add("is-ready");
-  }
+  video.addEventListener("canplay", markReady, { once: true });
+  if (video.readyState >= 3) markReady();
+
+  video.play().catch(() => {
+    /* autoplay blocked — still show first frame once data is available */
+    video.addEventListener("loadeddata", markReady, { once: true });
+  });
 }
