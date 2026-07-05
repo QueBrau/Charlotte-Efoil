@@ -233,18 +233,50 @@
 
       .campaign-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 0.5rem; }
       .fld { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--muted); }
-      .fld input, .fld textarea {
-        background: var(--bg);
+      .fld input, .fld textarea, .fld select {
+        background-color: var(--panel-2);
         border: 1px solid var(--line);
         color: var(--text);
         border-radius: 10px;
         padding: 0.65rem 0.85rem;
         font-size: 0.95rem;
         font-family: inherit;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      }
+      .fld input:focus, .fld textarea:focus, .fld select:focus {
+        outline: none;
+        border-color: rgba(79, 176, 212, 0.55);
+        box-shadow: 0 0 0 3px rgba(79, 176, 212, 0.14);
+        background-color: var(--bg);
       }
       .fld textarea { resize: vertical; }
-      .campaign-actions { display: flex; align-items: center; gap: 0.9rem; }
+      .fld select {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 100%;
+        padding-right: 2.35rem;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2393a7b0' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+      }
+      .fld select:hover {
+        border-color: rgba(255, 255, 255, 0.16);
+        background-color: var(--bg);
+      }
+      .fld select:focus {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234fb0d4' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      }
+      .campaign-actions { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
+      .schedule-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.9rem;
+      }
+      @media (max-width: 640px) { .schedule-row { grid-template-columns: 1fr; } }
       .status-pill { text-transform: capitalize; }
+      .status-pill.is-off { opacity: 0.65; }
     </style>
   </head>
   <body>
@@ -253,6 +285,12 @@
       <form class="gate-card" data-login-form>
         <h1>Analytics Dashboard</h1>
         <p>Enter the admin password to continue.</p>
+        <p class="muted hidden" data-demo-hint style="margin:-0.75rem 0 1rem;font-size:0.85rem">
+          Demo mode — enter any password to preview sample analytics.
+        </p>
+        <p class="muted" style="margin:-0.75rem 0 1rem;font-size:0.85rem">
+          <a href="?mock=1">Preview dashboard with demo data</a>
+        </p>
         <div class="field">
           <input type="password" name="password" placeholder="Admin password" autocomplete="current-password" required />
           <button class="btn" type="submit">Sign in</button>
@@ -266,7 +304,6 @@
       <header class="topbar">
         <h1>CharlotteEfoil · Analytics</h1>
         <div class="actions">
-          <button class="btn btn-ghost" data-refresh>Refresh</button>
           <button class="btn btn-ghost" data-logout>Sign out</button>
         </div>
       </header>
@@ -376,9 +413,9 @@
           <section class="panel hidden" data-panel="email">
             <div class="toolbar"><span class="title">Email marketing</span></div>
             <div class="card">
-              <h2>Email campaign</h2>
+              <h2>Send now</h2>
               <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
-                Send a broadcast to all contacts who haven't unsubscribed
+                Send a one-time broadcast to all contacts who haven't unsubscribed
                 (<span data-audience-count>…</span> recipients). Basic HTML is allowed; an
                 unsubscribe footer is added automatically.
               </p>
@@ -398,6 +435,61 @@
               </form>
               <div class="section-title">Campaign history</div>
               <div data-campaigns><div class="loading">Loading…</div></div>
+            </div>
+
+            <div class="card">
+              <h2>Scheduled sends</h2>
+              <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
+                Automatically send the same update on a day each month (Eastern Time).
+                For example, day 20 at 9:00 AM sends on the 20th of every month.
+              </p>
+              <form data-schedule-form class="campaign-form">
+                <label class="fld">
+                  <span>Label (optional)</span>
+                  <input type="text" name="name" placeholder="e.g. Monthly lake update" />
+                </label>
+                <label class="fld">
+                  <span>Subject</span>
+                  <input type="text" name="subject" placeholder="e.g. Flat water &amp; open dates this month" required />
+                </label>
+                <label class="fld">
+                  <span>Message (HTML allowed)</span>
+                  <textarea name="html" rows="6" placeholder="Your recurring monthly message…" required></textarea>
+                </label>
+                <div class="schedule-row">
+                  <label class="fld">
+                    <span>Day of month</span>
+                    <select name="day_of_month" required>
+                      <!-- filled by JS -->
+                    </select>
+                  </label>
+                  <label class="fld">
+                    <span>Send time (Eastern)</span>
+                    <select name="send_hour" required>
+                      <!-- filled by JS -->
+                    </select>
+                  </label>
+                </div>
+                <div class="campaign-actions">
+                  <button class="btn" type="submit" data-schedule-save>Save schedule</button>
+                  <span class="error" data-schedule-status></span>
+                </div>
+              </form>
+              <div class="section-title">Active schedules</div>
+              <div data-schedules><div class="loading">Loading…</div></div>
+            </div>
+
+            <div class="card">
+              <h2>Bounced contacts</h2>
+              <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
+                Permanent bounces and spam complaints are removed automatically via Amazon SES.
+                Transient bounces stay flagged here until you remove them.
+              </p>
+              <div class="campaign-actions" style="margin-bottom:0.9rem">
+                <button class="btn btn-ghost" type="button" data-remove-all-bounced>Remove all flagged</button>
+                <span class="error" data-bounced-status></span>
+              </div>
+              <div data-bounced-contacts><div class="loading">Loading…</div></div>
             </div>
           </section>
         </main>

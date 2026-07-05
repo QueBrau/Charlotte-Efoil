@@ -78,7 +78,7 @@ Create a project at [supabase.com](https://supabase.com), then apply the
 migrations in `supabase/migrations/` **in order**:
 
 **Option A — Supabase SQL editor:** paste and run each file in order
-(`0001` → `0006`).
+(`0001` → `0008`).
 
 **Option B — Supabase CLI:**
 
@@ -147,8 +147,48 @@ From the `/admin` dashboard → **Email campaign**: enter a subject and message
   and removes the contact from the audience (also honored via the
   `List-Unsubscribe` header).
 
+### Bounced contacts (automatic + manual)
+
+Migration `0007_email_bounces.sql` adds bounce tracking:
+
+- **Automatic (recommended):** In Amazon SES, publish **bounce** and **complaint**
+  events to an SNS topic and subscribe it to
+  `https://YOUR-SITE.netlify.app/api/ses-events`. Set `SES_SNS_TOPIC_ARN` in
+  Netlify so only that topic can post. Permanent bounces and spam complaints
+  **delete the contact** from `leads`. Transient bounces are flagged with
+  `bounced_at` and excluded from future campaigns.
+- **Automatic on send:** If a campaign send fails with a permanent-looking SES
+  error (suppressed mailbox, invalid address, etc.), the contact is removed
+  immediately.
+- **Manual:** In the admin dashboard → **Email marketing** → **Bounced
+  contacts**, review flagged addresses and click **Remove** (one contact) or
+  **Remove all flagged** (bulk delete).
+
 Campaign status and sent/failed counts appear in the dashboard's campaign
 history. Make sure your SES send-rate quota comfortably covers your list size.
+
+### Scheduled monthly sends
+
+Migration `0008_email_schedules.sql` adds recurring marketing schedules. From
+**Admin → Email marketing → Scheduled sends**, create a schedule with subject,
+message, **day of month** (1–28), and **send time** (Eastern). Example: day **20**
+at **9:00 AM ET** sends on the 20th of every month.
+
+- `GET /api/admin?action=schedules` — list schedules with a computed next-run label.
+- `POST /api/admin?action=create_schedule` — `{ name?, subject, html, day_of_month, send_hour }`
+- `POST /api/admin?action=update_schedule` — `{ id, enabled?, subject?, html?, … }`
+- `POST /api/admin?action=delete_schedule` — `{ id }`
+
+A Netlify **scheduled function** (`run-email-schedules`, `@hourly`) checks enabled
+schedules each hour. When a schedule is due (matching day + hour in
+`America/New_York`, and not already sent this month), it creates an
+`email_campaigns` row linked via `schedule_id` and triggers the same background
+sender used for one-off blasts. Scheduled sends appear in campaign history like
+manual sends.
+
+**Note:** Days 29–31 are intentionally excluded so every month has a valid send
+date. Pause or delete a schedule from the admin UI without losing past campaign
+history.
 
 ### 3. Run locally
 
@@ -193,6 +233,8 @@ It shows:
 - **Unique visitors** — one row per browser; click any row for a drill-down of
   every page they viewed (with time on page) and every link/button they clicked.
 - **Recent clicks** — the latest link and CTA interactions across the site.
+- **Email marketing** — one-off campaigns, **scheduled monthly sends**, bounce
+  cleanup, and campaign history.
 
 Time-on-page is measured client-side as *engaged* (visible) time and sent via
 `sendBeacon` when the page is hidden or closed, then stored on the matching
