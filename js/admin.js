@@ -28,6 +28,24 @@ async function api(action, params = {}) {
   return res.json();
 }
 
+async function apiPost(action, body = {}) {
+  const url = new URL(`${API_BASE}/admin`, window.location.origin);
+  url.searchParams.set("action", action);
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (res.status === 401) {
+    const err = new Error("Unauthorized");
+    err.code = 401;
+    throw err;
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.error) throw new Error(data.error || "Request failed");
+  return data;
+}
+
 // ----- formatting helpers ---------------------------------------------------
 function fmtNum(n) {
   return (n ?? 0).toLocaleString();
@@ -200,6 +218,81 @@ function renderEvents(rows) {
   });
 }
 
+// ----- email campaigns ------------------------------------------------------
+let audienceCount = 0;
+
+function renderCampaigns(rows) {
+  if (!rows.length) {
+    $("[data-campaigns]").innerHTML = '<p class="muted">No campaigns sent yet.</p>';
+    return;
+  }
+  $("[data-campaigns]").innerHTML = `
+    <table>
+      <thead><tr><th>When</th><th>Subject</th><th>Status</th><th class="num">Sent</th><th class="num">Failed</th><th class="num">Total</th></tr></thead>
+      <tbody>
+        ${rows
+          .map(
+            (c) => `<tr>
+              <td class="muted">${fmtDate(c.created_at)}</td>
+              <td>${esc(c.subject)}</td>
+              <td><span class="pill status-pill">${esc(c.status)}</span></td>
+              <td class="num">${fmtNum(c.sent_count)}</td>
+              <td class="num">${fmtNum(c.failed_count)}</td>
+              <td class="num">${fmtNum(c.total_recipients)}</td>
+            </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`;
+}
+
+async function loadCampaignSection() {
+  try {
+    const [{ count }, list] = await Promise.all([api("audience_count"), api("campaigns")]);
+    audienceCount = count || 0;
+    const el = $("[data-audience-count]");
+    if (el) el.textContent = fmtNum(audienceCount);
+    renderCampaigns(list);
+  } catch (err) {
+    if (err.code === 401) showLogin();
+  }
+}
+
+function initCampaignForm() {
+  const form = $("[data-campaign-form]");
+  if (!form || form.dataset.bound) return;
+  form.dataset.bound = "1";
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const statusEl = $("[data-campaign-status]");
+    const btn = $("[data-campaign-send]");
+    const subject = form.subject.value.trim();
+    const html = form.html.value.trim();
+    if (!subject || !html) return;
+
+    if (!confirm(`Send this campaign to ${fmtNum(audienceCount)} contacts? This cannot be undone.`)) return;
+
+    btn.disabled = true;
+    statusEl.classList.remove("error");
+    statusEl.style.color = "";
+    statusEl.textContent = "Queuing…";
+
+    try {
+      await apiPost("send_campaign", { subject, html });
+      statusEl.textContent = "Campaign queued — sending in the background.";
+      form.reset();
+      setTimeout(loadCampaignSection, 1500);
+    } catch (err) {
+      if (err.code === 401) return showLogin();
+      statusEl.classList.add("error");
+      statusEl.textContent = err.message || "Could not send campaign.";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 // ----- visitor drawer -------------------------------------------------------
 const overlay = $("[data-overlay]");
 const drawer = $("[data-drawer]");
@@ -286,6 +379,9 @@ async function loadAll() {
   ]);
   const unauthorized = results.find((r) => r.status === "rejected" && r.reason?.code === 401);
   if (unauthorized) showLogin();
+
+  initCampaignForm();
+  loadCampaignSection();
 }
 
 function showApp() {

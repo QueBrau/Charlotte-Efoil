@@ -1,39 +1,12 @@
-// Email notifications via the Resend HTTP API (no extra dependency).
-// Configure with RESEND_API_KEY, NOTIFY_EMAIL, and FROM_EMAIL. If RESEND_API_KEY
-// is not set, sending is skipped silently so submissions still succeed.
+// Email notifications via Amazon SES. Configure with SES_REGION,
+// SES_ACCESS_KEY_ID, SES_SECRET_ACCESS_KEY, SES_FROM_EMAIL, and NOTIFY_EMAIL.
+// If SES is not configured, sending is skipped silently so submissions still
+// succeed.
+
+import { sendEmail, sesConfigured } from "./ses.mjs";
 
 function esc(s) {
   return String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
-}
-
-async function sendEmail({ to, replyTo, subject, html }) {
-  const apiKey = Netlify.env.get("RESEND_API_KEY");
-  if (!apiKey) {
-    console.warn("RESEND_API_KEY not set — skipping email notification.");
-    return;
-  }
-
-  const from = Netlify.env.get("FROM_EMAIL") || "CharlotteEfoil <reservations@charlotteefoil.com>";
-
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: Array.isArray(to) ? to : [to],
-      reply_to: replyTo || undefined,
-      subject,
-      html,
-    }),
-  });
-
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new Error(`Resend responded ${res.status}: ${detail}`);
-  }
 }
 
 const INTEREST_LABELS = {
@@ -45,6 +18,11 @@ const INTEREST_LABELS = {
 
 /** Sends a formatted reservation-request notification to the business inbox. */
 export async function notifyReservation(payload) {
+  if (!sesConfigured()) {
+    console.warn("SES not configured — skipping reservation email notification.");
+    return;
+  }
+
   const to = Netlify.env.get("NOTIFY_EMAIL") || "hello@charlotteefoil.com";
   const name = [payload.first_name, payload.last_name].filter(Boolean).join(" ") || "Unknown";
   const interests = (payload.interests || []).map((i) => INTEREST_LABELS[i] || i);

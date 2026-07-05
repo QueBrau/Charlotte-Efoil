@@ -89,19 +89,56 @@ Copy `.env.example` to `.env` for local dev, and set the same values in
 | `SUPABASE_SERVICE_ROLE_KEY` | same page | **secret**, server-only |
 | `TRACKING_IP_SALT` | `openssl rand -hex 32` | IP hashing salt |
 | `ADMIN_PASSWORD` | `openssl rand -hex 24` | password for the `/admin` dashboard |
-| `RESEND_API_KEY` | [resend.com](https://resend.com) API keys | reservation email notifications (optional) |
+| `SES_REGION` | e.g. `us-east-1` | your SES region |
+| `SES_ACCESS_KEY_ID` | IAM user | needs `ses:SendEmail` |
+| `SES_SECRET_ACCESS_KEY` | IAM user | **secret** |
+| `SES_FROM_EMAIL` | verified sender | verified identity/domain in SES |
 | `NOTIFY_EMAIL` | your inbox | where reservations are routed (default `hello@charlotteefoil.com`) |
-| `FROM_EMAIL` | verified sender | must be on a domain verified in Resend |
+| `MAIL_FOOTER_ADDRESS` | your mailing address | CAN-SPAM footer for bulk campaigns |
+| `SITE_URL` | optional | used for unsubscribe links (auto-detected) |
 | `ALLOWED_ORIGIN` | optional | lock API to your domain |
 
-### Reservation email routing
+## Email (Amazon SES)
 
-When a reservation is submitted, `/api/reservations` saves it to the database
-and emails a formatted summary to `NOTIFY_EMAIL` (default
-`hello@charlotteefoil.com`) via [Resend](https://resend.com), with the
-requester set as reply-to. To enable it: create a Resend account, verify your
-sending domain, and set `RESEND_API_KEY` / `FROM_EMAIL`. If `RESEND_API_KEY` is
-unset, submissions are still stored — only the email is skipped.
+All email — the reservation notification **and** bulk marketing campaigns — is
+sent through **Amazon SES**, which is built for cheap volume (~$0.10 per 1,000
+emails, so 3,000 contacts twice a month is well under a dollar).
+
+### Setup
+
+1. In AWS SES, **verify your sending domain** (charlotteefoil.com) and set up
+   DKIM. Verify `SES_FROM_EMAIL`.
+2. **Request production access** — new SES accounts are sandboxed (can only send
+   to verified addresses, ~200/day). Production access lifts this and raises your
+   send-rate quota.
+3. Create an **IAM user** with an `ses:SendEmail` policy and put its keys in
+   `SES_ACCESS_KEY_ID` / `SES_SECRET_ACCESS_KEY` (never use root credentials).
+4. Set the SES env vars locally and in Netlify.
+
+### Reservation notifications
+
+When a reservation is submitted, `/api/reservations` saves it and emails a
+formatted summary to `NOTIFY_EMAIL`, with the requester set as reply-to. If SES
+isn't configured, the submission is still stored — only the email is skipped.
+
+### Bulk campaigns (email blast)
+
+From the `/admin` dashboard → **Email campaign**: enter a subject and message
+(basic HTML), and send to every contact who hasn't unsubscribed. The flow:
+
+- `POST /api/admin?action=send_campaign` creates a row in `email_campaigns` and
+  triggers `send-campaign-background` (a Netlify **background function**, 15-min
+  limit) so large sends don't time out.
+- The background sender loads the `email_audience` view, sends via SES with
+  bounded concurrency + throttle backoff, appends a CAN-SPAM footer with your
+  `MAIL_FOOTER_ADDRESS` and a one-click **unsubscribe** link, and records each
+  send in `email_sends`.
+- Unsubscribes hit `/api/unsubscribe?token=…`, which sets `leads.unsubscribed_at`
+  and removes the contact from the audience (also honored via the
+  `List-Unsubscribe` header).
+
+Campaign status and sent/failed counts appear in the dashboard's campaign
+history. Make sure your SES send-rate quota comfortably covers your list size.
 
 ### 3. Run locally
 

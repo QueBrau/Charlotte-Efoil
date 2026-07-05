@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.1079.0",
     "@supabase/supabase-js": "^2.45.4"
   },
   "devDependencies": {
