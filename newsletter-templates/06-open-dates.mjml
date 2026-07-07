@@ -1,0 +1,51 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="15px" line-height="1.55" />
+      <mj-button background-color="#4fb0d4" color="#ffffff" border-radius="8px" />
+    </mj-attributes>
+    <mj-preview>This weekend's open eFoil sessions — grab a slot before they're gone.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#f4f8fa" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="24px">
+      <mj-column>
+        <mj-text align="center" font-size="22px" font-weight="700" color="#194055">Open dates this weekend</mj-text>
+        <mj-text align="center" color="#5a6d78" padding-top="8px">Last-minute availability across the Charlotte lakes</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="0 16px 8px">
+      <mj-column background-color="#f4f8fa" border-radius="10px" padding="16px">
+        <mj-text font-weight="700" color="#194055">Saturday · 8:00 AM</mj-text>
+        <mj-text color="#4fb0d4" font-size="13px" padding-top="4px">Lake Norman · Morning glass</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="8px 16px">
+      <mj-column background-color="#f4f8fa" border-radius="10px" padding="16px">
+        <mj-text font-weight="700" color="#194055">Saturday · 4:30 PM</mj-text>
+        <mj-text color="#4fb0d4" font-size="13px" padding-top="4px">Lake Wylie · Sunset session</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="8px 16px 24px">
+      <mj-column background-color="#f4f8fa" border-radius="10px" padding="16px">
+        <mj-text font-weight="700" color="#194055">Sunday · 9:00 AM</mj-text>
+        <mj-text color="#4fb0d4" font-size="13px" padding-top="4px">Mountain Island Lake · Family-friendly</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="0 24px 28px">
+      <mj-column>
+        <mj-button href="{{SITE}}/reservation-request.html" align="center">Reserve your slot</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

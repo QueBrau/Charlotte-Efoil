@@ -9,6 +9,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("chart.js")) return "charts";
+          if (id.includes("grapesjs") || id.includes("grapes-flyer")) return "grapes";
         },
       },
       input: {

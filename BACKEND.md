@@ -78,7 +78,7 @@ Create a project at [supabase.com](https://supabase.com), then apply the
 migrations in `supabase/migrations/` **in order**:
 
 **Option A — Supabase SQL editor:** paste and run each file in order
-(`0001` → `0008`).
+(`0001` → `0010`).
 
 **Option B — Supabase CLI:**
 
@@ -133,16 +133,24 @@ isn't configured, the submission is still stored — only the email is skipped.
 
 ### Bulk campaigns (email blast)
 
-From the `/admin` dashboard → **Email campaign**: enter a subject and message
-(basic HTML), and send to every contact who hasn't unsubscribed. The flow:
+From the `/admin` dashboard → **Email marketing**: enter a subject and message
+(basic HTML), optionally design a **flyer** in the GrapesJS drag-and-drop editor,
+and send to every contact who hasn't unsubscribed. The flow:
 
-- `POST /api/admin?action=send_campaign` creates a row in `email_campaigns` and
-  triggers `send-campaign-background` (a Netlify **background function**, 15-min
-  limit) so large sends don't time out.
+- `POST /api/admin?action=upload_flyer` — upload images used inside the flyer
+  editor (JPG/PNG/WebP/GIF, max 2 MB). Stored in Netlify Blobs and served at
+  `/api/flyer?id=…`.
+- `POST /api/admin?action=send_campaign` — `{ subject, html, flyer_html? }` creates
+  a row in `email_campaigns` and triggers `send-campaign-background` (a Netlify
+  **background function**, 15-min limit) so large sends don't time out.
+- **Flyer templates:** ten MJML starters live in `newsletter-templates/` (hero,
+  monthly update, promo, corporate, gallery, etc.). Run `npm run build:templates`
+  after editing MJML; the admin flyer designer loads the compiled HTML presets.
 - The background sender loads the `email_audience` view, sends via SES with
-  bounded concurrency + throttle backoff, appends a CAN-SPAM footer with your
-  `MAIL_FOOTER_ADDRESS` and a one-click **unsubscribe** link, and records each
-  send in `email_sends`.
+  bounded concurrency + throttle backoff, prepends the **CharlotteEfoil logo**
+  (when no flyer is attached; flyer templates include the logo themselves),
+  then the optional GrapesJS flyer HTML, then your message, appends a CAN-SPAM footer with your `MAIL_FOOTER_ADDRESS` and a
+  one-click **unsubscribe** link, and records each send in `email_sends`.
 - Unsubscribes hit `/api/unsubscribe?token=…`, which sets `leads.unsubscribed_at`
   and removes the contact from the audience (also honored via the
   `List-Unsubscribe` header).
@@ -171,11 +179,12 @@ history. Make sure your SES send-rate quota comfortably covers your list size.
 
 Migration `0008_email_schedules.sql` adds recurring marketing schedules. From
 **Admin → Email marketing → Scheduled sends**, create a schedule with subject,
-message, **day of month** (1–28), and **send time** (Eastern). Example: day **20**
-at **9:00 AM ET** sends on the 20th of every month.
+message, optional **GrapesJS flyer**, **day of month** (1–28), and **send time**
+(Eastern). Example: day **20** at **9:00 AM ET** sends on the 20th of every month.
+The CharlotteEfoil logo is included on every send (in the flyer template, or auto-prepended for message-only blasts).
 
 - `GET /api/admin?action=schedules` — list schedules with a computed next-run label.
-- `POST /api/admin?action=create_schedule` — `{ name?, subject, html, day_of_month, send_hour }`
+- `POST /api/admin?action=create_schedule` — `{ name?, subject, html, day_of_month, send_hour, flyer_html? }`
 - `POST /api/admin?action=update_schedule` — `{ id, enabled?, subject?, html?, … }`
 - `POST /api/admin?action=delete_schedule` — `{ id }`
 

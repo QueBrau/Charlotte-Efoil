@@ -1,10 +1,33 @@
 import { sendBatch, sesConfigured } from "./ses.mjs";
 import { isPermanentSendFailure, recordEmailBounce } from "./bounce.mjs";
+import { flyerPublicUrl } from "./flyers.mjs";
 
-export function wrapCampaignHtml(campaignHtml, unsubscribeUrl) {
+export const LOGO_PATH = "/photos/CharlotteEfoil.png";
+
+export function logoBlock(baseUrl) {
+  const base = String(baseUrl || "").replace(/\/$/, "") || "https://www.charlotteefoil.com";
+  const safeBase = base.replace(/"/g, "&quot;");
+  const logoUrl = `${base}${LOGO_PATH}`.replace(/"/g, "&quot;");
+  return `<div style="margin:0 0 20px;text-align:center;padding:4px 0 8px"><a href="${safeBase}" target="_blank" rel="noopener" style="text-decoration:none"><img src="${logoUrl}" alt="CharlotteEfoil" width="200" style="max-width:200px;width:200px;height:auto;display:inline-block;border:0" /></a></div>`;
+}
+
+export function wrapCampaignHtml(campaignHtml, unsubscribeUrl, options = {}) {
+  const { flyerHtml = null, flyerUrl = null, baseUrl = "" } = options;
   const address = Netlify.env.get("MAIL_FOOTER_ADDRESS") || "CharlotteEfoil · Charlotte, NC";
+  const hasFlyer =
+    (flyerHtml && String(flyerHtml).trim()) || (flyerUrl && String(flyerUrl).trim());
+  const logo = hasFlyer ? "" : logoBlock(baseUrl);
+
+  let flyerBlock = "";
+  if (flyerHtml && String(flyerHtml).trim()) {
+    flyerBlock = `<div style="margin:0 0 24px">${flyerHtml}</div>`;
+  } else if (flyerUrl) {
+    const safeFlyer = String(flyerUrl).replace(/"/g, "&quot;");
+    flyerBlock = `<div style="margin:0 0 24px;text-align:center"><img src="${safeFlyer}" alt="" width="600" style="max-width:100%;width:100%;height:auto;border-radius:8px;display:block;margin:0 auto" /></div>`;
+  }
+
   return `<div style="font-family:system-ui,Segoe UI,Arial,sans-serif;color:#12303f;line-height:1.6;max-width:600px;margin:0 auto">
-    ${campaignHtml}
+    ${logo}${flyerBlock}${campaignHtml}
     <hr style="border:none;border-top:1px solid #e2e8ec;margin:28px 0 12px" />
     <p style="color:#8a9aa3;font-size:12px;line-height:1.5">
       ${address}<br />
@@ -65,7 +88,12 @@ export async function executeCampaignSend(supabase, campaign, baseUrl) {
     subject: campaign.subject,
     from: Netlify.env.get("SES_FROM_EMAIL") || undefined,
     concurrency: 5,
-    renderHtml: (r) => wrapCampaignHtml(campaign.html, r.unsubscribeUrl),
+    renderHtml: (r) =>
+      wrapCampaignHtml(campaign.html, r.unsubscribeUrl, {
+        baseUrl,
+        flyerHtml: campaign.flyer_html,
+        flyerUrl: flyerPublicUrl(baseUrl, campaign.flyer_id),
+      }),
     onResult: async (r, ok, err) => {
       if (ok) sent++;
       else failed++;

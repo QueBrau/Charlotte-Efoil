@@ -1,6 +1,13 @@
 import { getSupabase } from "./_shared/supabase.mjs";
 import { json, preflight, readBody, clean } from "./_shared/http.mjs";
 import { computeNextRunLabel, triggerBackgroundCampaignSend } from "./_shared/campaign-send.mjs";
+import {
+  FLYER_MAX_BYTES,
+  FLYER_TYPES,
+  flyerPublicUrl,
+  parseFlyerId,
+  saveFlyer,
+} from "./_shared/flyers.mjs";
 
 /** Constant-time-ish comparison to avoid trivial timing leaks. */
 function safeEqual(a, b) {
@@ -138,7 +145,9 @@ async function audienceCount(supabase) {
 async function campaigns(supabase) {
   const { data, error } = await supabase
     .from("email_campaigns")
-    .select("id, subject, status, total_recipients, sent_count, failed_count, created_at, sent_at, error")
+    .select(
+      "id, subject, status, total_recipients, sent_count, failed_count, created_at, sent_at, error, flyer_id, flyer_html"
+    )
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;
@@ -193,9 +202,13 @@ async function sendCampaign(supabase, req) {
   const html = clean(body.html, 200000);
   if (!subject || !html) return { error: "Subject and message are required.", status: 400 };
 
+  const flyerId = parseFlyerId(body.flyer_id);
+  if (flyerId?.error) return flyerId;
+  const flyerHtml = clean(body.flyer_html, 500000) || null;
+
   const { data, error } = await supabase
     .from("email_campaigns")
-    .insert({ subject, html, status: "sending" })
+    .insert({ subject, html, status: "sending", flyer_id: flyerId, flyer_html: flyerHtml })
     .select("id")
     .single();
   if (error) throw error;
@@ -214,6 +227,39 @@ async function sendCampaign(supabase, req) {
   return { ok: true, id: data.id };
 }
 
+async function uploadFlyer(req) {
+  const body = await readBody(req);
+  const contentType = clean(body.content_type, 64);
+  const data = body.data;
+
+  if (!data || typeof data !== "string") {
+    return { error: "Image data is required.", status: 400 };
+  }
+  if (!FLYER_TYPES.has(contentType)) {
+    return { error: "Use a JPG, PNG, WebP, or GIF image.", status: 400 };
+  }
+
+  let buffer;
+  try {
+    buffer = Buffer.from(data, "base64");
+  } catch {
+    return { error: "Could not read image data.", status: 400 };
+  }
+  if (!buffer.length || buffer.length > FLYER_MAX_BYTES) {
+    return { error: "Image must be under 2 MB.", status: 400 };
+  }
+
+  const id = crypto.randomUUID();
+  await saveFlyer(id, buffer, contentType);
+
+  const base = (
+    Netlify.env.get("SITE_URL") ||
+    new URL(req.url).origin
+  ).replace(/\/$/, "");
+
+  return { ok: true, id, url: flyerPublicUrl(base, id) };
+}
+
 function parseScheduleBody(body) {
   const subject = clean(body.subject, 300);
   const html = clean(body.html, 200000);
@@ -226,7 +272,9 @@ function parseScheduleBody(body) {
 async function listSchedules(supabase) {
   const { data, error } = await supabase
     .from("email_schedules")
-    .select("id, name, subject, day_of_month, send_hour, timezone, enabled, last_sent_at, created_at, updated_at")
+    .select(
+      "id, name, subject, day_of_month, send_hour, timezone, enabled, last_sent_at, created_at, updated_at, flyer_id, flyer_html"
+    )
     .order("created_at", { ascending: false });
   if (error) throw error;
   return (data || []).map((row) => ({
@@ -240,6 +288,10 @@ async function createSchedule(supabase, req) {
   const { subject, html, name, day_of_month, send_hour } = parseScheduleBody(body);
   if (!subject || !html) return { error: "Subject and message are required.", status: 400 };
 
+  const flyerId = parseFlyerId(body.flyer_id);
+  if (flyerId?.error) return flyerId;
+  const flyerHtml = clean(body.flyer_html, 500000) || null;
+
   const { data, error } = await supabase
     .from("email_schedules")
     .insert({
@@ -249,6 +301,8 @@ async function createSchedule(supabase, req) {
       day_of_month,
       send_hour,
       enabled: body.enabled !== false,
+      flyer_id: flyerId,
+      flyer_html: flyerHtml,
     })
     .select("id")
     .single();
@@ -271,6 +325,14 @@ async function updateSchedule(supabase, req) {
   }
   if (body.send_hour !== undefined) {
     patch.send_hour = Math.min(Math.max(Number(body.send_hour) ?? 9, 0), 23);
+  }
+  if (body.flyer_id !== undefined) {
+    const flyerId = parseFlyerId(body.flyer_id);
+    if (flyerId?.error) return flyerId;
+    patch.flyer_id = flyerId;
+  }
+  if (body.flyer_html !== undefined) {
+    patch.flyer_html = clean(body.flyer_html, 500000) || null;
   }
 
   if (!Object.keys(patch).length) return { error: "Nothing to update.", status: 400 };
@@ -315,6 +377,10 @@ export default async (req) => {
         }
         case "mark_bounced": {
           const result = await markBounced(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "upload_flyer": {
+          const result = await uploadFlyer(req);
           return json(result, result.status || (result.error ? 400 : 200));
         }
         case "create_schedule": {

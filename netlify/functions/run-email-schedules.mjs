@@ -41,8 +41,10 @@ export default async (req, context) => {
           html: schedule.html,
           status: "sending",
           schedule_id: schedule.id,
+          flyer_id: schedule.flyer_id || null,
+          flyer_html: schedule.flyer_html || null,
         })
-        .select("id, subject, html")
+        .select("id, subject, html, flyer_id, flyer_html")
         .single();
       if (cErr) throw cErr;
 

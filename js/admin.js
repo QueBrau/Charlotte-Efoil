@@ -6,6 +6,7 @@
 
 import Chart from "chart.js/auto";
 import { isMockMode, mockApi, showDemoBanner } from "./admin-mock.js";
+import { NEWSLETTER_TEMPLATES } from "./newsletter-templates.js";
 
 Chart.defaults.color = "#93a7b0";
 Chart.defaults.borderColor = "rgba(255, 255, 255, 0.08)";
@@ -443,13 +444,14 @@ function renderCampaigns(rows) {
   }
   $("[data-campaigns]").innerHTML = `
     <table>
-      <thead><tr><th>When</th><th>Subject</th><th>Status</th><th class="num">Sent</th><th class="num">Failed</th><th class="num">Total</th></tr></thead>
+      <thead><tr><th>When</th><th>Subject</th><th>Flyer</th><th>Status</th><th class="num">Sent</th><th class="num">Failed</th><th class="num">Total</th></tr></thead>
       <tbody>
         ${rows
           .map(
             (c) => `<tr>
               <td class="muted">${fmtDate(c.created_at)}</td>
               <td>${esc(c.subject)}</td>
+              <td>${c.flyer_html || c.flyer_id ? '<span class="pill">Yes</span>' : '<span class="muted">—</span>'}</td>
               <td><span class="pill status-pill">${esc(c.status)}</span></td>
               <td class="num">${fmtNum(c.sent_count)}</td>
               <td class="num">${fmtNum(c.failed_count)}</td>
@@ -459,6 +461,134 @@ function renderCampaigns(rows) {
           .join("")}
       </tbody>
     </table>`;
+}
+
+const FLYER_MAX_BYTES = 2 * 1024 * 1024;
+const FLYER_ACCEPT = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+
+let flyerEditorApi = null;
+let flyerEditorsReady = null;
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || "");
+      resolve(result.split(",")[1] || "");
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function ensureFlyerEditors() {
+  if (!flyerEditorApi) {
+    flyerEditorApi = await import("./grapes-flyer.js");
+  }
+  return flyerEditorApi;
+}
+
+async function uploadFlyerFile(file) {
+  if (!FLYER_ACCEPT.has(file.type)) throw new Error("Use a JPG, PNG, WebP, or GIF.");
+  if (file.size > FLYER_MAX_BYTES) throw new Error("Image must be under 2 MB.");
+  const data = await fileToBase64(file);
+  const result = await apiPost("upload_flyer", { content_type: file.type, data });
+  if (!result.url && result.id) {
+    result.url = `${API_BASE}/flyer?id=${encodeURIComponent(result.id)}`;
+  }
+  return result;
+}
+
+async function initTemplatePicker(root) {
+  const grid = root.querySelector("[data-template-grid]");
+  if (!grid || grid.dataset.ready) return;
+  grid.dataset.ready = "1";
+
+  const container = root.querySelector("[data-flyer-editor]");
+  const hidden = root.querySelector('input[name="flyer_html"]');
+
+  NEWSLETTER_TEMPLATES.forEach((t) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "template-card";
+    btn.dataset.templateId = t.id;
+    btn.innerHTML = `<strong>${esc(t.name)}</strong><span class="muted-desc">${esc(t.description)}</span><span class="pill">${esc(t.category)}</span>`;
+    btn.addEventListener("click", async () => {
+      const api = await ensureFlyerEditors();
+      api.loadFlyerEditor(container, t.html, hidden);
+      grid.querySelectorAll(".template-card").forEach((b) => b.classList.toggle("active", b === btn));
+    });
+    grid.appendChild(btn);
+  });
+}
+
+async function initFlyerEditors() {
+  if (flyerEditorsReady) return flyerEditorsReady;
+
+  flyerEditorsReady = (async () => {
+    const api = await ensureFlyerEditors();
+    for (const root of document.querySelectorAll("[data-flyer-editor-field]")) {
+      if (root.dataset.ready) continue;
+      root.dataset.ready = "1";
+
+      const container = root.querySelector("[data-flyer-editor]");
+      const hidden = root.querySelector('input[name="flyer_html"]');
+      const clearBtn = root.querySelector("[data-flyer-clear]");
+      const statusEl = root.querySelector("[data-flyer-status]");
+
+      api.initFlyerEditor(container, {
+        hiddenInput: hidden,
+        uploadFlyer: async (file) => {
+          try {
+            const result = await uploadFlyerFile(file);
+            if (statusEl) {
+              statusEl.classList.remove("error");
+              statusEl.textContent = "";
+            }
+            return result;
+          } catch (err) {
+            if (err.code === 401) {
+              showLogin();
+              throw err;
+            }
+            if (statusEl) {
+              statusEl.classList.add("error");
+              statusEl.textContent = err.message || "Upload failed.";
+            }
+            throw err;
+          }
+        },
+      });
+
+      clearBtn?.addEventListener("click", () => {
+        api.clearFlyerEditor(container, hidden);
+        if (statusEl) statusEl.textContent = "";
+        root.querySelector("[data-template-grid]")?.querySelectorAll(".template-card").forEach((b) => b.classList.remove("active"));
+      });
+
+      initTemplatePicker(root);
+    }
+  })();
+
+  return flyerEditorsReady;
+}
+
+async function syncFlyerFields(form) {
+  const api = await ensureFlyerEditors();
+  form?.querySelectorAll("[data-flyer-editor]").forEach((container) => {
+    const field = container.closest("[data-flyer-editor-field]");
+    const hidden = field?.querySelector('input[name="flyer_html"]');
+    api.syncFlyerInput(container, hidden);
+  });
+}
+
+async function resetFlyerEditors(form) {
+  const api = await ensureFlyerEditors();
+  form?.querySelectorAll("[data-flyer-editor-field]").forEach((root) => {
+    const container = root.querySelector("[data-flyer-editor]");
+    const hidden = root.querySelector('input[name="flyer_html"]');
+    api.clearFlyerEditor(container, hidden);
+  });
 }
 
 async function loadCampaignSection() {
@@ -502,34 +632,93 @@ function fmtHour(h) {
   return HOUR_LABELS[Number(h)] || `${h}:00`;
 }
 
+function ordinal(n) {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+function bindPicker(group, hiddenInput, items, defaultVal, onChange) {
+  group.innerHTML = items
+    .map(
+      ({ value, label }) =>
+        `<button type="button" data-value="${value}" role="radio" aria-checked="${value === defaultVal ? "true" : "false"}" class="${value === defaultVal ? "active" : ""}">${label}</button>`
+    )
+    .join("");
+
+  group.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-value]");
+    if (!btn) return;
+    const val = btn.dataset.value;
+    hiddenInput.value = val;
+    group.querySelectorAll("button").forEach((b) => {
+      const on = b.dataset.value === val;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-checked", on ? "true" : "false");
+    });
+    onChange?.(val);
+  });
+}
+
+function resetPicker(group, hiddenInput, value, onChange) {
+  hiddenInput.value = String(value);
+  group.querySelectorAll("button").forEach((b) => {
+    const on = b.dataset.value === String(value);
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-checked", on ? "true" : "false");
+  });
+  onChange?.(String(value));
+}
+
 function initScheduleForm() {
   const form = $("[data-schedule-form]");
   if (!form || form.dataset.bound) return;
   form.dataset.bound = "1";
 
-  const daySel = form.day_of_month;
-  const hourSel = form.send_hour;
-  if (daySel && !daySel.options.length) {
-    for (let d = 1; d <= 28; d++) {
-      const opt = document.createElement("option");
-      opt.value = String(d);
-      opt.textContent = String(d);
-      if (d === 20) opt.selected = true;
-      daySel.appendChild(opt);
-    }
+  const dayInput = form.day_of_month;
+  const hourInput = form.send_hour;
+  const dayPicker = form.querySelector("[data-day-picker]");
+  const hourPicker = form.querySelector("[data-hour-picker]");
+  const dayHint = form.querySelector("[data-day-hint]");
+  const hourHint = form.querySelector("[data-hour-hint]");
+
+  const updateDayHint = (val) => {
+    if (dayHint) dayHint.innerHTML = `Repeats on the <strong>${ordinal(Number(val))}</strong> of each month`;
+  };
+  const updateHourHint = (val) => {
+    if (hourHint) hourHint.innerHTML = `Sends at <strong>${fmtHour(val)} ET</strong>`;
+  };
+
+  if (dayPicker && !dayPicker.dataset.ready) {
+    dayPicker.dataset.ready = "1";
+    bindPicker(
+      dayPicker,
+      dayInput,
+      Array.from({ length: 28 }, (_, i) => {
+        const d = i + 1;
+        return { value: String(d), label: String(d) };
+      }),
+      "20",
+      updateDayHint
+    );
+    updateDayHint("20");
   }
-  if (hourSel && !hourSel.options.length) {
-    Object.entries(HOUR_LABELS).forEach(([val, label]) => {
-      const opt = document.createElement("option");
-      opt.value = val;
-      opt.textContent = `${label} ET`;
-      if (val === "9") opt.selected = true;
-      hourSel.appendChild(opt);
-    });
+
+  if (hourPicker && !hourPicker.dataset.ready) {
+    hourPicker.dataset.ready = "1";
+    bindPicker(
+      hourPicker,
+      hourInput,
+      Object.entries(HOUR_LABELS).map(([value, label]) => ({ value, label })),
+      "9",
+      updateHourHint
+    );
+    updateHourHint("9");
   }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    await syncFlyerFields(form);
     const statusEl = $("[data-schedule-status]");
     const btn = $("[data-schedule-save]");
     const payload = {
@@ -538,6 +727,7 @@ function initScheduleForm() {
       html: form.html.value.trim(),
       day_of_month: Number(form.day_of_month.value),
       send_hour: Number(form.send_hour.value),
+      flyer_html: form.flyer_html?.value.trim() || null,
     };
     if (!payload.subject || !payload.html) return;
 
@@ -552,8 +742,9 @@ function initScheduleForm() {
       await apiPost("create_schedule", payload);
       if (statusEl) statusEl.textContent = "Schedule saved.";
       form.reset();
-      if (daySel) daySel.value = "20";
-      if (hourSel) hourSel.value = "9";
+      await resetFlyerEditors(form);
+      resetPicker(dayPicker, dayInput, 20, updateDayHint);
+      resetPicker(hourPicker, hourInput, 9, updateHourHint);
       panelLoaded.email = false;
       await loadCampaignSection();
     } catch (err) {
@@ -582,7 +773,7 @@ function renderSchedules(rows) {
         ${rows
           .map(
             (s) => `<tr>
-              <td>${esc(s.name || s.subject)}${s.name ? `<br><span class="muted">${esc(s.subject)}</span>` : ""}</td>
+              <td>${esc(s.name || s.subject)}${s.name ? `<br><span class="muted">${esc(s.subject)}</span>` : ""}${s.flyer_html || s.flyer_id ? ' <span class="pill">Flyer</span>' : ""}</td>
               <td>Day ${esc(s.day_of_month)} · ${fmtHour(s.send_hour)} ET</td>
               <td class="muted">${esc(s.next_run || "—")}</td>
               <td class="muted">${s.last_sent_at ? fmtDate(s.last_sent_at) : "Never"}</td>
@@ -710,10 +901,12 @@ function initCampaignForm() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    await syncFlyerFields(form);
     const statusEl = $("[data-campaign-status]");
     const btn = $("[data-campaign-send]");
     const subject = form.subject.value.trim();
     const html = form.html.value.trim();
+    const flyer_html = form.flyer_html?.value.trim() || null;
     if (!subject || !html) return;
 
     if (!confirm(`Send this campaign to ${fmtNum(audienceCount)} contacts? This cannot be undone.`)) return;
@@ -724,9 +917,10 @@ function initCampaignForm() {
     statusEl.textContent = "Queuing…";
 
     try {
-      await apiPost("send_campaign", { subject, html });
+      await apiPost("send_campaign", { subject, html, flyer_html });
       statusEl.textContent = "Campaign queued — sending in the background.";
       form.reset();
+      await resetFlyerEditors(form);
       setTimeout(loadCampaignSection, 1500);
     } catch (err) {
       if (err.code === 401) return showLogin();
@@ -857,6 +1051,7 @@ async function loadPanel(id) {
         initCampaignForm();
         initScheduleForm();
         initBouncedActions();
+        await initFlyerEditors();
         await loadCampaignSection();
         break;
     }
