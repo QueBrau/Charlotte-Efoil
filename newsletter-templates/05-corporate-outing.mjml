@@ -1,0 +1,42 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Georgia, Times New Roman, serif" />
+      <mj-text color="#12303f" font-size="16px" line-height="1.7" font-family="system-ui, Arial, sans-serif" />
+      <mj-button background-color="#194055" color="#ffffff" border-radius="6px" font-family="system-ui, Arial, sans-serif" />
+    </mj-attributes>
+    <mj-preview>Take your team offsite — literally. Corporate eFoil outings on the lake.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#ffffff" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="32px 28px 16px" border-bottom="3px solid #194055">
+      <mj-column>
+        <mj-text font-size="13px" color="#4fb0d4" font-weight="700" text-transform="uppercase" letter-spacing="1px" font-family="system-ui, Arial, sans-serif">
+          Corporate &amp; team events
+        </mj-text>
+        <mj-text font-size="28px" color="#194055" font-weight="700" padding-top="10px" font-family="system-ui, Arial, sans-serif">
+          The team outing they'll actually talk about
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="24px 28px">
+      <mj-column>
+        <mj-text>
+          Skip the conference room. CharlotteEfoil brings a mobile fleet to your lake — perfect for client entertainment, leadership retreats, and team-building that feels like a vacation.
+        </mj-text>
+        <mj-text padding-top="14px" font-weight="600" color="#194055" font-family="system-ui, Arial, sans-serif">Ideal for groups of 4–12</mj-text>
+        <mj-text padding-top="8px">We handle instruction, safety, and logistics. You bring the crew.</mj-text>
+        <mj-button href="{{SITE}}/corporate.html" padding-top="20px">Plan a corporate outing</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

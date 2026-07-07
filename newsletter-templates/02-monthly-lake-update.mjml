@@ -1,0 +1,38 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="15px" line-height="1.6" />
+      <mj-button background-color="#4fb0d4" color="#ffffff" border-radius="8px" />
+    </mj-attributes>
+    <mj-preview>Your monthly Charlotte lakes update — conditions, dates, and what's new.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#eef4f6" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="24px">
+      <mj-column>
+        <mj-text color="#4fb0d4" font-size="12px" font-weight="700" text-transform="uppercase" letter-spacing="1px">
+          Monthly update
+        </mj-text>
+        <mj-text font-size="24px" font-weight="700" padding-top="8px" color="#194055">
+          Flat water &amp; open dates this month
+        </mj-text>
+        <mj-divider border-color="#e2e8ec" border-width="1px" padding="16px 0" />
+        <mj-text font-weight="600" color="#194055">Lake conditions</mj-text>
+        <mj-text padding-top="6px">Morning glass on Lake Norman most weekdays. Light afternoon chop — best for riders who've completed a first lesson.</mj-text>
+        <mj-text font-weight="600" color="#194055" padding-top="16px">Open dates</mj-text>
+        <mj-text padding-top="6px">• Sat &amp; Sun mornings — Lake Norman<br/>• Weekday sunsets — Lake Wylie<br/>• Corporate slots — by request</mj-text>
+        <mj-button href="{{SITE}}/reservation-request.html" padding-top="20px">See availability</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

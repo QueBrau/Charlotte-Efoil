@@ -1,0 +1,57 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="15px" line-height="1.6" />
+      <mj-button background-color="#194055" color="#ffffff" border-radius="8px" />
+    </mj-attributes>
+    <mj-preview>5 tips for your best eFoil session this season.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#ffffff" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#194055" padding="24px">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="24px" font-weight="700">Seasonal riding tips</mj-text>
+        <mj-text align="center" color="#c8e4ef" font-size="14px" padding-top="8px">From the CharlotteEfoil crew</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="20px 24px 8px">
+      <mj-column>
+        <mj-text font-weight="700" color="#194055">1. Book mornings for glass water</mj-text>
+        <mj-text padding-top="6px" color="#5a6d78">Calmest conditions are usually before 10 AM on Lake Norman.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="8px 24px">
+      <mj-column>
+        <mj-text font-weight="700" color="#194055">2. Wear quick-dry layers</mj-text>
+        <mj-text padding-top="6px" color="#5a6d78">You'll get splashed — comfort beats fashion on the board.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="8px 24px">
+      <mj-column>
+        <mj-text font-weight="700" color="#194055">3. Bring sunscreen &amp; water</mj-text>
+        <mj-text padding-top="6px" color="#5a6d78">Lake sun is stronger than it feels when you're flying.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="8px 24px 24px">
+      <mj-column>
+        <mj-text font-weight="700" color="#194055">4. First-timers: trust the coach</mj-text>
+        <mj-text padding-top="6px" color="#5a6d78">We progress at your pace — most riders foil on lesson one.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0 24px 28px">
+      <mj-column>
+        <mj-button href="{{SITE}}/flight-lessons.html" align="center">Explore lessons</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

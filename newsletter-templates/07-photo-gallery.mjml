@@ -1,0 +1,38 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="14px" line-height="1.5" />
+      <mj-button background-color="#194055" color="#ffffff" border-radius="8px" />
+    </mj-attributes>
+    <mj-preview>Life on the lake — recent flights, flat water, and golden-hour sessions.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#ffffff" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="24px 20px 12px">
+      <mj-column>
+        <mj-text align="center" font-size="20px" font-weight="700" color="#194055">On the water this week</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="8px 12px">
+      <mj-column width="50%">
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman eFoil" border-radius="10px" padding="4px" />
+        <mj-text align="center" font-size="13px" color="#5a6d78" padding-top="4px">Glass mornings on Norman</mj-text>
+      </mj-column>
+      <mj-column width="50%">
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Sunset eFoil session" border-radius="10px" padding="4px" />
+        <mj-text align="center" font-size="13px" color="#5a6d78" padding-top="4px">Sunset flights at Wylie</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="12px 24px 28px">
+      <mj-column>
+        <mj-text align="center">Tag <strong>@charlotteefoil</strong> in your flight photos — we love resharing rider stories.</mj-text>
+        <mj-button href="{{SITE}}/reservation-request.html" align="center" padding-top="16px">Book your session</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

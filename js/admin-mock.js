@@ -258,6 +258,13 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
     if (action === "send_campaign") {
       return { ok: true, id: "demo-campaign-" + Date.now() };
     }
+    if (action === "upload_flyer") {
+      return {
+        ok: true,
+        id: "f1000001-0000-4000-8000-000000000001",
+        url: null,
+      };
+    }
     if (action === "remove_contact") {
       MOCK_BOUNCED = MOCK_BOUNCED.filter((r) => r.id !== body.id);
       return { ok: true, id: body.id };
@@ -354,6 +361,8 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
           total_recipients: 812,
           sent_count: 809,
           failed_count: 3,
+          flyer_id: "f1000001-0000-4000-8000-000000000001",
+          flyer_html: "<table><tr><td><h1>July lake update</h1></td></tr></table>",
           created_at: isoDaysAgo(12),
           sent_at: isoDaysAgo(12),
           error: null,
@@ -365,6 +374,7 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
           total_recipients: 798,
           sent_count: 798,
           failed_count: 0,
+          flyer_id: null,
           created_at: isoDaysAgo(28),
           sent_at: isoDaysAgo(28),
           error: null,

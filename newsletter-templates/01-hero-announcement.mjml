@@ -1,0 +1,42 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="16px" line-height="1.65" padding="0" />
+      <mj-button background-color="#194055" color="#ffffff" font-size="16px" font-weight="600" border-radius="8px" inner-padding="14px 28px" />
+    </mj-attributes>
+    <mj-preview>Come fly with us — new eFoil sessions now open on the Charlotte lakes.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#f4f8fa" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="12px 12px 0 0" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#194055" padding="28px 24px">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="28px" font-weight="700" line-height="1.25">
+          Come fly with us over the water.
+        </mj-text>
+        <mj-text align="center" color="#c8e4ef" font-size="16px" padding-top="12px">
+          Private lessons, family outings, and corporate adventures across Lake Norman, Lake Wylie, and beyond.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="28px 24px">
+      <mj-column>
+        <mj-text>
+          Hey there — flat water and wide-open mornings are back on the lakes. Whether it's your first flight or your fifth session, we'd love to get you on the board.
+        </mj-text>
+        <mj-button href="{{SITE}}/reservation-request.html" align="center" padding-top="20px">
+          Request a reservation
+        </mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

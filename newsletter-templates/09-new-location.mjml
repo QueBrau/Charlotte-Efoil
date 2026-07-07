@@ -1,0 +1,33 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="16px" line-height="1.6" />
+      <mj-button background-color="#4fb0d4" color="#ffffff" border-radius="8px" />
+    </mj-attributes>
+    <mj-preview>Now launching from Lake Norman — mobile eFoil lessons closer than ever.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#f4f8fa" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman launch" padding="0" border-radius="12px 12px 0 0" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="28px 24px">
+      <mj-column>
+        <mj-text color="#4fb0d4" font-size="12px" font-weight="700" text-transform="uppercase" letter-spacing="1px">Now serving</mj-text>
+        <mj-text font-size="26px" font-weight="700" color="#194055" padding-top="8px">Lake Norman launch point</mj-text>
+        <mj-text padding-top="12px">
+          We're meeting riders dockside for calmer morning water and easier first flights. Same mobile fleet, new convenience for north Charlotte and Huntersville.
+        </mj-text>
+        <mj-text padding-top="12px" font-weight="600" color="#194055">Also available: Lake Wylie · Mountain Island Lake</mj-text>
+        <mj-button href="{{SITE}}/reservation-request.html" padding-top="20px">Book at Lake Norman</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -1,0 +1,43 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="system-ui, Arial, sans-serif" />
+      <mj-text color="#12303f" font-size="15px" line-height="1.65" />
+      <mj-button background-color="#46c78f" color="#ffffff" border-radius="8px" />
+    </mj-attributes>
+    <mj-preview>Your first eFoil flight — what to expect and how to book.</mj-preview>
+  </mj-head>
+  <mj-body background-color="#f4f8fa" width="600px">
+    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="24px">
+      <mj-column width="100%">
+        <mj-text color="#46c78f" font-size="12px" font-weight="700" text-transform="uppercase">First flight spotlight</mj-text>
+        <mj-text font-size="26px" font-weight="700" color="#194055" padding-top="8px">Learn to fly in one session</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="0 24px 24px">
+      <mj-column width="55%">
+        <mj-text font-weight="600" color="#194055">What's included</mj-text>
+        <mj-text padding-top="8px">
+          ✓ One-on-one coaching<br/>
+          ✓ All gear provided<br/>
+          ✓ Calm-water launch<br/>
+          ✓ Photo-worthy moments
+        </mj-text>
+        <mj-button href="{{SITE}}/flight-lessons.html" padding-top="16px">View lesson details</mj-button>
+      </mj-column>
+      <mj-column width="45%">
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="First eFoil lesson" border-radius="10px" />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

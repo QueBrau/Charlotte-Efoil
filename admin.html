@@ -233,7 +233,7 @@
 
       .campaign-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 0.5rem; }
       .fld { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--muted); }
-      .fld input, .fld textarea, .fld select {
+      .fld input, .fld textarea {
         background-color: var(--panel-2);
         border: 1px solid var(--line);
         color: var(--text);
@@ -243,38 +243,137 @@
         font-family: inherit;
         transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
       }
-      .fld input:focus, .fld textarea:focus, .fld select:focus {
+      .fld input:focus, .fld textarea:focus {
         outline: none;
         border-color: rgba(79, 176, 212, 0.55);
         box-shadow: 0 0 0 3px rgba(79, 176, 212, 0.14);
         background-color: var(--bg);
       }
       .fld textarea { resize: vertical; }
-      .fld select {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 100%;
-        padding-right: 2.35rem;
-        cursor: pointer;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2393a7b0' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 0.75rem center;
-        background-size: 1rem;
-      }
-      .fld select:hover {
-        border-color: rgba(255, 255, 255, 0.16);
-        background-color: var(--bg);
-      }
-      .fld select:focus {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234fb0d4' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-      }
       .campaign-actions { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
-      .schedule-row {
+
+      /* Schedule pickers — pill grid matching date-range toggle */
+      .schedule-pickers {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.9rem;
+        gap: 1rem;
       }
-      @media (max-width: 640px) { .schedule-row { grid-template-columns: 1fr; } }
+      @media (max-width: 900px) { .schedule-pickers { grid-template-columns: 1fr; } }
+      .picker-block { display: flex; flex-direction: column; gap: 0.4rem; }
+      .picker-label {
+        font-size: 0.85rem;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .picker-panel {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0.7rem;
+      }
+      .picker-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.35rem;
+      }
+      .picker-grid button,
+      .picker-times button {
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--muted);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.82rem;
+        line-height: 1.2;
+        transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      }
+      .picker-grid button {
+        padding: 0.45rem 0;
+        min-height: 2rem;
+      }
+      .picker-grid button:hover,
+      .picker-times button:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+      }
+      .picker-grid button.active,
+      .picker-times button.active {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #fff;
+      }
+      .picker-grid button:focus-visible,
+      .picker-times button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(79, 176, 212, 0.45);
+      }
+      .picker-times {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+      .picker-times button {
+        padding: 0.42rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        white-space: nowrap;
+      }
+      .picker-hint {
+        margin: 0.45rem 0 0;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .flyer-editor-wrap {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+      .flyer-editor-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.55rem 0.85rem;
+        background: var(--panel-2);
+        border-bottom: 1px solid var(--line);
+      }
+      .flyer-editor { min-height: 440px; }
+      .flyer-editor .gjs-one-bg { background-color: #f8fafb; }
+      .flyer-editor .gjs-two-color { color: #12303f; }
+      .flyer-editor .gjs-three-bg { background-color: #194055; color: #fff; }
+      .flyer-editor .gjs-four-color,
+      .flyer-editor .gjs-four-color-h:hover { color: #2b6b88; }
+      [data-flyer-status] { font-size: 0.82rem; min-height: 0; }
+
+      .template-picker { margin-bottom: 0.25rem; }
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+        gap: 0.5rem;
+        margin-top: 0.45rem;
+      }
+      .template-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+        text-align: left;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 0.7rem 0.8rem;
+        color: var(--text);
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .template-card:hover { border-color: rgba(79, 176, 212, 0.45); }
+      .template-card.active {
+        border-color: var(--accent);
+        background: rgba(79, 176, 212, 0.1);
+      }
+      .template-card strong { font-size: 0.84rem; }
+      .template-card .muted-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.35; }
       .status-pill { text-transform: capitalize; }
       .status-pill.is-off { opacity: 0.65; }
     </style>
@@ -416,14 +515,31 @@
               <h2>Send now</h2>
               <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
                 Send a one-time broadcast to all contacts who haven't unsubscribed
-                (<span data-audience-count>…</span> recipients). Basic HTML is allowed; an
-                unsubscribe footer is added automatically.
+                (<span data-audience-count>…</span> recipients). The CharlotteEfoil logo is
+                added automatically. Design an optional flyer below, or write your message in HTML.
               </p>
               <form data-campaign-form class="campaign-form">
                 <label class="fld">
                   <span>Subject</span>
                   <input type="text" name="subject" placeholder="e.g. Flat water &amp; open dates this month" required />
                 </label>
+                <div class="fld flyer-editor-field" data-flyer-editor-field>
+                  <span>Flyer designer (optional)</span>
+                  <p class="muted" style="font-size:0.82rem;margin:0">Drag-and-drop email blocks to build a visual flyer. Images upload when you add them to the canvas.</p>
+                  <div class="template-picker">
+                    <span class="picker-label">Start from a template</span>
+                    <div class="template-grid" data-template-grid></div>
+                  </div>
+                  <div class="flyer-editor-wrap">
+                    <div class="flyer-editor-head">
+                      <span class="muted" style="font-size:0.78rem">GrapesJS newsletter editor</span>
+                      <button type="button" class="btn btn-ghost" data-flyer-clear style="padding:0.35rem 0.65rem;font-size:0.78rem">Clear flyer</button>
+                    </div>
+                    <div class="flyer-editor" data-flyer-editor></div>
+                  </div>
+                  <input type="hidden" name="flyer_html" value="" />
+                  <span class="error" data-flyer-status></span>
+                </div>
                 <label class="fld">
                   <span>Message (HTML allowed)</span>
                   <textarea name="html" rows="8" placeholder="Write your update here. You can use &lt;b&gt;, &lt;a href&gt;, &lt;p&gt;, etc." required></textarea>
@@ -441,7 +557,7 @@
               <h2>Scheduled sends</h2>
               <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
                 Automatically send the same update on a day each month (Eastern Time).
-                For example, day 20 at 9:00 AM sends on the 20th of every month.
+                The CharlotteEfoil logo is added to every send. Optionally design a flyer below.
               </p>
               <form data-schedule-form class="campaign-form">
                 <label class="fld">
@@ -452,23 +568,44 @@
                   <span>Subject</span>
                   <input type="text" name="subject" placeholder="e.g. Flat water &amp; open dates this month" required />
                 </label>
+                <div class="fld flyer-editor-field" data-flyer-editor-field>
+                  <span>Flyer designer (optional)</span>
+                  <p class="muted" style="font-size:0.82rem;margin:0">Same drag-and-drop editor — saved with this schedule for every monthly send.</p>
+                  <div class="template-picker">
+                    <span class="picker-label">Start from a template</span>
+                    <div class="template-grid" data-template-grid></div>
+                  </div>
+                  <div class="flyer-editor-wrap">
+                    <div class="flyer-editor-head">
+                      <span class="muted" style="font-size:0.78rem">GrapesJS newsletter editor</span>
+                      <button type="button" class="btn btn-ghost" data-flyer-clear style="padding:0.35rem 0.65rem;font-size:0.78rem">Clear flyer</button>
+                    </div>
+                    <div class="flyer-editor" data-flyer-editor></div>
+                  </div>
+                  <input type="hidden" name="flyer_html" value="" />
+                  <span class="error" data-flyer-status></span>
+                </div>
                 <label class="fld">
                   <span>Message (HTML allowed)</span>
                   <textarea name="html" rows="6" placeholder="Your recurring monthly message…" required></textarea>
                 </label>
-                <div class="schedule-row">
-                  <label class="fld">
-                    <span>Day of month</span>
-                    <select name="day_of_month" required>
-                      <!-- filled by JS -->
-                    </select>
-                  </label>
-                  <label class="fld">
-                    <span>Send time (Eastern)</span>
-                    <select name="send_hour" required>
-                      <!-- filled by JS -->
-                    </select>
-                  </label>
+                <div class="schedule-pickers">
+                  <div class="picker-block">
+                    <span class="picker-label">Day of month</span>
+                    <div class="picker-panel">
+                      <div class="picker-grid" data-day-picker role="radiogroup" aria-label="Day of month"></div>
+                    </div>
+                    <p class="picker-hint" data-day-hint>Repeats on the <strong>20th</strong> of each month</p>
+                    <input type="hidden" name="day_of_month" value="20" required />
+                  </div>
+                  <div class="picker-block">
+                    <span class="picker-label">Send time (Eastern)</span>
+                    <div class="picker-panel">
+                      <div class="picker-times" data-hour-picker role="radiogroup" aria-label="Send time"></div>
+                    </div>
+                    <p class="picker-hint" data-hour-hint>Sends at <strong>9:00 AM ET</strong></p>
+                    <input type="hidden" name="send_hour" value="9" required />
+                  </div>
                 </div>
                 <div class="campaign-actions">
                   <button class="btn" type="submit" data-schedule-save>Save schedule</button>
