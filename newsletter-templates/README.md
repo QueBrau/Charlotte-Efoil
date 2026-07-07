@@ -20,11 +20,15 @@ They compile to email-safe HTML for GrapesJS.
 
 ## Brand tokens
 
-- Primary: `#194055`
-- Accent: `#4fb0d4`
+Shared layout: dark outer body, split hero (55/45), rounded light cards, pill badges, promo CTA block, Inter font.
+
+- Outer body: `#0d1519`
+- Hero panel: `#194055`
+- Hero text: `#eef4f6` / muted `#c8e4ef`
+- Cards: `#eef4f6` / tint `#dce8ee`
+- Text: `#12303f` / muted `#5a6d78`
+- Accent CTA: `#4fb0d4` / deep `#23546e`
 - Success CTA: `#46c78f`
-- Text: `#12303f`
-- Background: `#f4f8fa`
 
 Use `{{SITE}}` in MJML for absolute URLs (replaced at compile time).
 

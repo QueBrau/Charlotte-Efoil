@@ -1,41 +1,85 @@
 <mjml>
   <mj-head>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <mj-attributes>
-      <mj-all font-family="system-ui, -apple-system, Segoe UI, Arial, sans-serif" />
-      <mj-text color="#12303f" font-size="16px" line-height="1.65" padding="0" />
-      <mj-button background-color="#194055" color="#ffffff" font-size="16px" font-weight="600" border-radius="8px" inner-padding="14px 28px" />
+      <mj-text font-family="'Inter',Helvetica,Arial,sans-serif" />
+      <mj-button font-family="'Inter',Helvetica,Arial,sans-serif" border-radius="8px" inner-padding="12px 24px" font-size="14px" background-color="#4fb0d4" color="#ffffff" />
     </mj-attributes>
+    <mj-style>
+      p { margin: 0 !important; }
+      .ce-text a { color: unset; text-decoration: underline; }
+      .ce-pill p { background: #dce8ee; border-radius: 99px; padding: 10px 15px; text-align: center; color: #194055; font-size: 10px; }
+    </mj-style>
     <mj-preview>Come fly with us — new eFoil sessions now open on the Charlotte lakes.</mj-preview>
   </mj-head>
-  <mj-body background-color="#f4f8fa" width="600px">
-    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+  <mj-body background-color="#0d1519" width="600px">
+    <mj-section background-color="transparent" padding="20px 0">
       <mj-column>
-        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+        <mj-text padding="0" line-height="20px" align="center" color="#93a7b0" font-size="12px" css-class="ce-text">CharlotteEfoil · Lake Norman &amp; beyond</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="0">
-      <mj-column>
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="12px 12px 0 0" />
+    <mj-section border-radius="8px" padding="0" background-color="#194055">
+      <mj-column width="55%" padding="40px">
+        <mj-image padding="0" align="left" width="120px" src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" href="{{SITE}}" />
+        <mj-spacer height="26px" />
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" align="left" color="#eef4f6">
+          <p>Come fly with us</p>
+          <p>over the water.</p>
+        </mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" align="left" color="#c8e4ef">Private lessons, family outings, and corporate adventures across the Charlotte lakes.</mj-text>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" />
       </mj-column>
     </mj-section>
-    <mj-section background-color="#194055" padding="28px 24px">
-      <mj-column>
-        <mj-text align="center" color="#ffffff" font-size="28px" font-weight="700" line-height="1.25">
-          Come fly with us over the water.
-        </mj-text>
-        <mj-text align="center" color="#c8e4ef" font-size="16px" padding-top="12px">
-          Private lessons, family outings, and corporate adventures across Lake Norman, Lake Wylie, and beyond.
-        </mj-text>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section padding="30px 40px 26px" border-radius="8px 8px 0 0" background-color="#eef4f6">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text font-size="16px" color="#12303f" font-weight="700" padding="0">This month</mj-text>
+      </mj-column>
+      <mj-column width="2%"><mj-spacer height="14px" /></mj-column>
+      <mj-column width="48%" vertical-align="middle">
+        <mj-text css-class="ce-pill" padding="0"><p>Open sessions</p></mj-text>
       </mj-column>
     </mj-section>
-    <mj-section background-color="#ffffff" padding="28px 24px">
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
       <mj-column>
-        <mj-text>
-          Hey there — flat water and wide-open mornings are back on the lakes. Whether it's your first flight or your fifth session, we'd love to get you on the board.
+        <mj-text line-height="20px" font-size="14px" padding="0" color="#12303f">Flat water and wide-open mornings are back on the lakes. Whether it's your first flight or your fifth session, we'd love to get you on the board.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="26px 40px" background-color="#dce8ee">
+      <mj-column width="88%" vertical-align="middle">
+        <mj-text line-height="26px" font-size="16px" color="#12303f" font-weight="700" padding="0">Ready to book?</mj-text>
+      </mj-column>
+      <mj-column width="12%" vertical-align="middle">
+        <mj-button href="{{SITE}}/reservation-request.html" padding="0" font-size="12px">Go</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section border-radius="0 0 8px 8px" padding="0 40px 26px" background-color="#dce8ee">
+      <mj-column>
+        <mj-text color="#5a6d78" line-height="16px" font-size="10px" padding="0">Questions? Call <a href="tel:7044218778">704-421-8778</a> or reply to this email.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section border-radius="8px" padding="0" background-color="#23546e">
+      <mj-column width="55%" padding="40px">
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" align="left" color="#eef4f6">Request your flight</mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" align="left" color="#c8e4ef">The Charlotte area's only mobile eFoil experience.</mj-text>
+        <mj-spacer height="18px" />
+        <mj-button background-color="#4fb0d4" color="#ffffff" align="left" padding="0" href="{{SITE}}/reservation-request.html">Book now</mj-button>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="transparent" padding="30px 0">
+      <mj-column>
+        <mj-text padding="0" line-height="20px" align="center" color="#eef4f6" font-size="12px" css-class="ce-text">
+          <p><b>CharlotteEfoil</b></p>
+          <p><a href="tel:7044218778">704-421-8778</a> · <a href="mailto:hello@charlotteefoil.com">hello@charlotteefoil.com</a></p>
         </mj-text>
-        <mj-button href="{{SITE}}/reservation-request.html" align="center" padding-top="20px">
-          Request a reservation
-        </mj-button>
       </mj-column>
     </mj-section>
   </mj-body>

@@ -1,42 +1,85 @@
 <mjml>
   <mj-head>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <mj-attributes>
-      <mj-all font-family="system-ui, Arial, sans-serif" />
-      <mj-text color="#12303f" font-size="15px" line-height="1.65" />
-      <mj-button background-color="#46c78f" color="#ffffff" border-radius="8px" />
+      <mj-text font-family="'Inter',Helvetica,Arial,sans-serif" />
+      <mj-button font-family="'Inter',Helvetica,Arial,sans-serif" border-radius="8px" inner-padding="12px 24px" font-size="14px" background-color="#46c78f" color="#ffffff" />
     </mj-attributes>
+    <mj-style>
+      p { margin: 0 !important; }
+      .ce-text a { color: unset; text-decoration: underline; }
+      .ce-pill p { background: #dce8ee; border-radius: 99px; padding: 10px 15px; text-align: center; color: #194055; font-size: 10px; }
+    </mj-style>
     <mj-preview>Your first eFoil flight — what to expect and how to book.</mj-preview>
   </mj-head>
-  <mj-body background-color="#f4f8fa" width="600px">
-    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+  <mj-body background-color="#0d1519" width="600px">
+    <mj-section background-color="transparent" padding="20px 0">
       <mj-column>
-        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+        <mj-text padding="0" line-height="20px" align="center" color="#93a7b0" font-size="12px" css-class="ce-text">First flight spotlight</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="0">
-      <mj-column>
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="#ffffff" padding="24px">
-      <mj-column width="100%">
-        <mj-text color="#46c78f" font-size="12px" font-weight="700" text-transform="uppercase">First flight spotlight</mj-text>
-        <mj-text font-size="26px" font-weight="700" color="#194055" padding-top="8px">Learn to fly in one session</mj-text>
-      </mj-column>
-    </mj-section>
-    <mj-section background-color="#ffffff" padding="0 24px 24px">
-      <mj-column width="55%">
-        <mj-text font-weight="600" color="#194055">What's included</mj-text>
-        <mj-text padding-top="8px">
-          ✓ One-on-one coaching<br/>
-          ✓ All gear provided<br/>
-          ✓ Calm-water launch<br/>
-          ✓ Photo-worthy moments
+    <mj-section border-radius="8px" padding="0" background-color="#194055">
+      <mj-column width="55%" padding="40px">
+        <mj-image padding="0" align="left" width="120px" src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" href="{{SITE}}" />
+        <mj-spacer height="26px" />
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" align="left" color="#eef4f6">
+          <p>Learn to fly</p>
+          <p>in one session.</p>
         </mj-text>
-        <mj-button href="{{SITE}}/flight-lessons.html" padding-top="16px">View lesson details</mj-button>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" align="left" color="#c8e4ef">Most first-time riders are up and gliding on lesson one.</mj-text>
       </mj-column>
-      <mj-column width="45%">
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="First eFoil lesson" border-radius="10px" />
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="First eFoil lesson" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section padding="30px 40px 26px" border-radius="8px 8px 0 0" background-color="#eef4f6">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text font-size="16px" color="#12303f" font-weight="700" padding="0">What's included</mj-text>
+      </mj-column>
+      <mj-column width="2%"><mj-spacer height="14px" /></mj-column>
+      <mj-column width="48%" vertical-align="middle">
+        <mj-text css-class="ce-pill" padding="0"><p>Private lesson</p></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">✓</mj-text></mj-column>
+      <mj-column width="90%" vertical-align="middle"><mj-text padding="0">One-on-one coaching</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">✓</mj-text></mj-column>
+      <mj-column width="90%" vertical-align="middle"><mj-text padding="0">All gear provided</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">✓</mj-text></mj-column>
+      <mj-column width="90%" vertical-align="middle"><mj-text padding="0">Calm-water launch</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">✓</mj-text></mj-column>
+      <mj-column width="90%" vertical-align="middle"><mj-text padding="0">Photo-worthy moments</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="26px 40px" background-color="#dce8ee" border-radius="0 0 8px 8px">
+      <mj-column>
+        <mj-button href="{{SITE}}/flight-lessons.html" align="center">View lesson details</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section border-radius="8px" padding="0" background-color="#23546e">
+      <mj-column width="55%" padding="40px">
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" color="#eef4f6">Ready for takeoff?</mj-text>
+        <mj-spacer height="18px" />
+        <mj-button background-color="#46c78f" align="left" padding="0" href="{{SITE}}/reservation-request.html">Request a reservation</mj-button>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="transparent" padding="30px 0">
+      <mj-column>
+        <mj-text padding="0" line-height="20px" align="center" color="#eef4f6" font-size="12px" css-class="ce-text">
+          <p>CharlotteEfoil · <a href="tel:7044218778">704-421-8778</a></p>
+        </mj-text>
       </mj-column>
     </mj-section>
   </mj-body>

@@ -179,7 +179,7 @@ history. Make sure your SES send-rate quota comfortably covers your list size.
 
 Migration `0008_email_schedules.sql` adds recurring marketing schedules. From
 **Admin → Email marketing → Scheduled sends**, create a schedule with subject,
-message, optional **GrapesJS flyer**, **day of month** (1–28), and **send time**
+message, optional **GrapesJS flyer**, **day of month** (1–31), and **send time**
 (Eastern). Example: day **20** at **9:00 AM ET** sends on the 20th of every month.
 The CharlotteEfoil logo is included on every send (in the flyer template, or auto-prepended for message-only blasts).
 

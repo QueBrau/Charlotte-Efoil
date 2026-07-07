@@ -1,13 +1,11 @@
 import { initAnalytics, trackEvent } from "/js/analytics.js";
 
 const NAV_ITEMS = [
-  { href: "index.html", label: "Welcome", page: "welcome" },
-  { href: "pricing.html", label: "Pricing", page: "pricing" },
-  { href: "reservation-request.html", label: "Reservations", page: "reservation-request" },
-  { href: "flight-lessons.html", label: "Flight Lessons", page: "flight-lessons" },
-  { href: "corporate.html", label: "Corporate Outings", page: "corporate" },
-  { href: "about.html", label: "About Us", page: "about" },
-  { href: "contact.html", label: "Contact Us", page: "contact" },
+  { href: "/", label: "Welcome", page: "welcome" },
+  { href: "/reservation-request.html", label: "Reservations", page: "reservation-request" },
+  { href: "/flight-lessons.html", label: "How We Operate", page: "flight-lessons" },
+  { href: "/about.html", label: "About Us", page: "about" },
+  { href: "/contact.html", label: "Contact Us", page: "contact" },
 ];
 
 const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" decoding="async" fetchpriority="high" />`;
@@ -26,7 +24,7 @@ export function renderNav(activePage = "welcome") {
   return `
     <header class="site-header" data-header>
       <nav class="nav container" aria-label="Main navigation">
-        <a class="logo" href="index.html">${LOGO_MARKUP}</a>
+        <a class="logo" href="/">${LOGO_MARKUP}</a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
@@ -37,7 +35,7 @@ export function renderNav(activePage = "welcome") {
       ${links}
       <li class="nav-mobile-actions">
         <a class="btn btn-primary" href="tel:7044218778">Call 704-421-8778</a>
-        <a class="btn btn-secondary" href="reservation-request.html">Request Reservation</a>
+        <a class="btn btn-secondary" href="/reservation-request.html">Request Reservation</a>
       </li>
     </ul>
     <div class="nav-overlay" data-nav-overlay hidden></div>`;
@@ -48,19 +46,19 @@ export function renderFooter() {
     <footer class="site-footer">
       <div class="container footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="index.html">${LOGO_MARKUP}</a>
+          <a class="logo" href="/">${LOGO_MARKUP}</a>
           <p>The Charlotte area's only mobile eFoil experience. Carving your way to an adventure like no other.</p>
           <div class="footer-social">${INSTAGRAM_LINK}</div>
         </div>
         <div>
           <h3>Explore</h3>
           <ul>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="flight-lessons.html">Flight Lessons</a></li>
-            <li><a href="reservation-request.html">Reservations</a></li>
-            <li><a href="corporate.html">Corporate Outings</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="/reservation-request.html#pricing">Pricing</a></li>
+            <li><a href="/flight-lessons.html">How We Operate</a></li>
+            <li><a href="/reservation-request.html">Reservations</a></li>
+            <li><a href="/reservation-request.html#corporate">Corporate Outings</a></li>
+            <li><a href="/about.html">About Us</a></li>
+            <li><a href="/contact.html">Contact</a></li>
           </ul>
         </div>
         <div>
@@ -136,7 +134,7 @@ function initMobileActionBar() {
   bar.setAttribute("aria-label", "Quick actions");
   bar.innerHTML = `
     <a class="mobile-action-bar__call" href="tel:7044218778">Call</a>
-    <a class="mobile-action-bar__book" href="reservation-request.html">Book Now</a>
+    <a class="mobile-action-bar__book" href="/reservation-request.html">Book Now</a>
   `;
   document.body.appendChild(bar);
 }
@@ -375,4 +373,26 @@ export function initHeroVideo() {
     /* autoplay blocked — still show first frame once data is available */
     video.addEventListener("loadeddata", markReady, { once: true });
   });
+
+  const volumeBtn = document.querySelector("[data-hero-volume]");
+  if (!volumeBtn) return;
+
+  const iconMuted = volumeBtn.querySelector(".hero-video-volume__icon--muted");
+  const iconOn = volumeBtn.querySelector(".hero-video-volume__icon--on");
+
+  const syncVolumeUi = () => {
+    const muted = video.muted;
+    volumeBtn.setAttribute("aria-pressed", String(!muted));
+    volumeBtn.setAttribute("aria-label", muted ? "Unmute video" : "Mute video");
+    iconMuted?.classList.toggle("is-visible", muted);
+    iconOn?.classList.toggle("is-visible", !muted);
+  };
+
+  volumeBtn.addEventListener("click", () => {
+    video.muted = !video.muted;
+    if (!video.muted) video.volume = 1;
+    syncVolumeUi();
+  });
+
+  syncVolumeUi();
 }

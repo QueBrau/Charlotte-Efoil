@@ -694,7 +694,7 @@ function initScheduleForm() {
     bindPicker(
       dayPicker,
       dayInput,
-      Array.from({ length: 28 }, (_, i) => {
+      Array.from({ length: 31 }, (_, i) => {
         const d = i + 1;
         return { value: String(d), label: String(d) };
       }),
