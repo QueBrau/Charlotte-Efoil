@@ -19,6 +19,51 @@
   status = 301
   force = true
 
+# Pretty URLs for static pages.
+[[redirects]]
+  from = "/pricing"
+  to = "/reservation-request.html#pricing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pricing.html"
+  to = "/reservation-request.html#pricing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/flight-lessons"
+  to = "/flight-lessons.html"
+  status = 200
+
+[[redirects]]
+  from = "/reservation-request"
+  to = "/reservation-request.html"
+  status = 200
+
+[[redirects]]
+  from = "/corporate"
+  to = "/reservation-request.html#corporate"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/corporate.html"
+  to = "/reservation-request.html#corporate"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
 # Cache policy: Vite fingerprints /assets, so those are immutable. Photos and
 # videos change rarely; give them a month with revalidation in the background.
 [[headers]]

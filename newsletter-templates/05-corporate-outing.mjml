@@ -1,41 +1,83 @@
 <mjml>
   <mj-head>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <mj-attributes>
-      <mj-all font-family="Georgia, Times New Roman, serif" />
-      <mj-text color="#12303f" font-size="16px" line-height="1.7" font-family="system-ui, Arial, sans-serif" />
-      <mj-button background-color="#194055" color="#ffffff" border-radius="6px" font-family="system-ui, Arial, sans-serif" />
+      <mj-text font-family="'Inter',Helvetica,Arial,sans-serif" />
+      <mj-button font-family="'Inter',Helvetica,Arial,sans-serif" border-radius="8px" inner-padding="12px 24px" font-size="14px" background-color="#4fb0d4" color="#ffffff" />
     </mj-attributes>
+    <mj-style>
+      p { margin: 0 !important; }
+      .ce-text a { color: unset; text-decoration: underline; }
+      .ce-pill p { background: #dce8ee; border-radius: 99px; padding: 10px 15px; text-align: center; color: #194055; font-size: 10px; }
+    </mj-style>
     <mj-preview>Take your team offsite — literally. Corporate eFoil outings on the lake.</mj-preview>
   </mj-head>
-  <mj-body background-color="#ffffff" width="600px">
-    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+  <mj-body background-color="#0d1519" width="600px">
+    <mj-section background-color="transparent" padding="20px 0">
       <mj-column>
-        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+        <mj-text padding="0" line-height="20px" align="center" color="#93a7b0" font-size="12px" css-class="ce-text">Corporate &amp; team events</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="0">
-      <mj-column>
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+    <mj-section border-radius="8px" padding="0" background-color="#194055">
+      <mj-column width="55%" padding="40px">
+        <mj-image padding="0" align="left" width="120px" src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" href="{{SITE}}" />
+        <mj-spacer height="26px" />
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" align="left" color="#eef4f6">
+          <p>The team outing</p>
+          <p>they'll talk about.</p>
+        </mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" align="left" color="#c8e4ef">Client entertainment, retreats, and team-building on the water.</mj-text>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Corporate eFoil outing" />
       </mj-column>
     </mj-section>
-    <mj-section padding="32px 28px 16px" border-bottom="3px solid #194055">
-      <mj-column>
-        <mj-text font-size="13px" color="#4fb0d4" font-weight="700" text-transform="uppercase" letter-spacing="1px" font-family="system-ui, Arial, sans-serif">
-          Corporate &amp; team events
-        </mj-text>
-        <mj-text font-size="28px" color="#194055" font-weight="700" padding-top="10px" font-family="system-ui, Arial, sans-serif">
-          The team outing they'll actually talk about
-        </mj-text>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section padding="30px 40px 26px" border-radius="8px 8px 0 0" background-color="#eef4f6">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text font-size="16px" color="#12303f" font-weight="700" padding="0">Event details</mj-text>
+      </mj-column>
+      <mj-column width="2%"><mj-spacer height="14px" /></mj-column>
+      <mj-column width="48%" vertical-align="middle">
+        <mj-text css-class="ce-pill" padding="0"><p>Groups 4–12</p></mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="24px 28px">
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="14%" vertical-align="middle"><mj-text font-weight="700" padding="0">What</mj-text></mj-column>
+      <mj-column width="86%" vertical-align="middle"><mj-text padding="0">Mobile eFoil fleet at your lake</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="14%" vertical-align="middle"><mj-text font-weight="700" padding="0">Who</mj-text></mj-column>
+      <mj-column width="86%" vertical-align="middle"><mj-text padding="0">Teams, clients, leadership groups</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="14%" vertical-align="middle"><mj-text font-weight="700" padding="0">We</mj-text></mj-column>
+      <mj-column width="86%" vertical-align="middle"><mj-text padding="0">Handle instruction, safety, and logistics</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="26px 40px" background-color="#dce8ee" border-radius="0 0 8px 8px">
       <mj-column>
-        <mj-text>
-          Skip the conference room. CharlotteEfoil brings a mobile fleet to your lake — perfect for client entertainment, leadership retreats, and team-building that feels like a vacation.
+        <mj-button href="{{SITE}}/corporate.html" align="center">Plan a corporate outing</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section border-radius="8px" padding="0" background-color="#23546e">
+      <mj-column width="55%" padding="40px">
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" color="#eef4f6">Take your team offsite</mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" color="#c8e4ef">Literally — on the lake.</mj-text>
+        <mj-spacer height="18px" />
+        <mj-button align="left" padding="0" href="{{SITE}}/corporate.html">Get started</mj-button>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="transparent" padding="30px 0">
+      <mj-column>
+        <mj-text padding="0" line-height="20px" align="center" color="#eef4f6" font-size="12px" css-class="ce-text">
+          <p><a href="mailto:hello@charlotteefoil.com">hello@charlotteefoil.com</a></p>
         </mj-text>
-        <mj-text padding-top="14px" font-weight="600" color="#194055" font-family="system-ui, Arial, sans-serif">Ideal for groups of 4–12</mj-text>
-        <mj-text padding-top="8px">We handle instruction, safety, and logistics. You bring the crew.</mj-text>
-        <mj-button href="{{SITE}}/corporate.html" padding-top="20px">Plan a corporate outing</mj-button>
       </mj-column>
     </mj-section>
   </mj-body>

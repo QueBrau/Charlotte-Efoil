@@ -264,7 +264,7 @@ function parseScheduleBody(body) {
   const subject = clean(body.subject, 300);
   const html = clean(body.html, 200000);
   const name = clean(body.name, 120) || null;
-  const day = Math.min(Math.max(Number(body.day_of_month) || 1, 1), 28);
+  const day = Math.min(Math.max(Number(body.day_of_month) || 1, 1), 31);
   const hour = Math.min(Math.max(Number(body.send_hour) ?? 9, 0), 23);
   return { subject, html, name, day_of_month: day, send_hour: hour };
 }
@@ -321,7 +321,7 @@ async function updateSchedule(supabase, req) {
   if (body.html !== undefined) patch.html = clean(body.html, 200000);
   if (body.name !== undefined) patch.name = clean(body.name, 120) || null;
   if (body.day_of_month !== undefined) {
-    patch.day_of_month = Math.min(Math.max(Number(body.day_of_month) || 1, 1), 28);
+    patch.day_of_month = Math.min(Math.max(Number(body.day_of_month) || 1, 1), 31);
   }
   if (body.send_hour !== undefined) {
     patch.send_hour = Math.min(Math.max(Number(body.send_hour) ?? 9, 0), 23);

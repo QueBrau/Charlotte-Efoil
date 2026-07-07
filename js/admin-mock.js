@@ -278,7 +278,7 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
       return { ok: true, deleted: Boolean(body.permanent) };
     }
     if (action === "create_schedule") {
-      const day = Math.min(Math.max(Number(body.day_of_month) || 20, 1), 28);
+      const day = Math.min(Math.max(Number(body.day_of_month) || 20, 1), 31);
       const hour = Math.min(Math.max(Number(body.send_hour) ?? 9, 0), 23);
       const row = {
         id: "s-demo-" + Date.now(),

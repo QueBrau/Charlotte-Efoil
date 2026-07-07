@@ -65,6 +65,24 @@
           >
             <source src="/videos/hero-efoil.mp4" type="video/mp4" />
           </video>
+          <button
+            type="button"
+            class="hero-video-volume"
+            data-hero-volume
+            aria-label="Unmute video"
+            aria-pressed="false"
+          >
+            <svg class="hero-video-volume__icon hero-video-volume__icon--muted is-visible" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M11 5L6 9H3v6h3l5 4V5z" />
+              <path d="M16 9l4 4" />
+              <path d="M20 9l-4 4" />
+            </svg>
+            <svg class="hero-video-volume__icon hero-video-volume__icon--on" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M11 5L6 9H3v6h3l5 4V5z" />
+              <path d="M15.5 8.5a5 5 0 010 7" />
+              <path d="M18 6a8.5 8.5 0 010 12" />
+            </svg>
+          </button>
           <div class="hero-gradient"></div>
         </div>
 
@@ -72,7 +90,7 @@
           <p class="eyebrow">Carving your way to an experience like no other</p>
           <h1>Come fly with us over the water.</h1>
           <p class="hero-lead">
-            You can't buy happiness — but you can rent it. Private eFoil lessons, family outings,
+            You can't buy happiness but you can rent it. Private eFoil lessons, family outings,
             and corporate adventures across the Charlotte lakes and beyond.
           </p>
           <div class="hero-actions">
@@ -95,7 +113,7 @@
             <p>
               Our goal is to make this unique experience accessible to everyone with low hourly
               lesson pricing, location adaptability, and expert guided instruction on top of the line
-              Lift eFoil products.
+              Waydoo Flyer EVO products.
             </p>
             <ul class="check-list">
               <li>Low hourly lesson pricing</li>
@@ -104,7 +122,7 @@
               <li>Private lessons &amp; full-day family outings</li>
               <li>eFoil sales &amp; purchase demonstrations</li>
             </ul>
-            <a class="text-link" href="pricing.html">View pricing &rarr;</a>
+            <a class="text-link" href="/reservation-request.html#pricing">View pricing &rarr;</a>
           </div>
           <div class="split-visual" data-reveal>
             <div class="image-card">
@@ -125,16 +143,19 @@
         <div class="container">
           <div class="section-header center" data-reveal>
             <p class="eyebrow">Our Fleet</p>
-            <h2>Lift eFoil boards built for every rider</h2>
-            <p>We use all Lift eFoil products — tuned for beginners, progression, and pure exhilaration.</p>
+            <h2>Waydoo Flyer EVO boards built for every rider</h2>
+            <p>
+              We ride the Waydoo Flyer EVO series — modular eFoils with Smart Flight Assistance,
+              tuned for beginners, progression, and pure exhilaration.
+            </p>
           </div>
 
           <div class="fleet-grid">
             <article class="fleet-card" data-reveal>
               <div class="fleet-image">
                 <img
-                  src="/photos/5%274liftcruiser.png"
-                  alt="Lift 5'4 F3 Cruiser eFoil board"
+                  src="/photos/waydoo-evo-max-plus.webp"
+                  alt="Waydoo Flyer EVO Max Plus eFoil board"
                   width="640"
                   height="480"
                   loading="lazy"
@@ -142,16 +163,16 @@
                 />
               </div>
               <div class="fleet-body">
-                <span class="fleet-tag">Cruiser</span>
-                <h3>Lift 5'4 F3 Cruiser</h3>
+                <span class="fleet-tag">Beginner</span>
+                <h3>Flyer EVO Max Plus</h3>
                 <p>
-                  Stable, responsive, and ideal for building confidence. Paired with the 210 Camber Pro
-                  wing for smooth lift and controlled flight.
+                  Stable, family-friendly, and built for first flights. The 130L board delivers
+                  high buoyancy and smooth takeoffs with Smart Flight Assistance.
                 </p>
                 <ul>
-                  <li>5'4 board length</li>
-                  <li>210 Camber Pro wing</li>
-                  <li>Great for progression riders</li>
+                  <li>130L board for stability</li>
+                  <li>6000W propulsion</li>
+                  <li>Up to 135 min ride time</li>
                 </ul>
               </div>
             </article>
@@ -159,8 +180,8 @@
             <article class="fleet-card featured" data-reveal>
               <div class="fleet-image">
                 <img
-                  src="/photos/5%272liftx.png"
-                  alt="Lift 5'2 Lift X eFoil board"
+                  src="/photos/waydoo-evo-pro-plus.webp"
+                  alt="Waydoo Flyer EVO Pro Plus eFoil board"
                   width="640"
                   height="480"
                   loading="lazy"
@@ -168,16 +189,16 @@
                 />
               </div>
               <div class="fleet-body">
-                <span class="fleet-tag">Performance</span>
-                <h3>Lift 5'2 Lift X</h3>
+                <span class="fleet-tag">All riders</span>
+                <h3>Flyer EVO Pro Plus</h3>
                 <p>
-                  Compact and responsive with 250 surf wing options for beginners. A versatile setup
-                  for riders ready to progress from first flights to confident foiling.
+                  Balanced control for every skill level. The 90L Pro Plus combines responsive
+                  handling with intelligent ride support for smooth progression.
                 </p>
                 <ul>
-                  <li>5'2 board length</li>
-                  <li>250 surf wing compatible</li>
-                  <li>Agile, modern design</li>
+                  <li>90L board volume</li>
+                  <li>Smart Flight Assistance System</li>
+                  <li>Up to 32 mph top speed</li>
                 </ul>
               </div>
             </article>
@@ -185,8 +206,8 @@
             <article class="fleet-card" data-reveal>
               <div class="fleet-image">
                 <img
-                  src="/photos/blowfish.png"
-                  alt="Lift Blowfish stability attachment"
+                  src="/photos/waydoo-evo-lite.png"
+                  alt="Waydoo Flyer EVO Lite eFoil board"
                   width="640"
                   height="480"
                   loading="lazy"
@@ -194,16 +215,16 @@
                 />
               </div>
               <div class="fleet-body">
-                <span class="fleet-tag">Quick Learn</span>
-                <h3>Lift Blowfish</h3>
+                <span class="fleet-tag">Progression</span>
+                <h3>Flyer EVO Lite</h3>
                 <p>
-                  Makes it easy for any rider to quickly learn to fly. A forgiving platform that
-                  accelerates the learning curve from stomach to standing to foiling.
+                  Accessible and agile for riders building confidence. A lighter, more nimble
+                  platform that makes skill progression feel natural on the water.
                 </p>
                 <ul>
-                  <li>Beginner-friendly design</li>
-                  <li>Fast progression</li>
-                  <li>Ideal for all skill levels</li>
+                  <li>90L lightweight board</li>
+                  <li>4000W propulsion</li>
+                  <li>Ideal for skill progression</li>
                 </ul>
               </div>
             </article>
@@ -218,7 +239,7 @@
             <h2>Choose your adventure</h2>
           </div>
           <div class="experience-grid">
-            <a class="experience-card" href="flight-lessons.html" data-reveal>
+            <a class="experience-card" href="/flight-lessons.html" data-reveal>
               <span class="experience-num">01</span>
               <h3>Private Efoil Lessons</h3>
               <p>90-minute one on one sessions with expert instruction through our 4-step learning process.</p>
@@ -230,7 +251,7 @@
               <p>Morning and afternoon sessions, flexible scheduling, and up to 24 riders for weekend gatherings.</p>
               <span class="text-link">See reservation details &rarr;</span>
             </a>
-            <a class="experience-card" href="corporate.html" data-reveal>
+            <a class="experience-card" href="/reservation-request.html#corporate" data-reveal>
               <span class="experience-num">03</span>
               <h3>Corporate Outings</h3>
               <p>Half-day and full-day team experiences with pontoon support, lunch, and up to 5 eFoils.</p>
@@ -268,8 +289,8 @@
               <span>Travel radius</span>
             </div>
             <div class="stat-card">
-              <strong>Lift</strong>
-              <span>eFoil fleet</span>
+              <strong>Waydoo</strong>
+              <span>Flyer EVO fleet</span>
             </div>
           </div>
         </div>

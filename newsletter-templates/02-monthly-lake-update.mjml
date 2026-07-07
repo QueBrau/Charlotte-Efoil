@@ -1,37 +1,100 @@
 <mjml>
   <mj-head>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <mj-attributes>
-      <mj-all font-family="system-ui, Arial, sans-serif" />
-      <mj-text color="#12303f" font-size="15px" line-height="1.6" />
-      <mj-button background-color="#4fb0d4" color="#ffffff" border-radius="8px" />
+      <mj-text font-family="'Inter',Helvetica,Arial,sans-serif" />
+      <mj-button font-family="'Inter',Helvetica,Arial,sans-serif" border-radius="8px" inner-padding="12px 24px" font-size="14px" background-color="#4fb0d4" color="#ffffff" />
     </mj-attributes>
+    <mj-style>
+      p { margin: 0 !important; }
+      .ce-text a { color: unset; text-decoration: underline; }
+      .ce-pill p { background: #dce8ee; border-radius: 99px; padding: 10px 15px; text-align: center; color: #194055; font-size: 10px; }
+    </mj-style>
     <mj-preview>Your monthly Charlotte lakes update — conditions, dates, and what's new.</mj-preview>
   </mj-head>
-  <mj-body background-color="#eef4f6" width="600px">
-    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+  <mj-body background-color="#0d1519" width="600px">
+    <mj-section background-color="transparent" padding="20px 0">
       <mj-column>
-        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+        <mj-text padding="0" line-height="20px" align="center" color="#93a7b0" font-size="12px" css-class="ce-text">Monthly update · CharlotteEfoil</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="0">
-      <mj-column>
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" padding="0" border-radius="8px" />
+    <mj-section border-radius="8px" padding="0" background-color="#194055">
+      <mj-column width="55%" padding="40px">
+        <mj-image padding="0" align="left" width="120px" src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" href="{{SITE}}" />
+        <mj-spacer height="26px" />
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" align="left" color="#eef4f6">
+          <p>Flat water &amp;</p>
+          <p>open dates</p>
+        </mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" align="left" color="#c8e4ef">Your monthly lake conditions and availability roundup.</mj-text>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman" />
       </mj-column>
     </mj-section>
-    <mj-section background-color="#ffffff" padding="24px">
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section padding="30px 40px 26px" border-radius="8px 8px 0 0" background-color="#eef4f6">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text font-size="16px" color="#12303f" font-weight="700" padding="0">Lake conditions</mj-text>
+      </mj-column>
+      <mj-column width="2%"><mj-spacer height="14px" /></mj-column>
+      <mj-column width="48%" vertical-align="middle">
+        <mj-text css-class="ce-pill" padding="0"><p>Updated monthly</p></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
       <mj-column>
-        <mj-text color="#4fb0d4" font-size="12px" font-weight="700" text-transform="uppercase" letter-spacing="1px">
-          Monthly update
+        <mj-text line-height="20px" font-size="14px" padding="0">Morning glass on Lake Norman most weekdays. Light afternoon chop — best for riders who've completed a first lesson.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="30px 40px 26px" border-radius="8px 8px 0 0" background-color="#eef4f6">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text font-size="16px" color="#12303f" font-weight="700" padding="0">Open dates</mj-text>
+      </mj-column>
+      <mj-column width="2%"><mj-spacer height="14px" /></mj-column>
+      <mj-column width="48%" vertical-align="middle">
+        <mj-text css-class="ce-pill" padding="0"><p>This month</p></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">Sat</mj-text></mj-column>
+      <mj-column width="80%" vertical-align="middle"><mj-text padding="0">Mornings — Lake Norman</mj-text></mj-column>
+      <mj-column width="10%" vertical-align="middle"><mj-text padding="0">AM</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">Sun</mj-text></mj-column>
+      <mj-column width="80%" vertical-align="middle"><mj-text padding="0">Sunsets — Lake Wylie</mj-text></mj-column>
+      <mj-column width="10%" vertical-align="middle"><mj-text padding="0">PM</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
+      <mj-column width="10%" vertical-align="middle"><mj-text font-weight="700" padding="0">Corp</mj-text></mj-column>
+      <mj-column width="80%" vertical-align="middle"><mj-text padding="0">Team outings — by request</mj-text></mj-column>
+      <mj-column width="10%" vertical-align="middle"><mj-text padding="0">—</mj-text></mj-column>
+    </mj-section>
+    <mj-section padding="26px 40px" background-color="#dce8ee" border-radius="0 0 8px 8px">
+      <mj-column>
+        <mj-button href="{{SITE}}/reservation-request.html" align="center">See availability</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section border-radius="8px" padding="0" background-color="#23546e">
+      <mj-column width="55%" padding="40px">
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" color="#eef4f6">Book your next flight</mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" color="#c8e4ef">Slots fill fast on summer weekends.</mj-text>
+        <mj-spacer height="18px" />
+        <mj-button align="left" padding="0" href="{{SITE}}/reservation-request.html">Reserve</mj-button>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="transparent" padding="30px 0">
+      <mj-column>
+        <mj-text padding="0" line-height="20px" align="center" color="#eef4f6" font-size="12px" css-class="ce-text">
+          <p><a href="tel:7044218778">704-421-8778</a> · CharlotteEfoil</p>
         </mj-text>
-        <mj-text font-size="24px" font-weight="700" padding-top="8px" color="#194055">
-          Flat water &amp; open dates this month
-        </mj-text>
-        <mj-divider border-color="#e2e8ec" border-width="1px" padding="16px 0" />
-        <mj-text font-weight="600" color="#194055">Lake conditions</mj-text>
-        <mj-text padding-top="6px">Morning glass on Lake Norman most weekdays. Light afternoon chop — best for riders who've completed a first lesson.</mj-text>
-        <mj-text font-weight="600" color="#194055" padding-top="16px">Open dates</mj-text>
-        <mj-text padding-top="6px">• Sat &amp; Sun mornings — Lake Norman<br/>• Weekday sunsets — Lake Wylie<br/>• Corporate slots — by request</mj-text>
-        <mj-button href="{{SITE}}/reservation-request.html" padding-top="20px">See availability</mj-button>
       </mj-column>
     </mj-section>
   </mj-body>

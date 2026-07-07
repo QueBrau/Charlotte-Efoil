@@ -1,37 +1,79 @@
 <mjml>
   <mj-head>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <mj-attributes>
-      <mj-all font-family="system-ui, Arial, sans-serif" />
-      <mj-text color="#12303f" font-size="14px" line-height="1.5" />
-      <mj-button background-color="#194055" color="#ffffff" border-radius="8px" />
+      <mj-text font-family="'Inter',Helvetica,Arial,sans-serif" />
+      <mj-button font-family="'Inter',Helvetica,Arial,sans-serif" border-radius="8px" inner-padding="12px 24px" font-size="14px" background-color="#194055" color="#ffffff" />
     </mj-attributes>
+    <mj-style>
+      p { margin: 0 !important; }
+      .ce-text a { color: unset; text-decoration: underline; }
+      .ce-pill p { background: #dce8ee; border-radius: 99px; padding: 10px 15px; text-align: center; color: #194055; font-size: 10px; }
+    </mj-style>
     <mj-preview>Life on the lake — recent flights, flat water, and golden-hour sessions.</mj-preview>
   </mj-head>
-  <mj-body background-color="#ffffff" width="600px">
-    <mj-section background-color="#ffffff" padding="20px 24px 12px">
+  <mj-body background-color="#0d1519" width="600px">
+    <mj-section background-color="transparent" padding="20px 0">
       <mj-column>
-        <mj-image src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="180px" align="center" href="{{SITE}}" padding="0" />
+        <mj-text padding="0" line-height="20px" align="center" color="#93a7b0" font-size="12px" css-class="ce-text">From the water this week</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="24px 20px 12px">
-      <mj-column>
-        <mj-text align="center" font-size="20px" font-weight="700" color="#194055">On the water this week</mj-text>
+    <mj-section border-radius="8px" padding="0" background-color="#194055">
+      <mj-column width="55%" padding="40px">
+        <mj-image padding="0" align="left" width="120px" src="{{SITE}}/photos/CharlotteEfoil.png" alt="CharlotteEfoil" href="{{SITE}}" />
+        <mj-spacer height="26px" />
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" align="left" color="#eef4f6">
+          <p>On the water</p>
+          <p>this week</p>
+        </mj-text>
+        <mj-spacer height="14px" />
+        <mj-text font-size="14px" line-height="20px" padding="0" align="left" color="#c8e4ef">Glass mornings, sunset flights, and rider stories from the Charlotte lakes.</mj-text>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="eFoil on Lake Norman" />
       </mj-column>
     </mj-section>
-    <mj-section padding="8px 12px">
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section padding="30px 40px 26px" border-radius="8px 8px 0 0" background-color="#eef4f6">
+      <mj-column width="50%" vertical-align="middle">
+        <mj-text font-size="16px" color="#12303f" font-weight="700" padding="0">Gallery</mj-text>
+      </mj-column>
+      <mj-column width="2%"><mj-spacer height="14px" /></mj-column>
+      <mj-column width="48%" vertical-align="middle">
+        <mj-text css-class="ce-pill" padding="0"><p>Recent flights</p></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 26px" background-color="#eef4f6">
       <mj-column width="50%">
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman eFoil" border-radius="10px" padding="4px" />
-        <mj-text align="center" font-size="13px" color="#5a6d78" padding-top="4px">Glass mornings on Norman</mj-text>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman eFoil" border-radius="8px" padding="0" />
+        <mj-text align="center" font-size="13px" color="#5a6d78" padding-top="8px">Glass mornings on Norman</mj-text>
       </mj-column>
       <mj-column width="50%">
-        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Sunset eFoil session" border-radius="10px" padding="4px" />
-        <mj-text align="center" font-size="13px" color="#5a6d78" padding-top="4px">Sunset flights at Wylie</mj-text>
+        <mj-image src="{{SITE}}/photos/lakenorman.jpg" alt="Sunset eFoil session" border-radius="8px" padding="0" />
+        <mj-text align="center" font-size="13px" color="#5a6d78" padding-top="8px">Sunset flights at Wylie</mj-text>
       </mj-column>
     </mj-section>
-    <mj-section padding="12px 24px 28px">
+    <mj-section padding="0 40px 26px" background-color="#eef4f6" border-radius="0 0 8px 8px">
       <mj-column>
-        <mj-text align="center">Tag <strong>@charlotteefoil</strong> in your flight photos — we love resharing rider stories.</mj-text>
-        <mj-button href="{{SITE}}/reservation-request.html" align="center" padding-top="16px">Book your session</mj-button>
+        <mj-text line-height="20px" font-size="14px" padding="0" align="center">Tag <strong>@charlotteefoil</strong> in your flight photos — we love resharing rider stories.</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0"><mj-column><mj-spacer height="14px" /></mj-column></mj-section>
+    <mj-section border-radius="8px" padding="0" background-color="#23546e">
+      <mj-column width="55%" padding="40px">
+        <mj-text font-size="20px" line-height="30px" font-weight="700" padding="0" color="#eef4f6">Your turn next?</mj-text>
+        <mj-spacer height="18px" />
+        <mj-button background-color="#4fb0d4" align="left" padding="0" href="{{SITE}}/reservation-request.html">Book your session</mj-button>
+      </mj-column>
+      <mj-column vertical-align="bottom" width="45%">
+        <mj-image align="center" padding="0" src="{{SITE}}/photos/lakenorman.jpg" alt="Lake Norman" />
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="transparent" padding="30px 0">
+      <mj-column>
+        <mj-text padding="0" line-height="20px" align="center" color="#eef4f6" font-size="12px" css-class="ce-text">
+          <p>CharlotteEfoil · <a href="tel:7044218778">704-421-8778</a></p>
+        </mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
