@@ -434,6 +434,125 @@ function renderEvents(rows) {
   });
 }
 
+// ----- contacts ---------------------------------------------------------------
+let contactsCache = [];
+
+function contactName(c) {
+  const name = [c.first_name, c.last_name].filter(Boolean).join(" ").trim();
+  return name || c.email || "Unknown";
+}
+
+function sourceLabel(sources = []) {
+  if (sources.includes("contact") && sources.includes("reservation")) return "Contact + Reservation";
+  if (sources.includes("reservation")) return "Reservation";
+  if (sources.includes("contact")) return "Contact";
+  return "—";
+}
+
+function emailStatusLabel(status) {
+  if (status === "bounced") return '<span class="pill" style="color:var(--warn)">Bounced</span>';
+  if (status === "unsubscribed") return '<span class="pill" style="color:var(--warn)">Unsubscribed</span>';
+  return '<span class="pill" style="color:var(--good)">Active</span>';
+}
+
+function renderContactsStats(summary) {
+  const el = $("[data-contacts-stats]");
+  if (!el) return;
+  const cards = [
+    ["Total contacts", fmtNum(summary.total)],
+    ["With phone", fmtNum(summary.with_phone)],
+    ["Contact forms", fmtNum(summary.contact_forms)],
+    ["Reservations", fmtNum(summary.reservations)],
+  ];
+  el.innerHTML = cards
+    .map(
+      ([label, value]) =>
+        `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div></div>`
+    )
+    .join("");
+}
+
+function renderContacts(rows) {
+  const mount = $("[data-contacts]");
+  if (!mount) return;
+  if (!rows.length) {
+    mount.innerHTML = '<p class="muted">No contacts yet. Submissions from your contact and reservation forms will appear here.</p>';
+    return;
+  }
+
+  mount.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Source</th>
+          <th>Email list</th>
+          <th class="num">Forms</th>
+          <th class="num">Reservations</th>
+          <th>Last activity</th>
+          <th>Latest note</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows
+          .map(
+            (c) => `<tr class="clickable" data-contact="${esc(c.id)}">
+              <td><strong>${esc(contactName(c))}</strong><br><span class="pill">${esc(c.status || "new")}</span></td>
+              <td>${esc(c.email || "—")}</td>
+              <td>${c.phone ? esc(c.phone) : '<span class="muted">—</span>'}</td>
+              <td>${esc(sourceLabel(c.sources))}</td>
+              <td>${emailStatusLabel(c.email_status)}</td>
+              <td class="num">${fmtNum(c.contact_submissions)}</td>
+              <td class="num">${fmtNum(c.reservation_requests)}</td>
+              <td class="muted">${fmtDate(c.last_activity_at)}</td>
+              <td class="muted">${esc(c.last_preferred_date || c.last_message_preview || c.last_interests || "—")}</td>
+            </tr>`
+          )
+          .join("")}
+      </tbody>
+    </table>`;
+
+  mount.querySelectorAll("[data-contact]").forEach((row) => {
+    row.addEventListener("click", () => openContact(row.dataset.contact));
+  });
+}
+
+function filterContacts(query) {
+  const q = String(query || "").trim().toLowerCase();
+  if (!q) return contactsCache;
+  return contactsCache.filter((c) => {
+    const hay = [contactName(c), c.email, c.phone, c.last_message_preview, c.last_preferred_date, c.last_interests]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+async function loadContactsSection() {
+  const data = await api("contacts");
+  contactsCache = data.contacts || [];
+  renderContactsStats({
+    total: data.total || 0,
+    with_phone: data.with_phone || 0,
+    contact_forms: contactsCache.reduce((n, c) => n + (c.contact_submissions || 0), 0),
+    reservations: contactsCache.reduce((n, c) => n + (c.reservation_requests || 0), 0),
+  });
+  const search = $("[data-contacts-search]");
+  renderContacts(filterContacts(search?.value));
+}
+
+function initContactsSearch() {
+  const input = $("[data-contacts-search]");
+  if (!input || input.dataset.bound) return;
+  input.dataset.bound = "1";
+  input.addEventListener("input", () => {
+    renderContacts(filterContacts(input.value));
+  });
+}
+
 // ----- email campaigns ------------------------------------------------------
 let audienceCount = 0;
 
@@ -944,6 +1063,8 @@ function closeDrawer() {
 async function openVisitor(id) {
   overlay.classList.remove("hidden");
   drawer.classList.remove("hidden");
+  const title = $("[data-drawer-title]");
+  if (title) title.textContent = "Visitor activity";
   const body = $("[data-drawer-body]");
   body.innerHTML = '<div class="loading">Loading…</div>';
 
@@ -1006,6 +1127,100 @@ async function openVisitor(id) {
   }
 }
 
+async function openContact(id) {
+  overlay.classList.remove("hidden");
+  drawer.classList.remove("hidden");
+  const title = $("[data-drawer-title]");
+  if (title) title.textContent = "Contact detail";
+  const body = $("[data-drawer-body]");
+  body.innerHTML = '<div class="loading">Loading…</div>';
+
+  try {
+    const d = await api("contact", { id });
+    const lead = d.lead || {};
+    const name = contactName({
+      first_name: lead.first_name,
+      last_name: lead.last_name,
+      email: lead.email,
+    });
+
+    const info = `
+      <dl class="kv">
+        <dt>Name</dt><dd>${esc(name)}</dd>
+        <dt>Email</dt><dd>${esc(lead.email || "—")}</dd>
+        <dt>Phone</dt><dd>${lead.phone ? esc(lead.phone) : '<span class="muted">—</span>'}</dd>
+        <dt>Lead status</dt><dd><span class="pill">${esc(lead.status || "new")}</span></dd>
+        <dt>Email list</dt><dd>${emailStatusLabel(lead.bounced_at ? "bounced" : lead.unsubscribed_at ? "unsubscribed" : "active")}</dd>
+        <dt>First seen</dt><dd>${fmtDate(lead.first_seen_at || lead.created_at)}</dd>
+        <dt>Last contact</dt><dd>${fmtDate(lead.last_contact_at)}</dd>
+      </dl>`;
+
+    const contacts = (d.contact_submissions || []).length
+      ? `<table>
+          <thead><tr><th>When</th><th>Message</th><th>Status</th></tr></thead>
+          <tbody>${d.contact_submissions
+            .map(
+              (c) => `<tr>
+                <td class="muted">${fmtDate(c.created_at)}</td>
+                <td>${esc(c.message || "—")}</td>
+                <td><span class="pill">${esc(c.status || "new")}</span></td>
+              </tr>`
+            )
+            .join("")}</tbody>
+        </table>`
+      : '<p class="muted">No contact form submissions.</p>';
+
+    const reservations = (d.reservation_requests || []).length
+      ? `<table>
+          <thead><tr><th>When</th><th>Session</th><th>Location</th><th>Interests</th><th>Notes</th></tr></thead>
+          <tbody>${d.reservation_requests
+            .map(
+              (r) => `<tr>
+                <td class="muted">${fmtDate(r.created_at)}</td>
+                <td>${esc(r.session_time || "—")}</td>
+                <td>${esc(r.launch_location || "—")}</td>
+                <td>${esc((r.interests || []).join(", ") || "—")}</td>
+                <td class="muted">${esc(r.preferred_date || "—")}</td>
+              </tr>`
+            )
+            .join("")}</tbody>
+        </table>`
+      : '<p class="muted">No reservation requests.</p>';
+
+    const visitors = (d.visitors || []).length
+      ? `<table>
+          <thead><tr><th>Visitor</th><th>Device</th><th class="num">Sessions</th><th>Last seen</th></tr></thead>
+          <tbody>${d.visitors
+            .map(
+              (v) => `<tr class="clickable" data-visitor="${esc(v.id)}">
+                <td><span class="pill">${shortToken(v.visitor_token)}</span></td>
+                <td>${esc(v.device_type || "—")}${v.browser ? ` · ${esc(v.browser)}` : ""}</td>
+                <td class="num">${fmtNum(v.total_sessions)}</td>
+                <td class="muted">${fmtDate(v.last_seen_at)}</td>
+              </tr>`
+            )
+            .join("")}</tbody>
+        </table>`
+      : '<p class="muted">No linked visitor sessions.</p>';
+
+    body.innerHTML = `
+      ${info}
+      <div class="section-title">Contact form submissions (${(d.contact_submissions || []).length})</div>
+      ${contacts}
+      <div class="section-title">Reservation requests (${(d.reservation_requests || []).length})</div>
+      ${reservations}
+      <div class="section-title">Linked visitors (${(d.visitors || []).length})</div>
+      ${visitors}`;
+
+    body.querySelectorAll("[data-visitor]").forEach((row) => {
+      row.addEventListener("click", () => openVisitor(row.dataset.visitor));
+    });
+  } catch (err) {
+    if (err.code === 401) return showLogin();
+    body.innerHTML = '<p class="muted">Could not load contact.</p>';
+  }
+}
+
 // ----- sidebar tabs + lazy panel loading ------------------------------------
 const panelLoaded = {};
 
@@ -1047,6 +1262,10 @@ async function loadPanel(id) {
       case "behavior":
         await api("events", { limit: 100 }).then(renderEvents);
         break;
+      case "contacts":
+        initContactsSearch();
+        await loadContactsSection();
+        break;
       case "email":
         initCampaignForm();
         initScheduleForm();
@@ -1073,7 +1292,7 @@ function initTabs() {
   });
 
   const initial = location.hash.replace("#", "") || "overview";
-  const valid = ["overview", "traffic", "visitors", "behavior", "email"];
+  const valid = ["overview", "traffic", "visitors", "behavior", "contacts", "email"];
   showTab(valid.includes(initial) ? initial : "overview");
 }
 

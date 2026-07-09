@@ -164,6 +164,202 @@ async function bouncedContacts(supabase) {
   return data || [];
 }
 
+function contactEmailStatus(lead) {
+  if (lead.bounced_at) return "bounced";
+  if (lead.unsubscribed_at) return "unsubscribed";
+  return "active";
+}
+
+function latestByLead(rows, leadKey = "lead_id") {
+  const map = new Map();
+  for (const row of rows || []) {
+    const id = row[leadKey];
+    if (!id || map.has(id)) continue;
+    map.set(id, row);
+  }
+  return map;
+}
+
+function interestsLabel(reservation) {
+  const labels = (reservation?.interests || [])
+    .map((i) => i.interest_type?.label)
+    .filter(Boolean);
+  return labels.length ? labels.join(", ") : null;
+}
+
+async function listContacts(supabase, url) {
+  const limit = Math.min(Number(url.searchParams.get("limit")) || 500, 500);
+
+  const { data: leads, error, count } = await supabase
+    .from("leads")
+    .select(
+      "id, email, first_name, last_name, phone, status, first_seen_at, last_contact_at, created_at, unsubscribed_at, bounced_at, bounce_kind",
+      { count: "exact" }
+    )
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  if (!leads?.length) {
+    return { total: count || 0, with_phone: 0, contacts: [] };
+  }
+
+  const ids = leads.map((l) => l.id);
+
+  const [overviewRes, contactRowsRes, reservationRowsRes, interestRowsRes] = await Promise.all([
+    supabase
+      .from("analytics_lead_overview")
+      .select("id, contact_submissions, reservation_requests, linked_visitors")
+      .in("id", ids),
+    supabase
+      .from("contact_submissions")
+      .select("lead_id, message, created_at")
+      .in("lead_id", ids)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("reservation_requests")
+      .select("id, lead_id, session_time, launch_location, preferred_date, created_at")
+      .in("lead_id", ids)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("reservation_request_interests")
+      .select("reservation_request_id, interest_types(label)"),
+  ]);
+
+  if (overviewRes.error) throw overviewRes.error;
+  if (contactRowsRes.error) throw contactRowsRes.error;
+  if (reservationRowsRes.error) throw reservationRowsRes.error;
+  if (interestRowsRes.error) throw interestRowsRes.error;
+
+  const overviewMap = new Map((overviewRes.data || []).map((r) => [r.id, r]));
+  const latestContact = latestByLead(contactRowsRes.data);
+  const latestReservation = latestByLead(reservationRowsRes.data);
+
+  const reservationIds = new Set((reservationRowsRes.data || []).map((r) => r.id));
+  const interestsByReservation = new Map();
+  for (const row of interestRowsRes.data || []) {
+    if (!reservationIds.has(row.reservation_request_id)) continue;
+    const label = row.interest_types?.label;
+    if (!label) continue;
+    const list = interestsByReservation.get(row.reservation_request_id) || [];
+    list.push(label);
+    interestsByReservation.set(row.reservation_request_id, list);
+  }
+
+  const contacts = leads.map((lead) => {
+    const stats = overviewMap.get(lead.id) || {};
+    const contactCount = Number(stats.contact_submissions) || 0;
+    const reservationCount = Number(stats.reservation_requests) || 0;
+    const sources = [];
+    if (contactCount > 0) sources.push("contact");
+    if (reservationCount > 0) sources.push("reservation");
+
+    const lastContact = latestContact.get(lead.id);
+    const lastReservation = latestReservation.get(lead.id);
+    const lastActivity = [lastContact?.created_at, lastReservation?.created_at, lead.last_contact_at, lead.created_at]
+      .filter(Boolean)
+      .sort()
+      .pop();
+
+    const lastInterests = lastReservation
+      ? (interestsByReservation.get(lastReservation.id) || []).join(", ")
+      : null;
+
+    return {
+      id: lead.id,
+      email: lead.email,
+      first_name: lead.first_name,
+      last_name: lead.last_name,
+      phone: lead.phone,
+      status: lead.status,
+      email_status: contactEmailStatus(lead),
+      sources,
+      contact_submissions: contactCount,
+      reservation_requests: reservationCount,
+      linked_visitors: Number(stats.linked_visitors) || 0,
+      first_seen_at: lead.first_seen_at,
+      last_contact_at: lead.last_contact_at,
+      created_at: lead.created_at,
+      last_activity_at: lastActivity || null,
+      last_message_preview: lastContact?.message ? clean(lastContact.message, 160) : null,
+      last_session_time: lastReservation?.session_time || null,
+      last_launch_location: lastReservation?.launch_location || null,
+      last_preferred_date: lastReservation?.preferred_date
+        ? clean(lastReservation.preferred_date, 160)
+        : null,
+      last_interests: lastInterests || null,
+    };
+  });
+
+  return {
+    total: count || contacts.length,
+    with_phone: contacts.filter((c) => c.phone).length,
+    contacts,
+  };
+}
+
+async function contactDetail(supabase, url) {
+  const id = url.searchParams.get("id");
+  if (!id) return { error: "missing id" };
+
+  const [leadRes, contactsRes, reservationsRes, visitorsRes] = await Promise.all([
+    supabase.from("leads").select("*").eq("id", id).maybeSingle(),
+    supabase
+      .from("contact_submissions")
+      .select("id, name, email, message, status, source_path, created_at")
+      .eq("lead_id", id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("reservation_requests")
+      .select(
+        "id, first_name, last_name, email, phone, session_time, launch_location, preferred_date, status, source_path, created_at"
+      )
+      .eq("lead_id", id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("visitors")
+      .select("id, visitor_token, device_type, browser, total_sessions, total_page_views, last_seen_at")
+      .eq("lead_id", id)
+      .order("last_seen_at", { ascending: false })
+      .limit(20),
+  ]);
+
+  if (leadRes.error) throw leadRes.error;
+  if (contactsRes.error) throw contactsRes.error;
+  if (reservationsRes.error) throw reservationsRes.error;
+  if (visitorsRes.error) throw visitorsRes.error;
+  if (!leadRes.data) return { error: "Contact not found" };
+
+  const reservationIds = (reservationsRes.data || []).map((r) => r.id);
+  let interests = [];
+  if (reservationIds.length) {
+    const { data, error } = await supabase
+      .from("reservation_request_interests")
+      .select("reservation_request_id, interest_types(label, slug)")
+      .in("reservation_request_id", reservationIds);
+    if (error) throw error;
+    interests = data || [];
+  }
+
+  const interestsByReservation = new Map();
+  for (const row of interests) {
+    const list = interestsByReservation.get(row.reservation_request_id) || [];
+    if (row.interest_types?.label) list.push(row.interest_types.label);
+    interestsByReservation.set(row.reservation_request_id, list);
+  }
+
+  const reservations = (reservationsRes.data || []).map((r) => ({
+    ...r,
+    interests: interestsByReservation.get(r.id) || [],
+  }));
+
+  return {
+    lead: leadRes.data,
+    contact_submissions: contactsRes.data || [],
+    reservation_requests: reservations,
+    visitors: visitorsRes.data || [],
+  };
+}
+
 async function removeContact(supabase, req) {
   const body = await readBody(req);
   const id = body.id;
@@ -423,6 +619,10 @@ export default async (req) => {
         return json(await campaigns(supabase));
       case "bounced_contacts":
         return json(await bouncedContacts(supabase));
+      case "contacts":
+        return json(await listContacts(supabase, url));
+      case "contact":
+        return json(await contactDetail(supabase, url));
       case "schedules":
         return json(await listSchedules(supabase));
       default:
