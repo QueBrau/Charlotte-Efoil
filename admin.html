@@ -424,6 +424,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4l7 16 2.5-6.5L20 11z"/></svg>
             Behavior
           </button>
+          <button type="button" data-tab="contacts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Contacts
+          </button>
           <button type="button" data-tab="email">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
             Email marketing
@@ -505,6 +509,29 @@
             <div class="card">
               <h2>Recent link &amp; button clicks</h2>
               <div data-events><div class="loading">Loading…</div></div>
+            </div>
+          </section>
+
+          <!-- Contacts -->
+          <section class="panel hidden" data-panel="contacts">
+            <div class="toolbar">
+              <span class="title">Contacts</span>
+              <input
+                type="search"
+                data-contacts-search
+                placeholder="Search name, email, or phone"
+                style="background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:0.55rem 0.8rem;min-width:min(280px,100%)"
+              />
+            </div>
+            <div class="stat-grid" data-contacts-stats>
+              <div class="loading">Loading…</div>
+            </div>
+            <div class="card">
+              <h2>All contacts</h2>
+              <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
+                Everyone who submitted a contact or reservation form. Click a row for full details.
+              </p>
+              <div data-contacts><div class="loading">Loading…</div></div>
             </div>
           </section>
 
@@ -634,9 +661,9 @@
     </div>
 
     <div class="overlay hidden" data-overlay></div>
-    <aside class="drawer hidden" data-drawer aria-label="Visitor detail">
+    <aside class="drawer hidden" data-drawer aria-label="Detail panel">
       <div class="drawer-head">
-        <strong>Visitor activity</strong>
+        <strong data-drawer-title>Detail</strong>
         <button class="btn btn-ghost" data-drawer-close>Close</button>
       </div>
       <div class="drawer-body" data-drawer-body></div>

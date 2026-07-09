@@ -202,6 +202,163 @@ let MOCK_BOUNCED = [
   },
 ];
 
+const LEAD_IDS = [
+  "l1000001-0000-4000-8000-000000000001",
+  "l1000002-0000-4000-8000-000000000002",
+  "l1000003-0000-4000-8000-000000000003",
+  "l1000004-0000-4000-8000-000000000004",
+  "l1000005-0000-4000-8000-000000000005",
+];
+
+const MOCK_CONTACTS_LIST = [
+  {
+    id: LEAD_IDS[0],
+    email: "sarah.m@email.com",
+    first_name: "Sarah",
+    last_name: "Miller",
+    phone: "704-555-1234",
+    status: "new",
+    email_status: "active",
+    sources: ["contact", "reservation"],
+    contact_submissions: 1,
+    reservation_requests: 1,
+    linked_visitors: 1,
+    first_seen_at: isoDaysAgo(14),
+    last_contact_at: isoDaysAgo(2),
+    created_at: isoDaysAgo(14),
+    last_activity_at: isoDaysAgo(2),
+    last_message_preview: "Interested in a lesson for two this weekend.",
+    last_preferred_date: "Saturday morning",
+    last_interests: "Private lesson, Lake Norman",
+  },
+  {
+    id: LEAD_IDS[1],
+    email: "mike.j@email.com",
+    first_name: "Mike",
+    last_name: "Johnson",
+    phone: "980-555-8899",
+    status: "contacted",
+    email_status: "active",
+    sources: ["reservation"],
+    contact_submissions: 0,
+    reservation_requests: 2,
+    linked_visitors: 1,
+    first_seen_at: isoDaysAgo(21),
+    last_contact_at: isoDaysAgo(5),
+    created_at: isoDaysAgo(21),
+    last_activity_at: isoDaysAgo(5),
+    last_message_preview: null,
+    last_preferred_date: "July 12 afternoon",
+    last_interests: "Corporate outing",
+  },
+  {
+    id: LEAD_IDS[2],
+    email: "hello@charlotteefoil.com",
+    first_name: "Alex",
+    last_name: "Rivera",
+    phone: null,
+    status: "new",
+    email_status: "active",
+    sources: ["contact"],
+    contact_submissions: 2,
+    reservation_requests: 0,
+    linked_visitors: 1,
+    first_seen_at: isoDaysAgo(9),
+    last_contact_at: isoDaysAgo(1),
+    created_at: isoDaysAgo(9),
+    last_activity_at: isoDaysAgo(1),
+    last_message_preview: "Do you offer gift certificates?",
+    last_preferred_date: null,
+    last_interests: null,
+  },
+  {
+    id: LEAD_IDS[3],
+    email: "jenny.k@email.com",
+    first_name: "Jenny",
+    last_name: "Kim",
+    phone: "704-555-4422",
+    status: "booked",
+    email_status: "unsubscribed",
+    sources: ["reservation"],
+    contact_submissions: 0,
+    reservation_requests: 1,
+    linked_visitors: 0,
+    first_seen_at: isoDaysAgo(45),
+    last_contact_at: isoDaysAgo(30),
+    created_at: isoDaysAgo(45),
+    last_activity_at: isoDaysAgo(30),
+    last_message_preview: null,
+    last_preferred_date: "June 28",
+    last_interests: "Sunset session",
+  },
+  {
+    id: LEAD_IDS[4],
+    email: "bad.address@example.com",
+    first_name: "Bad",
+    last_name: "Address",
+    phone: null,
+    status: "new",
+    email_status: "bounced",
+    sources: ["contact"],
+    contact_submissions: 1,
+    reservation_requests: 0,
+    linked_visitors: 0,
+    first_seen_at: isoDaysAgo(3),
+    last_contact_at: isoDaysAgo(3),
+    created_at: isoDaysAgo(3),
+    last_activity_at: isoDaysAgo(3),
+    last_message_preview: "General inquiry",
+    last_preferred_date: null,
+    last_interests: null,
+  },
+];
+
+const MOCK_CONTACT_DETAILS = Object.fromEntries(
+  MOCK_CONTACTS_LIST.map((c, i) => [
+    c.id,
+    {
+      lead: {
+        id: c.id,
+        email: c.email,
+        first_name: c.first_name,
+        last_name: c.last_name,
+        phone: c.phone,
+        status: c.status,
+        first_seen_at: c.first_seen_at,
+        last_contact_at: c.last_contact_at,
+        created_at: c.created_at,
+        unsubscribed_at: c.email_status === "unsubscribed" ? isoDaysAgo(20) : null,
+        bounced_at: c.email_status === "bounced" ? isoDaysAgo(3) : null,
+      },
+      contact_submissions:
+        c.contact_submissions > 0
+          ? [
+              {
+                id: `cs-${i + 1}`,
+                message: c.last_message_preview || "Hello, I'd like more info.",
+                status: "new",
+                created_at: c.last_activity_at,
+              },
+            ]
+          : [],
+      reservation_requests:
+        c.reservation_requests > 0
+          ? [
+              {
+                id: `rr-${i + 1}`,
+                session_time: c.last_interests?.includes("Sunset") ? "Sunset" : "Morning",
+                launch_location: c.last_interests?.includes("Corporate") ? "Corporate" : "Lake Norman",
+                preferred_date: c.last_preferred_date,
+                interests: c.last_interests ? c.last_interests.split(", ") : [],
+                created_at: c.last_activity_at,
+              },
+            ]
+          : [],
+      visitors: c.linked_visitors > 0 ? [MOCK_VISITORS[i]] : [],
+    },
+  ])
+);
+
 function mockNextRun(day, hour) {
   const now = new Date();
   let month = now.getMonth();
@@ -344,6 +501,14 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
       return MOCK_VISITORS.slice(0, Number(params.limit) || 100);
     case "visitor":
       return MOCK_VISITOR_DETAILS[params.id] || { visitor: null, sessions: [], page_views: [], events: [] };
+    case "contacts":
+      return {
+        total: MOCK_CONTACTS_LIST.length,
+        with_phone: MOCK_CONTACTS_LIST.filter((c) => c.phone).length,
+        contacts: MOCK_CONTACTS_LIST,
+      };
+    case "contact":
+      return MOCK_CONTACT_DETAILS[params.id] || { error: "Contact not found" };
     case "bounced_contacts":
       return MOCK_BOUNCED;
     case "schedules":
