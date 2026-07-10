@@ -7,7 +7,9 @@
     "dev": "vite",
     "build:templates": "node scripts/compile-newsletter-templates.mjs",
     "build": "npm run build:templates && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "^3.1079.0",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@netlify/functions": "^2.8.1",
     "mjml": "^5.4.0",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vitest": "^4.1.10"
   }
 }

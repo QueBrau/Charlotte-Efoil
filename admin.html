@@ -6,386 +6,25 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Analytics Dashboard | CharlotteEfoil</title>
     <link rel="icon" href="/photos/CharlotteEfoil.png" type="image/png" />
-    <style>
-      :root {
-        --brand: rgb(25, 64, 85);
-        --brand-2: rgb(35, 84, 110);
-        --bg: #0d1519;
-        --panel: #142027;
-        --panel-2: #1b2b33;
-        --line: rgba(255, 255, 255, 0.09);
-        --text: #eef4f6;
-        --muted: #93a7b0;
-        --accent: #4fb0d4;
-        --good: #46c78f;
-        --warn: #e8b04b;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--text);
-        -webkit-font-smoothing: antialiased;
-      }
-      a { color: var(--accent); }
-      button { font: inherit; cursor: pointer; }
-
-      /* Login gate */
-      .gate {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 1.5rem;
-      }
-      .gate-card {
-        width: 100%;
-        max-width: 360px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 2rem;
-      }
-      .gate-card h1 { font-size: 1.25rem; margin: 0 0 0.35rem; }
-      .gate-card p { color: var(--muted); margin: 0 0 1.25rem; font-size: 0.9rem; }
-      .field { display: flex; flex-direction: column; gap: 0.4rem; }
-      input[type="password"] {
-        background: var(--bg);
-        border: 1px solid var(--line);
-        color: var(--text);
-        border-radius: 10px;
-        padding: 0.7rem 0.9rem;
-        font-size: 1rem;
-      }
-      .btn {
-        background: var(--brand);
-        color: #fff;
-        border: 0;
-        border-radius: 10px;
-        padding: 0.7rem 1rem;
-        font-weight: 600;
-        transition: background 0.15s ease;
-      }
-      .btn:hover { background: var(--brand-2); }
-      .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--text); }
-      .error { color: #ff8f8f; font-size: 0.85rem; min-height: 1.1rem; }
-
-      .hidden { display: none !important; }
-
-      /* App shell */
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid var(--line);
-        position: sticky;
-        top: 0;
-        background: rgba(13, 21, 25, 0.92);
-        backdrop-filter: blur(8px);
-        z-index: 20;
-      }
-      .topbar h1 { font-size: 1.05rem; margin: 0; }
-      .topbar .actions { display: flex; gap: 0.6rem; }
-
-      /* Sidebar + content layout */
-      .layout { display: flex; align-items: flex-start; max-width: 1360px; margin: 0 auto; }
-      .sidebar {
-        position: sticky;
-        top: 65px;
-        flex: 0 0 220px;
-        padding: 1.25rem 0.9rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        min-height: calc(100vh - 65px);
-        border-right: 1px solid var(--line);
-      }
-      .sidebar button {
-        display: flex;
-        align-items: center;
-        gap: 0.65rem;
-        width: 100%;
-        text-align: left;
-        background: transparent;
-        border: 0;
-        color: var(--muted);
-        padding: 0.65rem 0.85rem;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: background 0.15s ease, color 0.15s ease;
-      }
-      .sidebar button:hover { background: var(--panel); color: var(--text); }
-      .sidebar button.active { background: var(--brand); color: #fff; }
-      .sidebar button svg { width: 17px; height: 17px; flex: 0 0 auto; }
-      .wrap { flex: 1; min-width: 0; padding: 1.5rem; }
-      .panel.hidden { display: none; }
-
-      @media (max-width: 820px) {
-        .layout { flex-direction: column; }
-        .sidebar {
-          position: sticky;
-          top: 65px;
-          z-index: 15;
-          flex: none;
-          width: 100%;
-          min-height: 0;
-          flex-direction: row;
-          overflow-x: auto;
-          gap: 0.35rem;
-          padding: 0.6rem 0.9rem;
-          border-right: 0;
-          border-bottom: 1px solid var(--line);
-          background: var(--bg);
-          -webkit-overflow-scrolling: touch;
-        }
-        .sidebar button { width: auto; white-space: nowrap; padding: 0.5rem 0.8rem; }
-      }
-
-      .stat-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 0.9rem;
-        margin-bottom: 1.5rem;
-      }
-      .stat {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 1rem 1.1rem;
-      }
-      .stat .label { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
-      .stat .value { font-size: 1.7rem; font-weight: 700; margin-top: 0.3rem; }
-
-      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-      @media (max-width: 820px) { .grid-2 { grid-template-columns: 1fr; } }
-
-      .card {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 1.1rem 1.2rem;
-        margin-bottom: 1.25rem;
-      }
-      .card h2 { font-size: 0.95rem; margin: 0 0 0.9rem; }
-
-      table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-      th, td { text-align: left; padding: 0.55rem 0.5rem; border-bottom: 1px solid var(--line); vertical-align: top; }
-      th { color: var(--muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; }
-      tbody tr.clickable:hover { background: var(--panel-2); cursor: pointer; }
-      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-      .muted { color: var(--muted); }
-      .pill {
-        display: inline-block;
-        padding: 0.12rem 0.5rem;
-        border-radius: 999px;
-        background: var(--panel-2);
-        border: 1px solid var(--line);
-        font-size: 0.72rem;
-        color: var(--muted);
-      }
-      .bar-track { background: var(--panel-2); border-radius: 6px; height: 8px; overflow: hidden; min-width: 60px; }
-      .bar-fill { background: var(--accent); height: 100%; }
-
-      /* Slide-over detail */
-      .overlay {
-        position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 40;
-      }
-      .drawer {
-        position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%);
-        background: var(--panel); border-left: 1px solid var(--line); z-index: 41;
-        display: flex; flex-direction: column;
-      }
-      .drawer-head {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 1rem 1.25rem; border-bottom: 1px solid var(--line);
-      }
-      .drawer-body { padding: 1.25rem; overflow-y: auto; }
-      .kv { display: grid; grid-template-columns: 130px 1fr; gap: 0.3rem 0.75rem; font-size: 0.85rem; margin-bottom: 1.25rem; }
-      .kv dt { color: var(--muted); }
-      .kv dd { margin: 0; }
-      .section-title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 1.25rem 0 0.5rem; }
-      .loading { color: var(--muted); padding: 2rem 0; text-align: center; }
-
-      /* Date-range toggle */
-      .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
-      .toolbar .title { font-size: 1.15rem; font-weight: 700; }
-      .range { display: inline-flex; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 0.25rem; gap: 0.15rem; }
-      .range button {
-        background: transparent; color: var(--muted); border: 0;
-        padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; font-size: 0.85rem;
-      }
-      .range button.active { background: var(--brand); color: #fff; }
-
-      /* KPI cards with trend accent */
-      .stat .sub { color: var(--muted); font-size: 0.78rem; margin-top: 0.25rem; }
-      .stat .value.accent { color: var(--accent); }
-
-      /* Charts */
-      .chart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.25rem; }
-      @media (max-width: 980px) { .chart-grid { grid-template-columns: 1fr 1fr; } }
-      @media (max-width: 640px) { .chart-grid { grid-template-columns: 1fr; } }
-      .chart-box { position: relative; height: 260px; }
-      .chart-box.tall { height: 300px; }
-      .chart-empty { display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 0.85rem; }
-
-      .campaign-form { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 0.5rem; }
-      .fld { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--muted); }
-      .fld input, .fld textarea {
-        background-color: var(--panel-2);
-        border: 1px solid var(--line);
-        color: var(--text);
-        border-radius: 10px;
-        padding: 0.65rem 0.85rem;
-        font-size: 0.95rem;
-        font-family: inherit;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-      }
-      .fld input:focus, .fld textarea:focus {
-        outline: none;
-        border-color: rgba(79, 176, 212, 0.55);
-        box-shadow: 0 0 0 3px rgba(79, 176, 212, 0.14);
-        background-color: var(--bg);
-      }
-      .fld textarea { resize: vertical; }
-      .campaign-actions { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
-
-      /* Schedule pickers — pill grid matching date-range toggle */
-      .schedule-pickers {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-      }
-      @media (max-width: 900px) { .schedule-pickers { grid-template-columns: 1fr; } }
-      .picker-block { display: flex; flex-direction: column; gap: 0.4rem; }
-      .picker-label {
-        font-size: 0.85rem;
-        color: var(--muted);
-        font-weight: 500;
-      }
-      .picker-panel {
-        background: var(--panel-2);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 0.7rem;
-      }
-      .picker-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 0.35rem;
-      }
-      .picker-grid button,
-      .picker-times button {
-        background: transparent;
-        border: 1px solid transparent;
-        color: var(--muted);
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.82rem;
-        line-height: 1.2;
-        transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-      }
-      .picker-grid button {
-        padding: 0.45rem 0;
-        min-height: 2rem;
-      }
-      .picker-grid button:hover,
-      .picker-times button:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: var(--text);
-      }
-      .picker-grid button.active,
-      .picker-times button.active {
-        background: var(--brand);
-        border-color: var(--brand);
-        color: #fff;
-      }
-      .picker-grid button:focus-visible,
-      .picker-times button:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(79, 176, 212, 0.45);
-      }
-      .picker-times {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.35rem;
-      }
-      .picker-times button {
-        padding: 0.42rem 0.7rem;
-        border-radius: 999px;
-        font-size: 0.78rem;
-        white-space: nowrap;
-      }
-      .picker-hint {
-        margin: 0.45rem 0 0;
-        font-size: 0.78rem;
-        color: var(--muted);
-      }
-
-      .flyer-editor-wrap {
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        overflow: hidden;
-        background: #ffffff;
-      }
-      .flyer-editor-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        padding: 0.55rem 0.85rem;
-        background: var(--panel-2);
-        border-bottom: 1px solid var(--line);
-      }
-      .flyer-editor { min-height: 440px; }
-      .flyer-editor .gjs-one-bg { background-color: #f8fafb; }
-      .flyer-editor .gjs-two-color { color: #12303f; }
-      .flyer-editor .gjs-three-bg { background-color: #194055; color: #fff; }
-      .flyer-editor .gjs-four-color,
-      .flyer-editor .gjs-four-color-h:hover { color: #2b6b88; }
-      [data-flyer-status] { font-size: 0.82rem; min-height: 0; }
-
-      .template-picker { margin-bottom: 0.25rem; }
-      .template-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-        gap: 0.5rem;
-        margin-top: 0.45rem;
-      }
-      .template-card {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
-        text-align: left;
-        background: var(--panel-2);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 0.7rem 0.8rem;
-        color: var(--text);
-        transition: border-color 0.15s ease, background 0.15s ease;
-      }
-      .template-card:hover { border-color: rgba(79, 176, 212, 0.45); }
-      .template-card.active {
-        border-color: var(--accent);
-        background: rgba(79, 176, 212, 0.1);
-      }
-      .template-card strong { font-size: 0.84rem; }
-      .template-card .muted-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.35; }
-      .status-pill { text-transform: capitalize; }
-      .status-pill.is-off { opacity: 0.65; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/admin.css" />
   </head>
   <body>
     <!-- Login gate -->
     <div class="gate" data-gate>
       <form class="gate-card" data-login-form>
-        <h1>Analytics Dashboard</h1>
+        <div class="gate-brand">
+          <img src="/photos/CharlotteEfoil.png" alt="" />
+          <div>
+            <h1>Analytics Dashboard</h1>
+            <p class="muted" style="margin:0;font-size:0.82rem">CharlotteEfoil admin</p>
+          </div>
+        </div>
         <p>Enter the admin password to continue.</p>
         <p class="muted hidden" data-demo-hint style="margin:-0.75rem 0 1rem;font-size:0.85rem">
-          Demo mode — enter any password to preview sample analytics.
+          Demo mode enter any password to preview sample analytics.
         </p>
         <p class="muted" style="margin:-0.75rem 0 1rem;font-size:0.85rem">
           <a href="?mock=1">Preview dashboard with demo data</a>
@@ -399,83 +38,167 @@
     </div>
 
     <!-- App -->
-    <div data-app class="hidden">
-      <header class="topbar">
-        <h1>CharlotteEfoil · Analytics</h1>
-        <div class="actions">
-          <button class="btn btn-ghost" data-logout>Sign out</button>
+    <div data-app class="hidden app-shell">
+      <aside class="sidebar">
+        <div class="sidebar-profile">
+          <img src="/photos/CharlotteEfoil.png" alt="" />
+          <div>
+            <strong>Admin</strong>
+            <span>CharlotteEfoil team</span>
+          </div>
         </div>
-      </header>
-      <div class="layout">
-        <nav class="sidebar" data-tabs aria-label="Dashboard sections">
-          <button type="button" data-tab="overview" class="active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-            Overview
-          </button>
-          <button type="button" data-tab="traffic">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
-            Traffic
-          </button>
-          <button type="button" data-tab="visitors">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 15.2c2.6.3 4.6 1.9 5.5 4.8"/></svg>
-            Visitors
-          </button>
-          <button type="button" data-tab="behavior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4l7 16 2.5-6.5L20 11z"/></svg>
-            Behavior
-          </button>
-          <button type="button" data-tab="contacts">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Contacts
-          </button>
-          <button type="button" data-tab="email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-            Email marketing
-          </button>
+        <div class="sidebar-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+          <input type="search" data-nav-filter placeholder="Search menu…" />
+        </div>
+        <nav class="sidebar-nav" data-tabs aria-label="Dashboard sections">
+          <div class="nav-group">
+            <span class="nav-label">Analytics</span>
+            <button type="button" data-tab="overview" class="active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+              Home
+            </button>
+            <button type="button" data-tab="traffic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+              Traffic
+            </button>
+            <button type="button" data-tab="behavior">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4l7 16 2.5-6.5L20 11z"/></svg>
+              Behavior
+            </button>
+          </div>
+          <div class="nav-group">
+            <span class="nav-label">Audience</span>
+            <button type="button" data-tab="visitors">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 15.2c2.6.3 4.6 1.9 5.5 4.8"/></svg>
+              Visitors
+            </button>
+            <button type="button" data-tab="contacts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Contacts
+            </button>
+          </div>
+          <div class="nav-group">
+            <span class="nav-label">Marketing</span>
+            <button type="button" data-tab="media">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              Media library
+            </button>
+            <button type="button" data-tab="email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+              Email marketing
+            </button>
+          </div>
         </nav>
+      </aside>
 
-        <main class="wrap">
-          <!-- Overview -->
-          <section class="panel" data-panel="overview">
-            <div class="toolbar">
-              <span class="title" data-range-title>Overview · last 30 days</span>
-              <div class="range" data-range>
-                <button type="button" data-days="7">7 days</button>
-                <button type="button" data-days="30" class="active">30 days</button>
-                <button type="button" data-days="90">90 days</button>
+      <div class="main-column">
+        <header class="topbar">
+          <div class="topbar-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+            <input type="search" data-global-search placeholder="Search something…" />
+          </div>
+          <div class="topbar-actions">
+            <button type="button" class="icon-btn" data-notifications title="Recent activity" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+              <span class="notif-dot hidden" data-notif-dot></span>
+            </button>
+            <div class="brand-chip">
+              <img src="/photos/CharlotteEfoil.png" alt="" />
+              <div>
+                <strong>CharlotteEfoil</strong>
+                <span>Brand</span>
               </div>
             </div>
+            <button class="btn btn-ghost" data-logout>Sign out</button>
+          </div>
+        </header>
 
-            <div class="stat-grid" data-kpis>
-              <div class="loading">Loading…</div>
+        <main class="content">
+          <header class="page-header">
+            <div>
+              <h1 data-page-title>Home</h1>
+              <p data-page-subtitle>Site analytics and marketing tools</p>
+            </div>
+            <div class="page-chips">
+              <span class="chip chip-good">Live</span>
+              <span class="chip hidden chip-demo" data-demo-chip>Demo data</span>
+              <span class="chip" data-page-meta>Last updated just now</span>
+            </div>
+          </header>
+
+        <div class="wrap">
+          <!-- Home / Overview -->
+          <section class="panel home-panel" data-panel="overview">
+            <header class="campaign-header">
+              <div class="campaign-header-main">
+                <a class="campaign-back" href="/" target="_blank" rel="noopener" aria-label="View live site">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                </a>
+                <img src="/photos/CharlotteEfoil.png" alt="" class="campaign-logo" />
+                <div>
+                  <h2>CharlotteEfoil</h2>
+                  <p>Lake Norman eFoil lessons, demos, and reservations site analytics and marketing hub.</p>
+                </div>
+              </div>
+              <div class="campaign-header-meta">
+                <span class="chip chip-good">Active</span>
+                <span class="campaign-date">Created on <strong data-home-since>—</strong></span>
+                <div class="range range-compact" data-range>
+                  <button type="button" data-days="7">7d</button>
+                  <button type="button" data-days="30" class="active">30d</button>
+                  <button type="button" data-days="90">90d</button>
+                </div>
+                <button type="button" class="icon-btn icon-btn-sm" data-home-menu aria-label="More options">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+                </button>
+              </div>
+            </header>
+
+            <nav class="channel-tabs" data-home-channels aria-label="Traffic channels"></nav>
+
+            <div class="home-top">
+              <div class="home-kpi-stack" data-home-kpis>
+                <div class="loading">Loading…</div>
+              </div>
+              <div class="card home-traffic-card" data-home-traffic></div>
             </div>
 
-            <div class="card">
-              <h2>Sessions over time</h2>
-              <div class="chart-box tall"><canvas data-chart-sessions></canvas></div>
+            <div class="home-bottom">
+              <div class="card home-card">
+                <div class="card-head">
+                  <h2>Contacts</h2>
+                  <button type="button" class="link-btn" data-go-contacts>+ View all</button>
+                </div>
+                <div data-home-contacts><div class="loading">Loading…</div></div>
+              </div>
+              <div class="card home-card">
+                <div class="card-head">
+                  <h2>Device mix</h2>
+                  <span class="muted home-card-sub">New vs returning by device</span>
+                </div>
+                <div class="chart-box home-chart">
+                  <canvas data-home-device-chart></canvas>
+                </div>
+              </div>
+              <div class="card home-card">
+                <div class="card-head">
+                  <h2>Visitor interests</h2>
+                  <span class="muted home-card-sub">By traffic channel</span>
+                </div>
+                <div class="chart-box home-chart">
+                  <canvas data-home-radar-chart></canvas>
+                </div>
+              </div>
             </div>
-
-            <div class="chart-grid">
-              <div class="card" style="margin-bottom:0">
-                <h2>New vs returning visitors</h2>
-                <div class="chart-box"><canvas data-chart-newret></canvas></div>
-              </div>
-              <div class="card" style="margin-bottom:0">
-                <h2>Sessions by device</h2>
-                <div class="chart-box"><canvas data-chart-device></canvas></div>
-              </div>
-              <div class="card" style="margin-bottom:0">
-                <h2>Traffic channels</h2>
-                <div class="chart-box"><canvas data-chart-channels></canvas></div>
-              </div>
-            </div>
+            <span class="hidden" data-range-title>Overview · last 30 days</span>
           </section>
 
           <!-- Traffic -->
           <section class="panel hidden" data-panel="traffic">
             <div class="toolbar"><span class="title">Traffic</span></div>
             <div class="card">
-              <h2>All-time totals</h2>
+              <h2>All time totals</h2>
               <div class="stat-grid" data-stats style="margin-bottom:0"></div>
             </div>
             <div class="card">
@@ -518,9 +241,9 @@
               <span class="title">Contacts</span>
               <input
                 type="search"
+                class="search-input"
                 data-contacts-search
                 placeholder="Search name, email, or phone"
-                style="background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:0.55rem 0.8rem;min-width:min(280px,100%)"
               />
             </div>
             <div class="stat-grid" data-contacts-stats>
@@ -535,13 +258,50 @@
             </div>
           </section>
 
+          <!-- Media library -->
+          <section class="panel hidden" data-panel="media">
+            <div class="toolbar media-toolbar">
+              <span class="title">Media library</span>
+              <div class="media-filters" data-media-filters>
+                <button type="button" class="active" data-media-kind="all">All</button>
+                <button type="button" data-media-kind="image">Images</button>
+                <button type="button" data-media-kind="logo">Logos</button>
+                <button type="button" data-media-kind="video">Videos</button>
+              </div>
+            </div>
+            <div class="stat-grid" data-media-stats>
+              <div class="loading">Loading…</div>
+            </div>
+            <div class="card">
+              <h2>Upload media</h2>
+              <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
+                Logos, photos, and videos for email flyers. Images up to 5 MB, videos up to 25 MB.
+              </p>
+              <div class="media-upload-zone" data-media-drop>
+                <p style="margin:0 0 0.65rem">Drag files here or choose from your computer.</p>
+                <label class="btn" style="cursor:pointer">
+                  Choose files
+                  <input type="file" data-media-upload hidden multiple accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,video/mp4,video/webm,video/quicktime" />
+                </label>
+                <p class="muted" data-media-upload-status style="margin:0.65rem 0 0;font-size:0.82rem"></p>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Your files</h2>
+              <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
+                Browse, preview, or delete assets. Drag any item into a flyer editor on the Email marketing tab.
+              </p>
+              <div data-media-grid><div class="loading">Loading…</div></div>
+            </div>
+          </section>
+
           <!-- Email marketing -->
           <section class="panel hidden" data-panel="email">
             <div class="toolbar"><span class="title">Email marketing</span></div>
             <div class="card">
               <h2>Send now</h2>
               <p class="muted" style="margin-top:-0.4rem;font-size:0.85rem">
-                Send a one-time broadcast to all contacts who haven't unsubscribed
+                Send a one time broadcast to all contacts who haven't unsubscribed
                 (<span data-audience-count>…</span> recipients). The CharlotteEfoil logo is
                 added automatically. Design an optional flyer below, or write your message in HTML.
               </p>
@@ -552,7 +312,8 @@
                 </label>
                 <div class="fld flyer-editor-field" data-flyer-editor-field>
                   <span>Flyer designer (optional)</span>
-                  <p class="muted" style="font-size:0.82rem;margin:0">Drag-and-drop email blocks to build a visual flyer. Images upload when you add them to the canvas.</p>
+                  <p class="muted" style="font-size:0.82rem;margin:0">Drag and drop email blocks to build a visual flyer. Open the asset panel (image icon) or drag from the media strip below — uploads are saved to your Media library.</p>
+                  <div class="media-strip" data-flyer-media-strip hidden></div>
                   <div class="template-picker">
                     <span class="picker-label">Start from a template</span>
                     <div class="template-grid" data-template-grid></div>
@@ -597,7 +358,8 @@
                 </label>
                 <div class="fld flyer-editor-field" data-flyer-editor-field>
                   <span>Flyer designer (optional)</span>
-                  <p class="muted" style="font-size:0.82rem;margin:0">Same drag-and-drop editor — saved with this schedule for every monthly send.</p>
+                  <p class="muted" style="font-size:0.82rem;margin:0">Same drag and drop editor saved with this schedule for every monthly send. Open the asset panel or drag from the media strip below.</p>
+                  <div class="media-strip" data-flyer-media-strip hidden></div>
                   <div class="template-picker">
                     <span class="picker-label">Start from a template</span>
                     <div class="template-grid" data-template-grid></div>
@@ -656,6 +418,7 @@
               <div data-bounced-contacts><div class="loading">Loading…</div></div>
             </div>
           </section>
+        </div>
         </main>
       </div>
     </div>

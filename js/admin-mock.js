@@ -3,6 +3,8 @@
 // without Supabase or Netlify Functions configured.
 // =============================================================================
 
+import { isSiteMediaId, mergeMediaLibrary } from "./site-media-catalog.js";
+
 export function isMockMode() {
   return new URLSearchParams(window.location.search).get("mock") === "1";
 }
@@ -178,6 +180,47 @@ function buildDashboard(days) {
     form_submissions: 37,
     contact_submissions: 22,
     reservation_requests: 15,
+  };
+}
+
+function buildHomeInsights(days) {
+  const dashboard = buildDashboard(days);
+  const sessions = dashboard.totals.sessions;
+  return {
+    range_days: days,
+    countries: [
+      { country: "US", sessions: Math.round(sessions * 0.72), visitors: Math.round(sessions * 0.55) },
+      { country: "CA", sessions: Math.round(sessions * 0.08), visitors: Math.round(sessions * 0.06) },
+      { country: "DE", sessions: Math.round(sessions * 0.05), visitors: Math.round(sessions * 0.04) },
+      { country: "ID", sessions: Math.round(sessions * 0.04), visitors: Math.round(sessions * 0.03) },
+      { country: "UY", sessions: Math.round(sessions * 0.02), visitors: Math.round(sessions * 0.02) },
+    ],
+    country_count: 5,
+    devices: [
+      { label: "mobile", sessions: Math.round(sessions * 0.58), new: 420, returning: 230 },
+      { label: "desktop", sessions: Math.round(sessions * 0.34), new: 180, returning: 200 },
+      { label: "tablet", sessions: Math.round(sessions * 0.08), new: 45, returning: 44 },
+    ],
+    channels: dashboard.channels,
+    contacts: MOCK_CONTACTS_LIST.slice(0, 6).map((c) => ({
+      id: c.id,
+      name: [c.first_name, c.last_name].filter(Boolean).join(" ").trim() || c.email,
+      email: c.email,
+      phone: c.phone,
+      projects: (Number(c.contact_submissions) || 0) + (Number(c.reservation_requests) || 0),
+      follower: c.phone || c.email,
+      created_at: c.created_at,
+    })),
+    event_counts: {
+      contact: 22,
+      reservation: 15,
+      cta_click: 88,
+    },
+    radar: {
+      labels: ["Lessons", "Demos", "Corporate", "Family", "Contact", "Reservations"],
+      values: [42, 28, 16, 22, 22, 15],
+    },
+    tracking_since: isoDaysAgo(180),
   };
 }
 
@@ -403,6 +446,8 @@ const MOCK_EVENTS = [
   { id: "e10", visitor_id: VISITOR_IDS[7], event_type: "cta_click", event_name: "request_reservation", path: "/corporate.html", metadata: { href: "/reservation-request.html" }, created_at: isoDaysAgo(4, 13) },
 ];
 
+let MOCK_UPLOADED_MEDIA = [];
+
 /** Simulate network latency so loading states are visible briefly. */
 function delay(ms = 180) {
   return new Promise((r) => setTimeout(r, ms));
@@ -421,6 +466,32 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
         id: "f1000001-0000-4000-8000-000000000001",
         url: null,
       };
+    }
+    if (action === "upload_media") {
+      const id = "m-demo-" + Date.now();
+      const contentType = body.content_type || "image/png";
+      const item = {
+        id,
+        name: body.name || body.filename || "Uploaded file",
+        original_filename: body.filename || null,
+        content_type: contentType,
+        kind: body.kind || "image",
+        size_bytes: body.data ? Math.ceil((body.data.length * 3) / 4) : 120000,
+        alt_text: body.alt_text || null,
+        created_at: new Date().toISOString(),
+        url: `/api/media?id=${encodeURIComponent(id)}`,
+        preview_data: body.data || null,
+        source: "upload",
+      };
+      MOCK_UPLOADED_MEDIA.unshift(item);
+      return { ok: true, item };
+    }
+    if (action === "delete_media") {
+      if (isSiteMediaId(body.id)) {
+        return { error: "Site files cannot be deleted from the media library.", status: 400 };
+      }
+      MOCK_UPLOADED_MEDIA = MOCK_UPLOADED_MEDIA.filter((m) => m.id !== body.id);
+      return { ok: true, id: body.id };
     }
     if (action === "remove_contact") {
       MOCK_BOUNCED = MOCK_BOUNCED.filter((r) => r.id !== body.id);
@@ -477,6 +548,8 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
       };
     case "dashboard":
       return buildDashboard(Math.min(Math.max(Number(params.days) || 30, 1), 90));
+    case "home":
+      return buildHomeInsights(Math.min(Math.max(Number(params.days) || 30, 1), 90));
     case "daily":
       return DAILY;
     case "top_pages":
@@ -509,6 +582,10 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
       };
     case "contact":
       return MOCK_CONTACT_DETAILS[params.id] || { error: "Contact not found" };
+    case "media": {
+      const kind = params.kind;
+      return mergeMediaLibrary(MOCK_UPLOADED_MEDIA, kind);
+    }
     case "bounced_contacts":
       return MOCK_BOUNCED;
     case "schedules":
@@ -551,12 +628,6 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
 }
 
 export function showDemoBanner() {
-  const topbar = document.querySelector(".topbar");
-  if (!topbar || topbar.querySelector("[data-demo-banner]")) return;
-  const pill = document.createElement("span");
-  pill.dataset.demoBanner = "";
-  pill.textContent = "Demo data";
-  pill.style.cssText =
-    "font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:0.3rem 0.65rem;border-radius:999px;background:rgba(79,176,212,0.15);color:#4fb0d4;border:1px solid rgba(79,176,212,0.35);";
-  topbar.querySelector("h1")?.insertAdjacentElement("afterend", pill);
+  const chip = document.querySelector("[data-demo-chip]");
+  if (chip) chip.classList.remove("hidden");
 }

@@ -8,6 +8,16 @@ import {
   parseFlyerId,
   saveFlyer,
 } from "./_shared/flyers.mjs";
+import {
+  MEDIA_TYPES,
+  detectMediaKind,
+  maxBytesForKind,
+  mediaPublicUrl,
+  parseMediaId,
+  saveMedia,
+  deleteMediaBlob,
+} from "./_shared/media.mjs";
+import { isSiteMediaId, mergeMediaLibrary } from "../../js/site-media-catalog.js";
 
 /** Constant-time-ish comparison to avoid trivial timing leaks. */
 function safeEqual(a, b) {
@@ -116,6 +126,161 @@ async function dashboard(supabase, url) {
   const { data, error } = await supabase.rpc("admin_dashboard", { p_days: days });
   if (error) throw error;
   return data || {};
+}
+
+function classifyChannel(referrer = "", utmSource = "", utmMedium = "") {
+  const ref = String(referrer || "");
+  const src = String(utmSource || "");
+  const med = String(utmMedium || "");
+  if (/charlotteefoil/i.test(ref)) return "Direct";
+  if (src || /(cpc|ppc|paid|display|social|email|newsletter)/i.test(med)) return "Marketing";
+  if (/(google\.|bing\.|yahoo\.|duckduckgo\.|ecosia\.|baidu\.|yandex\.|search)/i.test(ref)) {
+    return "Organic search";
+  }
+  if (!ref) return "Direct";
+  return "Referral";
+}
+
+async function homeInsights(supabase, url) {
+  const days = Math.min(Math.max(Number(url.searchParams.get("days")) || 30, 1), 365);
+  const start = new Date();
+  start.setDate(start.getDate() - days);
+  const startTs = start.toISOString();
+
+  const [sessionsRes, leadsRes, overviewRes, eventsRes, interestsRes, siteRes] = await Promise.all([
+    supabase
+      .from("sessions")
+      .select("id, visitor_id, country, device_type, referrer, utm_source, utm_medium, started_at, page_view_count")
+      .gte("started_at", startTs),
+    supabase
+      .from("leads")
+      .select("id, email, first_name, last_name, phone, created_at")
+      .order("created_at", { ascending: false })
+      .limit(8),
+    supabase.from("analytics_lead_overview").select("id, contact_submissions, reservation_requests"),
+    supabase
+      .from("events")
+      .select("event_type, event_name, visitor_id")
+      .gte("created_at", startTs),
+    supabase
+      .from("reservation_request_interests")
+      .select("interest_types(label)"),
+    supabase.from("visitors").select("id, first_seen_at, device_type").gte("first_seen_at", "1970-01-01"),
+  ]);
+
+  if (sessionsRes.error) throw sessionsRes.error;
+  if (leadsRes.error) throw leadsRes.error;
+  if (overviewRes.error) throw overviewRes.error;
+  if (eventsRes.error) throw eventsRes.error;
+  if (interestsRes.error) throw interestsRes.error;
+  if (siteRes.error) throw siteRes.error;
+
+  const visitorMap = new Map((siteRes.data || []).map((v) => [v.id, v]));
+  const overviewMap = new Map((overviewRes.data || []).map((r) => [r.id, r]));
+
+  const countryMap = new Map();
+  const deviceMap = new Map();
+  const channelMap = new Map();
+  const deviceSplit = new Map();
+
+  for (const s of sessionsRes.data || []) {
+    const channel = classifyChannel(s.referrer, s.utm_source, s.utm_medium);
+    channelMap.set(channel, (channelMap.get(channel) || 0) + 1);
+
+    const device = s.device_type || "unknown";
+    deviceMap.set(device, (deviceMap.get(device) || 0) + 1);
+
+    const visitor = visitorMap.get(s.visitor_id);
+    const isNew = visitor?.first_seen_at && new Date(visitor.first_seen_at) >= start;
+    const split = deviceSplit.get(device) || { new: 0, returning: 0 };
+    if (isNew) split.new += 1;
+    else split.returning += 1;
+    deviceSplit.set(device, split);
+
+    const country = (s.country || "Unknown").toUpperCase();
+    if (country && country !== "UNKNOWN") {
+      const row = countryMap.get(country) || { country, sessions: 0, visitors: new Set() };
+      row.sessions += 1;
+      row.visitors.add(s.visitor_id);
+      countryMap.set(country, row);
+    }
+  }
+
+  const countries = [...countryMap.values()]
+    .map((r) => ({ country: r.country, sessions: r.sessions, visitors: r.visitors.size }))
+    .sort((a, b) => b.visitors - a.visitors)
+    .slice(0, 12);
+
+  const devices = ["mobile", "desktop", "tablet", "unknown"]
+    .map((label) => ({
+      label,
+      sessions: deviceMap.get(label) || 0,
+      new: deviceSplit.get(label)?.new || 0,
+      returning: deviceSplit.get(label)?.returning || 0,
+    }))
+    .filter((d) => d.sessions > 0);
+
+  const eventCounts = {};
+  for (const e of eventsRes.data || []) {
+    const key = e.event_name || e.event_type || "other";
+    eventCounts[key] = (eventCounts[key] || 0) + 1;
+  }
+
+  const interestCounts = {};
+  for (const row of interestsRes.data || []) {
+    const label = row.interest_types?.label;
+    if (!label) continue;
+    interestCounts[label] = (interestCounts[label] || 0) + 1;
+  }
+
+  const radarLabels = [
+    "Lessons",
+    "Demos",
+    "Corporate",
+    "Family",
+    "Contact",
+    "Reservations",
+  ];
+  const radarValues = [
+    interestCounts["Private lesson"] || interestCounts["Lessons"] || 0,
+    interestCounts["Demo flight"] || interestCounts["Demos"] || 0,
+    interestCounts["Corporate outing"] || interestCounts["Corporate"] || 0,
+    interestCounts["Family session"] || interestCounts["Family"] || 0,
+    eventCounts.contact || eventCounts.contact_form || 0,
+    interestCounts["Reservation"] || 0,
+  ];
+
+  const channels = [...channelMap.entries()].map(([label, sessions]) => ({ label, sessions }));
+
+  const contacts = (leadsRes.data || []).map((lead) => {
+    const stats = overviewMap.get(lead.id) || {};
+    return {
+      id: lead.id,
+      name: [lead.first_name, lead.last_name].filter(Boolean).join(" ").trim() || lead.email,
+      email: lead.email,
+      phone: lead.phone,
+      projects: (Number(stats.contact_submissions) || 0) + (Number(stats.reservation_requests) || 0),
+      follower: lead.phone || lead.email,
+      created_at: lead.created_at,
+    };
+  });
+
+  const trackingSince = (siteRes.data || []).reduce((min, v) => {
+    if (!v.first_seen_at) return min;
+    return !min || v.first_seen_at < min ? v.first_seen_at : min;
+  }, (leadsRes.data || []).slice(-1)[0]?.created_at || null);
+
+  return {
+    range_days: days,
+    countries,
+    country_count: countries.length,
+    devices,
+    channels,
+    contacts,
+    event_counts: eventCounts,
+    radar: { labels: radarLabels, values: radarValues },
+    tracking_since: trackingSince,
+  };
 }
 
 async function fromView(supabase, view, limit = 100) {
@@ -456,6 +621,107 @@ async function uploadFlyer(req) {
   return { ok: true, id, url: flyerPublicUrl(base, id) };
 }
 
+function siteBaseFromReq(req) {
+  return (Netlify.env.get("SITE_URL") || new URL(req.url).origin).replace(/\/$/, "");
+}
+
+async function listMedia(supabase, req) {
+  const kind = clean(new URL(req.url).searchParams.get("kind"), 16);
+  let query = supabase
+    .from("media_assets")
+    .select("id, name, original_filename, content_type, kind, size_bytes, alt_text, created_at")
+    .order("created_at", { ascending: false })
+    .limit(500);
+  if (kind && ["image", "video", "logo"].includes(kind)) {
+    query = query.eq("kind", kind);
+  }
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const base = siteBaseFromReq(req);
+  const uploaded = (data || []).map((row) => ({
+    ...row,
+    url: mediaPublicUrl(base, row.id),
+    source: "upload",
+  }));
+
+  return mergeMediaLibrary(uploaded, kind);
+}
+
+async function uploadMedia(supabase, req) {
+  const body = await readBody(req);
+  const contentType = clean(body.content_type, 64);
+  const data = body.data;
+  const originalFilename = clean(body.filename, 200) || null;
+  const name = clean(body.name, 200) || originalFilename || "Untitled";
+  const altText = clean(body.alt_text, 300) || null;
+  const kind = detectMediaKind(contentType, originalFilename || name, body.kind);
+
+  if (!data || typeof data !== "string") {
+    return { error: "File data is required.", status: 400 };
+  }
+  if (!MEDIA_TYPES.has(contentType)) {
+    return {
+      error: "Use a JPG, PNG, WebP, GIF, SVG, MP4, WebM, or MOV file.",
+      status: 400,
+    };
+  }
+
+  let buffer;
+  try {
+    buffer = Buffer.from(data, "base64");
+  } catch {
+    return { error: "Could not read file data.", status: 400 };
+  }
+
+  const maxBytes = maxBytesForKind(kind, contentType);
+  if (!buffer.length || buffer.length > maxBytes) {
+    const mb = Math.round(maxBytes / (1024 * 1024));
+    return { error: `File must be under ${mb} MB.`, status: 400 };
+  }
+
+  const id = crypto.randomUUID();
+  await saveMedia(id, buffer, contentType);
+
+  const { data: row, error } = await supabase
+    .from("media_assets")
+    .insert({
+      id,
+      name,
+      original_filename: originalFilename,
+      content_type: contentType,
+      kind,
+      size_bytes: buffer.length,
+      alt_text: altText,
+    })
+    .select("id, name, original_filename, content_type, kind, size_bytes, alt_text, created_at")
+    .single();
+
+  if (error) {
+    await deleteMediaBlob(id).catch(() => {});
+    throw error;
+  }
+
+  const base = siteBaseFromReq(req);
+  return { ok: true, item: { ...row, url: mediaPublicUrl(base, row.id) } };
+}
+
+async function deleteMedia(supabase, req) {
+  const body = await readBody(req);
+  if (isSiteMediaId(body.id)) {
+    return { error: "Site files cannot be deleted from the media library.", status: 400 };
+  }
+  const id = parseMediaId(body.id);
+  if (id?.error) return id;
+
+  const { data, error } = await supabase.from("media_assets").delete().eq("id", id).select("id").maybeSingle();
+  if (error) throw error;
+  if (!data) return { error: "Media not found.", status: 404 };
+
+  await deleteMediaBlob(id).catch((err) => console.warn("media blob delete failed:", id, err));
+  return { ok: true, id };
+}
+
 function parseScheduleBody(body) {
   const subject = clean(body.subject, 300);
   const html = clean(body.html, 200000);
@@ -579,6 +845,14 @@ export default async (req) => {
           const result = await uploadFlyer(req);
           return json(result, result.status || (result.error ? 400 : 200));
         }
+        case "upload_media": {
+          const result = await uploadMedia(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "delete_media": {
+          const result = await deleteMedia(supabase, req);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
         case "create_schedule": {
           const result = await createSchedule(supabase, req);
           return json(result, result.status || (result.error ? 400 : 200));
@@ -601,6 +875,8 @@ export default async (req) => {
         return json(await overview(supabase));
       case "dashboard":
         return json(await dashboard(supabase, url));
+      case "home":
+        return json(await homeInsights(supabase, url));
       case "visitors":
         return json(await visitors(supabase, url));
       case "visitor":
@@ -623,6 +899,8 @@ export default async (req) => {
         return json(await listContacts(supabase, url));
       case "contact":
         return json(await contactDetail(supabase, url));
+      case "media":
+        return json(await listMedia(supabase, req));
       case "schedules":
         return json(await listSchedules(supabase));
       default:
