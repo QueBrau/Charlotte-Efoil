@@ -7,18 +7,101 @@
 import Chart from "chart.js/auto";
 import { isMockMode, mockApi, showDemoBanner } from "./admin-mock.js";
 import { NEWSLETTER_TEMPLATES } from "./newsletter-templates.js";
+import { initHomeTabs, renderHome, resizeHomeCharts } from "./admin-home.js";
 
-Chart.defaults.color = "#93a7b0";
-Chart.defaults.borderColor = "rgba(255, 255, 255, 0.08)";
-Chart.defaults.font.family =
-  'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+Chart.defaults.color = "#6b7c93";
+Chart.defaults.borderColor = "#e6ebf2";
+Chart.defaults.font.family = 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 
 const API_BASE = window.CE_API_BASE || "/api";
 const TOKEN_KEY = "ce_admin_token";
 const PALETTE = ["#4fb0d4", "#46c78f", "#e8b04b", "#b57edc", "#e87b7b", "#7bc4e8", "#9ad46f"];
 
 let rangeDays = 30;
+let activeTab = "overview";
 const charts = {};
+
+const PAGE_META = {
+  overview: {
+    title: "Home",
+    subtitle: "Performance overview for your CharlotteEfoil site",
+    meta: "Analytics dashboard",
+  },
+  traffic: {
+    title: "Traffic",
+    subtitle: "All time totals, daily trends, and top pages",
+    meta: "Traffic reporting",
+  },
+  visitors: {
+    title: "Visitors",
+    subtitle: "Unique browsers and session history",
+    meta: "Audience tracking",
+  },
+  behavior: {
+    title: "Behavior",
+    subtitle: "Recent link clicks, CTA taps, and form interactions",
+    meta: "Engagement events",
+  },
+  contacts: {
+    title: "Contacts",
+    subtitle: "People who submitted contact or reservation forms",
+    meta: "Lead management",
+  },
+  media: {
+    title: "Media library",
+    subtitle: "Logos, photos, and videos for email flyers",
+    meta: "Asset management",
+  },
+  email: {
+    title: "Email marketing",
+    subtitle: "Campaigns, scheduled sends, and bounce cleanup",
+    meta: "Marketing tools",
+  },
+};
+
+const STAT_ICONS = {
+  sessions:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 2 5-6"/></svg>',
+  visitors:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/></svg>',
+  clock:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+  pages:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M4 4h16v16H4z"/><path d="M8 4v16"/></svg>',
+  bounce:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.9 4.9l2.8 2.8"/><path d="M16.3 16.3l2.8 2.8"/></svg>',
+  forms:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>',
+  views:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.5"/></svg>',
+  growth:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+};
+
+function statCard(label, value, sub = "", icon = STAT_ICONS.sessions, tone = "") {
+  return `<div class="stat">
+    <div class="stat-icon ${tone}">${icon}</div>
+    <div class="stat-body">
+      <div class="label">${label}</div>
+      <div class="value">${value}</div>${sub ? `<div class="sub">${sub}</div>` : ""}
+    </div>
+  </div>`;
+}
+
+function updatePageHeader(tab = activeTab) {
+  const meta = PAGE_META[tab] || PAGE_META.overview;
+  const content = document.querySelector(".content");
+  if (content) content.classList.toggle("is-home", tab === "overview");
+  const title = $("[data-page-title]");
+  const subtitle = $("[data-page-subtitle]");
+  const pageMeta = $("[data-page-meta]");
+  if (title) title.textContent = meta.title;
+  if (subtitle) {
+    subtitle.textContent =
+      tab === "overview" ? `Campaign overview · last ${rangeDays} days` : meta.subtitle;
+  }
+  if (pageMeta) pageMeta.textContent = meta.meta;
+}
 
 const $ = (sel) => document.querySelector(sel);
 const gate = $("[data-gate]");
@@ -120,20 +203,17 @@ function cap(s) {
 // ----- renderers ------------------------------------------------------------
 function renderStats(o) {
   const cards = [
-    ["Unique visitors", fmtNum(o.unique_visitors)],
-    ["Sessions", fmtNum(o.sessions)],
-    ["Page views", fmtNum(o.page_views)],
-    ["Pages / session", o.pages_per_session ?? 0],
-    ["Interactions", fmtNum(o.events)],
-    ["Leads", fmtNum(o.leads)],
-    ["Contact forms", fmtNum(o.contact_submissions)],
-    ["Reservations", fmtNum(o.reservation_requests)],
+    [STAT_ICONS.visitors, "Unique visitors", fmtNum(o.unique_visitors), "", ""],
+    [STAT_ICONS.sessions, "Sessions", fmtNum(o.sessions), "", ""],
+    [STAT_ICONS.views, "Page views", fmtNum(o.page_views), "", ""],
+    [STAT_ICONS.pages, "Pages / session", o.pages_per_session ?? 0, "", "slate"],
+    [STAT_ICONS.forms, "Interactions", fmtNum(o.events), "", "amber"],
+    [STAT_ICONS.growth, "Leads", fmtNum(o.leads), "", "green"],
+    [STAT_ICONS.forms, "Contact forms", fmtNum(o.contact_submissions), "", ""],
+    [STAT_ICONS.forms, "Reservations", fmtNum(o.reservation_requests), "", "green"],
   ];
   $("[data-stats]").innerHTML = cards
-    .map(
-      ([label, value]) =>
-        `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div></div>`
-    )
+    .map(([icon, label, value, sub, tone]) => statCard(label, value, sub, icon, tone))
     .join("");
 }
 
@@ -163,7 +243,7 @@ function setEmpty(box, key) {
 const donutLegend = {
   position: "bottom",
   labels: {
-    color: "#ffffff",
+    color: "#6b7c93",
     boxWidth: 12,
     padding: 14,
     generateLabels(chart) {
@@ -173,7 +253,7 @@ const donutLegend = {
         text: `${label} — ${Math.round((Number(ds.data[i]) / total) * 100)}%`,
         fillStyle: ds.backgroundColor[i],
         strokeStyle: ds.backgroundColor[i],
-        fontColor: "#ffffff",
+        fontColor: "#6b7c93",
         lineWidth: 0,
         index: i,
       }));
@@ -206,7 +286,7 @@ function drawDoughnut(box, key, items) {
         {
           data: clean.map((it) => Number(it.value)),
           backgroundColor: clean.map((_, i) => PALETTE[i % PALETTE.length]),
-          borderColor: "#142027",
+          borderColor: "#ffffff",
           borderWidth: 2,
         },
       ],
@@ -233,8 +313,8 @@ function drawSessions(box, key, rows) {
         {
           label: "Sessions",
           data: rows.map((r) => Number(r.sessions) || 0),
-          borderColor: "#4fb0d4",
-          backgroundColor: "rgba(79, 176, 212, 0.16)",
+          borderColor: "#4f7df3",
+          backgroundColor: "rgba(79, 125, 243, 0.12)",
           fill: true,
           tension: 0.3,
           pointRadius: 2,
@@ -243,7 +323,7 @@ function drawSessions(box, key, rows) {
         {
           label: "Unique visitors",
           data: rows.map((r) => Number(r.unique_visitors) || 0),
-          borderColor: "#46c78f",
+          borderColor: "#22c55e",
           backgroundColor: "transparent",
           tension: 0.3,
           pointRadius: 2,
@@ -255,10 +335,10 @@ function drawSessions(box, key, rows) {
       responsive: true,
       maintainAspectRatio: false,
       interaction: { mode: "index", intersect: false },
-      plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 14 } } },
+      plugins: { legend: { position: "bottom", labels: { boxWidth: 12, padding: 14, color: "#6b7c93" } } },
       scales: {
-        x: { grid: { display: false } },
-        y: { beginAtZero: true, ticks: { precision: 0 } },
+        x: { grid: { display: false }, ticks: { color: "#6b7c93" } },
+        y: { beginAtZero: true, ticks: { precision: 0, color: "#6b7c93" }, grid: { color: "#eef2f7" } },
       },
     },
   });
@@ -269,47 +349,31 @@ function renderKpis(d) {
   const nr = d.new_vs_returning || {};
   const totalVisitors = (Number(nr.new) || 0) + (Number(nr.returning) || 0);
   const cards = [
-    ["Site sessions", fmtNum(t.sessions), ""],
-    ["Unique visitors", fmtNum(t.unique_visitors), ""],
-    ["Avg. session duration", fmtSeconds(d.avg_session_duration_seconds), ""],
-    ["Avg. pages / session", d.avg_pages_per_session ?? 0, ""],
-    ["Bounce rate", fmtPct(d.bounce_rate), "single-page sessions"],
-    ["Form submissions", fmtNum(d.form_submissions), `${fmtNum(d.contact_submissions)} contact · ${fmtNum(d.reservation_requests)} reservation`],
-    ["Page views", fmtNum(t.page_views), ""],
-    ["New visitors", pctOf(nr.new, totalVisitors), `${fmtNum(nr.new)} new · ${fmtNum(nr.returning)} returning`],
+    [STAT_ICONS.sessions, "Site sessions", fmtNum(t.sessions), ""],
+    [STAT_ICONS.visitors, "Unique visitors", fmtNum(t.unique_visitors), ""],
+    [STAT_ICONS.clock, "Avg. session duration", fmtSeconds(d.avg_session_duration_seconds), ""],
+    [STAT_ICONS.pages, "Avg. pages / session", d.avg_pages_per_session ?? 0, ""],
+    [STAT_ICONS.bounce, "Bounce rate", fmtPct(d.bounce_rate), "single page sessions"],
+    [STAT_ICONS.forms, "Form submissions", fmtNum(d.form_submissions), `${fmtNum(d.contact_submissions)} contact · ${fmtNum(d.reservation_requests)} reservation`],
+    [STAT_ICONS.views, "Page views", fmtNum(t.page_views), ""],
+    [STAT_ICONS.growth, "New visitors", pctOf(nr.new, totalVisitors), `${fmtNum(nr.new)} new · ${fmtNum(nr.returning)} returning`, "green"],
   ];
   const el = $("[data-kpis]");
   if (el) {
     el.innerHTML = cards
-      .map(
-        ([label, value, sub]) =>
-          `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div>${
-            sub ? `<div class="sub">${sub}</div>` : ""
-          }</div>`
-      )
+      .map(([icon, label, value, sub, tone = ""]) => statCard(label, value, sub, icon, tone))
       .join("");
   }
 }
 
 async function loadDashboard() {
   try {
-    const d = await api("dashboard", { days: rangeDays });
-    renderKpis(d);
-    drawSessions(boxes.sessions, "sessions", d.sessions_over_time || []);
-    drawDoughnut(boxes.newret, "newret", [
-      { label: "New", value: d.new_vs_returning?.new },
-      { label: "Returning", value: d.new_vs_returning?.returning },
+    const [dashboard, insights] = await Promise.all([
+      api("dashboard", { days: rangeDays }),
+      api("home", { days: rangeDays }),
     ]);
-    drawDoughnut(
-      boxes.device,
-      "device",
-      (d.sessions_by_device || []).map((x) => ({ label: cap(x.label), value: Number(x.sessions) }))
-    );
-    drawDoughnut(
-      boxes.channels,
-      "channels",
-      (d.channels || []).map((x) => ({ label: x.label, value: Number(x.sessions) }))
-    );
+    renderHome(dashboard, insights);
+    initHomeTabs();
   } catch (err) {
     if (err.code === 401) showLogin();
   }
@@ -459,17 +523,12 @@ function renderContactsStats(summary) {
   const el = $("[data-contacts-stats]");
   if (!el) return;
   const cards = [
-    ["Total contacts", fmtNum(summary.total)],
-    ["With phone", fmtNum(summary.with_phone)],
-    ["Contact forms", fmtNum(summary.contact_forms)],
-    ["Reservations", fmtNum(summary.reservations)],
+    [STAT_ICONS.growth, "Total contacts", fmtNum(summary.total)],
+    [STAT_ICONS.forms, "With phone", fmtNum(summary.with_phone)],
+    [STAT_ICONS.forms, "Contact forms", fmtNum(summary.contact_forms)],
+    [STAT_ICONS.forms, "Reservations", fmtNum(summary.reservations), "", "green"],
   ];
-  el.innerHTML = cards
-    .map(
-      ([label, value]) =>
-        `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div></div>`
-    )
-    .join("");
+  el.innerHTML = cards.map(([icon, label, value, , tone]) => statCard(label, value, "", icon, tone)).join("");
 }
 
 function renderContacts(rows) {
@@ -582,11 +641,91 @@ function renderCampaigns(rows) {
     </table>`;
 }
 
-const FLYER_MAX_BYTES = 2 * 1024 * 1024;
-const FLYER_ACCEPT = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const MEDIA_MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MEDIA_MAX_VIDEO_BYTES = 25 * 1024 * 1024;
+const MEDIA_IMAGE_ACCEPT = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/svg+xml",
+]);
+const MEDIA_VIDEO_ACCEPT = new Set(["video/mp4", "video/webm", "video/quicktime"]);
+const MEDIA_ACCEPT = new Set([...MEDIA_IMAGE_ACCEPT, ...MEDIA_VIDEO_ACCEPT]);
 
 let flyerEditorApi = null;
 let flyerEditorsReady = null;
+let mediaCache = [];
+let mediaFilter = "all";
+const mediaPreviewUrls = new Map();
+
+function base64ToObjectUrl(contentType, data) {
+  const binary = atob(data);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return URL.createObjectURL(new Blob([bytes], { type: contentType }));
+}
+
+function rememberMediaPreviewUrl(item, url) {
+  if (!item?.id || !url) return url || "";
+  const prev = mediaPreviewUrls.get(item.id);
+  if (prev && prev !== url && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+  mediaPreviewUrls.set(item.id, url);
+  return url;
+}
+
+function ensureMediaPreviewUrl(item) {
+  if (!item?.id) return "";
+  const cached = mediaPreviewUrls.get(item.id);
+  if (cached) return cached;
+  if (item.preview_data && item.content_type) {
+    return rememberMediaPreviewUrl(item, base64ToObjectUrl(item.content_type, item.preview_data));
+  }
+  return "";
+}
+
+function mediaDisplayUrl(item) {
+  if (!item) return "";
+  return ensureMediaPreviewUrl(item) || item.url || "";
+}
+
+function mediaOpenUrl(item) {
+  return ensureMediaPreviewUrl(item) || item?.url || "";
+}
+
+function mediaLinkLabel(item) {
+  const url = item?.url || "";
+  if (url.startsWith("data:")) return "Uploaded file";
+  if (url.startsWith("blob:")) return "Local preview";
+  return url || "—";
+}
+
+function revokeMediaPreviewUrl(id) {
+  const url = mediaPreviewUrls.get(id);
+  if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
+  mediaPreviewUrls.delete(id);
+}
+
+function fmtBytes(bytes) {
+  const n = Number(bytes) || 0;
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function detectUploadKind(file, requestedKind = "") {
+  const kind = String(requestedKind || "").toLowerCase();
+  if (kind === "logo" || kind === "video" || kind === "image") return kind;
+  if (MEDIA_VIDEO_ACCEPT.has(file.type)) return "video";
+  if (/logo/i.test(file.name)) return "logo";
+  return "image";
+}
+
+function mediaMaxBytes(file, kind) {
+  return kind === "video" || MEDIA_VIDEO_ACCEPT.has(file.type)
+    ? MEDIA_MAX_VIDEO_BYTES
+    : MEDIA_MAX_IMAGE_BYTES;
+}
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -607,15 +746,401 @@ async function ensureFlyerEditors() {
   return flyerEditorApi;
 }
 
-async function uploadFlyerFile(file) {
-  if (!FLYER_ACCEPT.has(file.type)) throw new Error("Use a JPG, PNG, WebP, or GIF.");
-  if (file.size > FLYER_MAX_BYTES) throw new Error("Image must be under 2 MB.");
-  const data = await fileToBase64(file);
-  const result = await apiPost("upload_flyer", { content_type: file.type, data });
-  if (!result.url && result.id) {
-    result.url = `${API_BASE}/flyer?id=${encodeURIComponent(result.id)}`;
+async function uploadMediaFile(file, options = {}) {
+  if (!MEDIA_ACCEPT.has(file.type)) {
+    throw new Error("Use a JPG, PNG, WebP, GIF, SVG, MP4, WebM, or MOV file.");
   }
-  return result;
+  const kind = detectUploadKind(file, options.kind);
+  const maxBytes = mediaMaxBytes(file, kind);
+  if (file.size > maxBytes) {
+    throw new Error(`File must be under ${Math.round(maxBytes / (1024 * 1024))} MB.`);
+  }
+  const data = await fileToBase64(file);
+  const result = await apiPost("upload_media", {
+    content_type: file.type,
+    data,
+    filename: file.name,
+    name: options.name || file.name,
+    kind,
+    alt_text: options.alt_text || null,
+  });
+  const item = result.item;
+  if (item?.id) {
+    rememberMediaPreviewUrl(item, URL.createObjectURL(file));
+  }
+  if (!item?.url && item?.id) {
+    item.url = `${API_BASE}/media?id=${encodeURIComponent(item.id)}`;
+  }
+  return item;
+}
+
+async function fetchMediaLibrary(force = false) {
+  if (mediaCache.length && !force) return mediaCache;
+  const data = await api("media");
+  mediaCache = data.items || [];
+  return mediaCache;
+}
+
+function filteredMediaItems(items = mediaCache) {
+  if (mediaFilter === "all") return items;
+  return items.filter((item) => item.kind === mediaFilter);
+}
+
+const MEDIA_VIDEO_PLAY_ICON =
+  '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+
+function initVideoThumbnails(root = document) {
+  root.querySelectorAll(".media-thumb--video video").forEach((video) => {
+    if (video.dataset.thumbBound) return;
+    video.dataset.thumbBound = "1";
+
+    const thumb = video.closest(".media-thumb");
+    const markReady = () => video.classList.add("is-ready");
+    const seekToPreview = () => {
+      const duration = Number(video.duration);
+      const target = Number.isFinite(duration) && duration > 0
+        ? Math.min(0.75, Math.max(0.05, duration * 0.03))
+        : 0.1;
+      try {
+        video.currentTime = target;
+      } catch {
+        markReady();
+      }
+    };
+
+    video.addEventListener("seeked", markReady, { once: true });
+    video.addEventListener("loadeddata", seekToPreview, { once: true });
+    video.addEventListener("error", () => thumb?.classList.add("is-error"));
+
+    if (video.readyState >= 2) seekToPreview();
+    else video.load();
+  });
+}
+
+function mediaPreviewHtml(item, { thumb = true } = {}) {
+  const cls = thumb ? "media-thumb" : "";
+  const src = esc(mediaDisplayUrl(item));
+  if (item.kind === "video") {
+    return `<div class="${cls} media-thumb--video">
+      <video src="${src}" muted playsinline preload="auto" aria-hidden="true"></video>
+      <span class="media-play-badge">${MEDIA_VIDEO_PLAY_ICON}</span>
+      <span class="pill media-badge">Video</span>
+    </div>`;
+  }
+  const badge = item.kind === "logo" ? '<span class="pill media-badge">Logo</span>' : "";
+  return `<div class="${cls}"><img src="${src}" alt="${esc(item.alt_text || item.name || "Media")}" loading="lazy" />${badge}</div>`;
+}
+
+function renderMediaStats(summary) {
+  const el = $("[data-media-stats]");
+  if (!el) return;
+  const cards = [
+    [STAT_ICONS.views, "Total files", fmtNum(summary.total)],
+    [STAT_ICONS.views, "Images", fmtNum(summary.images)],
+    [STAT_ICONS.clock, "Videos", fmtNum(summary.videos), "", "amber"],
+    [STAT_ICONS.growth, "Logos", fmtNum(summary.logos), "", "green"],
+  ];
+  el.innerHTML = cards.map(([icon, label, value, , tone]) => statCard(label, value, "", icon, tone)).join("");
+}
+
+function resetMediaDeleteConfirm(mount = $("[data-media-grid]")) {
+  mount?.querySelectorAll("[data-media-delete][data-confirming]").forEach((btn) => {
+    delete btn.dataset.confirming;
+    btn.textContent = "Delete";
+    btn.classList.remove("btn-delete-confirm");
+  });
+}
+
+function renderMediaGrid(items) {
+  const mount = $("[data-media-grid]");
+  if (!mount) return;
+  const rows = filteredMediaItems(items);
+  if (!rows.length) {
+    mount.innerHTML =
+      '<p class="muted">No media yet. Upload logos, photos, or videos above — they will appear here and in the flyer editor.</p>';
+    return;
+  }
+
+  mount.innerHTML = `<div class="media-grid">${rows
+    .map(
+      (item) => {
+        const siteBadge = item.static ? '<span class="pill media-badge">Site file</span>' : "";
+        return `<article class="media-card" draggable="true" data-media-id="${esc(item.id)}" data-media-url="${esc(item.url)}" data-media-kind="${esc(item.kind)}">
+        ${mediaPreviewHtml(item)}
+        <div class="media-meta">
+          <strong>${esc(item.name || item.original_filename || "Untitled")}</strong>
+          <span class="muted">${esc(item.kind)} · ${fmtBytes(item.size_bytes)} · ${fmtDate(item.created_at)} ${siteBadge}</span>
+          <div class="media-actions">
+            <button type="button" class="btn btn-ghost" data-media-preview="${esc(item.id)}">View</button>
+            <button type="button" class="btn btn-ghost btn-delete" data-media-delete="${esc(item.id)}">Delete</button>
+          </div>
+        </div>
+      </article>`;
+      }
+    )
+    .join("")}</div>`;
+
+  mount.querySelectorAll("[data-media-preview]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      resetMediaDeleteConfirm(mount);
+      const item = mediaCache.find((m) => m.id === btn.dataset.mediaPreview);
+      if (item) openMediaPreview(item);
+    });
+  });
+
+  mount.querySelectorAll("[data-media-delete]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const item = mediaCache.find((m) => m.id === btn.dataset.mediaDelete);
+      if (!item) return;
+
+      if (!btn.dataset.confirming) {
+        resetMediaDeleteConfirm(mount);
+        btn.dataset.confirming = "1";
+        btn.textContent = "Are you sure?";
+        btn.classList.add("btn-delete-confirm");
+        return;
+      }
+
+      delete btn.dataset.confirming;
+      btn.textContent = "Delete";
+      btn.classList.remove("btn-delete-confirm");
+
+      try {
+        await apiPost("delete_media", { id: item.id });
+        revokeMediaPreviewUrl(item.id);
+        await loadMediaSection(true);
+        await refreshFlyerMediaLibrary();
+      } catch (err) {
+        if (err.code === 401) return showLogin();
+        alert(err.message || "Could not delete file.");
+      }
+    });
+  });
+
+  mount.querySelectorAll(".media-card[draggable]").forEach((card) => {
+    card.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData(
+        "application/x-ce-media",
+        JSON.stringify({
+          id: card.dataset.mediaId,
+          url: card.dataset.mediaUrl,
+          kind: card.dataset.mediaKind,
+        })
+      );
+      e.dataTransfer.effectAllowed = "copy";
+    });
+  });
+
+  initVideoThumbnails(mount);
+}
+
+function appendDrawerRow(dl, label, value) {
+  const dt = document.createElement("dt");
+  dt.textContent = label;
+  const dd = document.createElement("dd");
+  if (value instanceof Node) dd.appendChild(value);
+  else dd.textContent = value;
+  dl.appendChild(dt);
+  dl.appendChild(dd);
+}
+
+function openMediaPreview(item) {
+  overlay.classList.remove("hidden");
+  drawer.classList.remove("hidden");
+  const title = $("[data-drawer-title]");
+  if (title) title.textContent = item.name || "Media preview";
+  const body = $("[data-drawer-body]");
+  body.replaceChildren();
+
+  const src = mediaDisplayUrl(item);
+  if (item.kind === "video") {
+    const video = document.createElement("video");
+    video.src = src;
+    video.controls = true;
+    video.style.cssText = "width:100%;border-radius:12px;background:#000";
+    body.appendChild(video);
+  } else {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = item.alt_text || item.name || "Media";
+    img.style.cssText = "width:100%;border-radius:12px";
+    body.appendChild(img);
+  }
+
+  const dl = document.createElement("dl");
+  dl.className = "kv";
+  dl.style.marginTop = "1rem";
+  appendDrawerRow(dl, "Type", `${item.kind} (${item.content_type || "—"})`);
+  appendDrawerRow(dl, "Size", fmtBytes(item.size_bytes));
+  appendDrawerRow(
+    dl,
+    item.static ? "Source" : "Uploaded",
+    item.static ? "Site file" : fmtDate(item.created_at)
+  );
+
+  const link = document.createElement("a");
+  const openUrl = mediaOpenUrl(item);
+  link.href = openUrl || "#";
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = mediaLinkLabel(item);
+  link.style.wordBreak = "break-all";
+  appendDrawerRow(dl, "URL", link);
+  body.appendChild(dl);
+}
+
+async function refreshFlyerMediaLibrary() {
+  const items = await fetchMediaLibrary(true);
+  const api = await ensureFlyerEditors();
+  document.querySelectorAll("[data-flyer-editor]").forEach((container) => {
+    api.setFlyerAssets(container, items);
+  });
+  document.querySelectorAll("[data-flyer-media-strip]").forEach((strip) => {
+    renderFlyerMediaStrip(strip, items);
+  });
+}
+
+function renderFlyerMediaStrip(strip, items = mediaCache) {
+  if (!strip) return;
+  const picks = items.filter((item) => item.kind !== "video").slice(0, 12);
+  if (!picks.length) {
+    strip.hidden = true;
+    strip.innerHTML = "";
+    return;
+  }
+  strip.hidden = false;
+  strip.innerHTML = picks
+    .map(
+      (item) => `<div class="media-strip-item" draggable="true" data-media-url="${esc(item.url)}" data-media-kind="${esc(item.kind)}" title="${esc(item.name || "")}">
+        <img src="${esc(mediaDisplayUrl(item))}" alt="" loading="lazy" />
+      </div>`
+    )
+    .join("");
+
+  strip.querySelectorAll("[draggable]").forEach((el) => {
+    el.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData(
+        "application/x-ce-media",
+        JSON.stringify({ url: el.dataset.mediaUrl, kind: el.dataset.mediaKind })
+      );
+      e.dataTransfer.effectAllowed = "copy";
+    });
+  });
+}
+
+function bindFlyerMediaDrop(container) {
+  if (!container || container.dataset.mediaDropBound) return;
+  container.dataset.mediaDropBound = "1";
+  container.addEventListener("dragover", (e) => {
+    if (!e.dataTransfer.types.includes("application/x-ce-media")) return;
+    e.preventDefault();
+  });
+  container.addEventListener("drop", async (e) => {
+    const raw = e.dataTransfer.getData("application/x-ce-media");
+    if (!raw) return;
+    e.preventDefault();
+    try {
+      const payload = JSON.parse(raw);
+      const api = await ensureFlyerEditors();
+      const editor = api.getFlyerEditor(container);
+      if (!editor || !payload.url) return;
+      if (payload.kind === "video") {
+        editor.addComponents(
+          `<table width="100%"><tr><td style="padding:16px;text-align:center"><a href="${esc(payload.url)}" style="display:inline-block;padding:12px 18px;background:#194055;color:#fff;text-decoration:none;border-radius:8px;font-family:system-ui,Arial,sans-serif">Watch video</a></td></tr></table>`
+        );
+      } else {
+        editor.addComponents(
+          `<table width="100%"><tr><td style="padding:0;text-align:center"><img src="${esc(payload.url)}" alt="" style="max-width:100%;height:auto;display:block;margin:0 auto" /></td></tr></table>`
+        );
+      }
+    } catch (err) {
+      console.warn("flyer media drop failed:", err);
+    }
+  });
+}
+
+async function uploadMediaFiles(files, statusEl, kind = "") {
+  const list = Array.from(files || []);
+  if (!list.length) return [];
+  const uploaded = [];
+  if (statusEl) statusEl.textContent = `Uploading ${list.length} file${list.length > 1 ? "s" : ""}…`;
+  for (const file of list) {
+    const item = await uploadMediaFile(file, { kind });
+    uploaded.push(item);
+  }
+  return uploaded;
+}
+
+async function loadMediaSection(force = false) {
+  const data = await api("media");
+  mediaCache = data.items || [];
+  renderMediaStats({
+    total: data.total || mediaCache.length,
+    images: data.images ?? mediaCache.filter((m) => m.kind === "image").length,
+    videos: data.videos ?? mediaCache.filter((m) => m.kind === "video").length,
+    logos: data.logos ?? mediaCache.filter((m) => m.kind === "logo").length,
+  });
+  renderMediaGrid(mediaCache);
+  if (force) await refreshFlyerMediaLibrary();
+}
+
+function initMediaFilters() {
+  const wrap = $("[data-media-filters]");
+  if (!wrap || wrap.dataset.bound) return;
+  wrap.dataset.bound = "1";
+  wrap.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-media-kind]");
+    if (!btn) return;
+    mediaFilter = btn.dataset.mediaKind || "all";
+    wrap.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+    renderMediaGrid(mediaCache);
+  });
+}
+
+function initMediaUpload() {
+  const input = $("[data-media-upload]");
+  const drop = $("[data-media-drop]");
+  const statusEl = $("[data-media-upload-status]");
+  if (!input || input.dataset.bound) return;
+  input.dataset.bound = "1";
+
+  const handleFiles = async (files) => {
+    if (!files?.length) return;
+    try {
+      const uploaded = await uploadMediaFiles(files, statusEl);
+      if (statusEl) statusEl.textContent = `Uploaded ${uploaded.length} file${uploaded.length > 1 ? "s" : ""}.`;
+      await loadMediaSection(true);
+    } catch (err) {
+      if (err.code === 401) return showLogin();
+      if (statusEl) statusEl.textContent = err.message || "Upload failed.";
+    }
+  };
+
+  input.addEventListener("change", () => {
+    handleFiles(input.files);
+    input.value = "";
+  });
+
+  if (drop && !drop.dataset.bound) {
+    drop.dataset.bound = "1";
+    ["dragenter", "dragover"].forEach((evt) => {
+      drop.addEventListener(evt, (e) => {
+        e.preventDefault();
+        drop.classList.add("dragover");
+      });
+    });
+    ["dragleave", "drop"].forEach((evt) => {
+      drop.addEventListener(evt, (e) => {
+        e.preventDefault();
+        drop.classList.remove("dragover");
+      });
+    });
+    drop.addEventListener("drop", (e) => handleFiles(e.dataTransfer.files));
+  }
+}
+
+async function uploadFlyerFile(file) {
+  return uploadMediaFile(file);
 }
 
 async function initTemplatePicker(root) {
@@ -655,16 +1180,19 @@ async function initFlyerEditors() {
       const clearBtn = root.querySelector("[data-flyer-clear]");
       const statusEl = root.querySelector("[data-flyer-status]");
 
-      api.initFlyerEditor(container, {
+      await api.initFlyerEditor(container, {
         hiddenInput: hidden,
+        loadAssets: fetchMediaLibrary,
         uploadFlyer: async (file) => {
           try {
-            const result = await uploadFlyerFile(file);
+            const item = await uploadMediaFile(file);
+            mediaCache = [item, ...mediaCache.filter((m) => m.id !== item.id)];
+            renderFlyerMediaStrip(root.querySelector("[data-flyer-media-strip]"), mediaCache);
             if (statusEl) {
               statusEl.classList.remove("error");
               statusEl.textContent = "";
             }
-            return result;
+            return { url: item.url, item };
           } catch (err) {
             if (err.code === 401) {
               showLogin();
@@ -678,6 +1206,10 @@ async function initFlyerEditors() {
           }
         },
       });
+
+      bindFlyerMediaDrop(container);
+      await fetchMediaLibrary();
+      renderFlyerMediaStrip(root.querySelector("[data-flyer-media-strip]"), mediaCache);
 
       clearBtn?.addEventListener("click", () => {
         api.clearFlyerEditor(container, hidden);
@@ -1227,11 +1759,13 @@ const panelLoaded = {};
 function showTab(id) {
   const nav = $("[data-tabs]");
   if (!nav) return;
+  activeTab = id;
   nav.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.dataset.tab === id));
   document.querySelectorAll("[data-panel]").forEach((panel) => {
     panel.classList.toggle("hidden", panel.dataset.panel !== id);
   });
-  if (id === "overview") Object.values(charts).forEach((c) => c?.resize());
+  updatePageHeader(id);
+  if (id === "overview") resizeHomeCharts();
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
   if (location.hash !== `#${id}`) {
     history.replaceState(null, "", `#${id}`);
@@ -1266,6 +1800,12 @@ async function loadPanel(id) {
         initContactsSearch();
         await loadContactsSection();
         break;
+      case "media":
+        initMediaFilters();
+        initMediaUpload();
+        await loadMediaSection();
+        await refreshFlyerMediaLibrary();
+        break;
       case "email":
         initCampaignForm();
         initScheduleForm();
@@ -1292,8 +1832,82 @@ function initTabs() {
   });
 
   const initial = location.hash.replace("#", "") || "overview";
-  const valid = ["overview", "traffic", "visitors", "behavior", "contacts", "email"];
+  const valid = ["overview", "traffic", "visitors", "behavior", "contacts", "media", "email"];
   showTab(valid.includes(initial) ? initial : "overview");
+}
+
+function filterPanelTables(query) {
+  const q = String(query || "").trim().toLowerCase();
+  const panel = document.querySelector(`[data-panel="${activeTab}"]:not(.hidden)`);
+  if (!panel) return;
+  panel.querySelectorAll("tbody tr").forEach((row) => {
+    if (!q) {
+      row.hidden = false;
+      return;
+    }
+    row.hidden = !row.textContent.toLowerCase().includes(q);
+  });
+  panel.querySelectorAll(".media-card").forEach((card) => {
+    if (!q) {
+      card.hidden = false;
+      return;
+    }
+    card.hidden = !card.textContent.toLowerCase().includes(q);
+  });
+}
+
+function initGlobalSearch() {
+  const input = $("[data-global-search]");
+  if (!input || input.dataset.bound) return;
+  input.dataset.bound = "1";
+  input.addEventListener("input", () => {
+    const q = input.value.trim();
+    if (activeTab === "contacts") {
+      const contactsInput = $("[data-contacts-search]");
+      if (contactsInput) {
+        contactsInput.value = q;
+        renderContacts(filterContacts(q));
+      }
+      return;
+    }
+    filterPanelTables(q);
+  });
+}
+
+function initSidebarNavFilter() {
+  const input = $("[data-nav-filter]");
+  const nav = $("[data-tabs]");
+  if (!input || !nav || input.dataset.bound) return;
+  input.dataset.bound = "1";
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    nav.querySelectorAll("button[data-tab]").forEach((btn) => {
+      const label = btn.textContent.toLowerCase();
+      btn.dataset.navHidden = !q || label.includes(q) ? "0" : "1";
+    });
+  });
+}
+
+function initNotifications() {
+  const btn = $("[data-notifications]");
+  if (!btn || btn.dataset.bound) return;
+  btn.dataset.bound = "1";
+  btn.addEventListener("click", () => {
+    showTab("contacts");
+    $("[data-global-search]")?.focus();
+  });
+}
+
+async function refreshNotificationBadge() {
+  const dot = $("[data-notif-dot]");
+  if (!dot) return;
+  try {
+    const o = await api("overview");
+    const count = Number(o.contact_submissions || 0) + Number(o.reservation_requests || 0);
+    dot.classList.toggle("hidden", count <= 0);
+  } catch {
+    dot.classList.add("hidden");
+  }
 }
 
 // ----- date-range selector --------------------------------------------------
@@ -1308,14 +1922,31 @@ function initRange() {
     wrap.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
     const title = $("[data-range-title]");
     if (title) title.textContent = `Overview · last ${rangeDays} days`;
+    updatePageHeader("overview");
     loadDashboard();
   });
+}
+
+function initHomeActions() {
+  $("[data-go-contacts]")?.addEventListener("click", () => showTab("contacts"));
+  $("[data-home-menu]")?.addEventListener("click", () => window.open("/", "_blank"));
+  document.addEventListener("admin:open-contact", (e) => {
+    const id = e.detail?.id;
+    if (!id) return;
+    showTab("contacts").then(() => openContact(id));
+  });
+  document.addEventListener("home:refresh", () => loadDashboard());
 }
 
 // ----- load / auth ----------------------------------------------------------
 async function loadAll() {
   initRange();
+  initGlobalSearch();
+  initSidebarNavFilter();
+  initNotifications();
+  initHomeActions();
   initTabs();
+  refreshNotificationBadge();
 }
 
 function showApp() {
