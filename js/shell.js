@@ -1,4 +1,5 @@
 import { initAnalytics, trackEvent } from "/js/analytics.js";
+import { phoneDigits } from "/js/site-content-schema.js";
 
 const NAV_ITEMS = [
   { href: "/", label: "Welcome", page: "welcome" },
@@ -8,15 +9,37 @@ const NAV_ITEMS = [
   { href: "/contact.html", label: "Contact Us", page: "contact" },
 ];
 
-const LOGO_MARKUP = `<img class="logo-image" src="/photos/CharlotteEfoil.png" alt="CharlotteEfoil" width="220" height="52" decoding="async" fetchpriority="high" />`;
-
 const INSTAGRAM_URL = "https://www.instagram.com/charlotteefoil";
 
 const INSTAGRAM_SVG = `<svg class="social-link__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
 
-const INSTAGRAM_LINK = `<a class="social-link" href="${INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">${INSTAGRAM_SVG}<span>@charlotteefoil</span></a>`;
+function globalConfig(overrides = {}) {
+  const phone = overrides.phone || "704-421-8778";
+  return {
+    phone,
+    phone_tel: phoneDigits(phone),
+    email: overrides.email || "hello@CharlotteEfoil.com",
+    instagram_url: overrides.instagram_url || INSTAGRAM_URL,
+    instagram_handle: overrides.instagram_handle || "@charlotteefoil",
+    logo_src: overrides.logo_src || "/photos/CharlotteEfoil.png",
+    footer_tagline:
+      overrides.footer_tagline ||
+      "The Charlotte area's only mobile eFoil experience. Carving your way to an adventure like no other.",
+    service_area: overrides.service_area || "Serving Lake Norman, Mountain Island Lake, Lake Wylie & beyond.",
+    location_city: overrides.location_city || "Charlotte, NC",
+  };
+}
 
-export function renderNav(activePage = "welcome") {
+function logoMarkup(src) {
+  return `<img class="logo-image" src="${src}" alt="CharlotteEfoil" width="220" height="52" decoding="async" fetchpriority="high" />`;
+}
+
+function instagramLink(url, handle) {
+  return `<a class="social-link" href="${url}" target="_blank" rel="noopener noreferrer">${INSTAGRAM_SVG}<span>${handle}</span></a>`;
+}
+
+export function renderNav(activePage = "welcome", global = {}) {
+  const g = globalConfig(global);
   const links = NAV_ITEMS.map((item) => {
     return `<li class="nav-item ${item.page === activePage ? "is-active" : ""}"><a href="${item.href}">${item.label}</a></li>`;
   }).join("");
@@ -24,31 +47,32 @@ export function renderNav(activePage = "welcome") {
   return `
     <header class="site-header" data-header>
       <nav class="nav container" aria-label="Main navigation">
-        <a class="logo" href="/">${LOGO_MARKUP}</a>
+        <a class="logo" href="/">${logoMarkup(g.logo_src)}</a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
           <span></span><span></span><span></span>
         </button>
-        <a class="nav-phone" href="tel:7044218778">704-421-8778</a>
+        <a class="nav-phone" href="tel:${g.phone_tel}">${g.phone}</a>
       </nav>
     </header>
     <ul class="nav-links" id="nav-menu">
       ${links}
       <li class="nav-mobile-actions">
-        <a class="btn btn-primary" href="tel:7044218778">Call 704-421-8778</a>
+        <a class="btn btn-primary" href="tel:${g.phone_tel}">Call ${g.phone}</a>
         <a class="btn btn-secondary" href="/reservation-request.html">Request Reservation</a>
       </li>
     </ul>
     <div class="nav-overlay" data-nav-overlay hidden></div>`;
 }
 
-export function renderFooter() {
+export function renderFooter(global = {}) {
+  const g = globalConfig(global);
   return `
     <footer class="site-footer">
       <div class="container footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="/">${LOGO_MARKUP}</a>
-          <p>The Charlotte area's only mobile eFoil experience. Carving your way to an adventure like no other.</p>
-          <div class="footer-social">${INSTAGRAM_LINK}</div>
+          <a class="logo" href="/">${logoMarkup(g.logo_src)}</a>
+          <p>${g.footer_tagline}</p>
+          <div class="footer-social">${instagramLink(g.instagram_url, g.instagram_handle)}</div>
         </div>
         <div>
           <h3>Explore</h3>
@@ -64,25 +88,26 @@ export function renderFooter() {
         <div>
           <h3>Contact</h3>
           <ul>
-            <li><a href="tel:7044218778">704-421-8778</a></li>
-            <li><a href="mailto:hello@CharlotteEfoil.com">hello@CharlotteEfoil.com</a></li>
-            <li><a href="${INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">Instagram @charlotteefoil</a></li>
-            <li>Charlotte, NC</li>
+            <li><a href="tel:${g.phone_tel}">${g.phone}</a></li>
+            <li><a href="mailto:${g.email}">${g.email}</a></li>
+            <li><a href="${g.instagram_url}" target="_blank" rel="noopener noreferrer">Instagram ${g.instagram_handle}</a></li>
+            <li>${g.location_city}</li>
           </ul>
         </div>
       </div>
       <div class="container footer-bottom">
         <p>&copy; <span data-year></span> CharlotteEfoil. All rights reserved.</p>
-        <p>Serving Lake Norman, Mountain Island Lake, Lake Wylie &amp; beyond.</p>
+        <p>${g.service_area}</p>
       </div>
     </footer>`;
 }
 
-export function initShell(activePage) {
+export function initShell(activePage, globalOverrides = null) {
+  const global = globalOverrides || window.__ceGlobal || {};
   const headerMount = document.querySelector("[data-site-header]");
   const footerMount = document.querySelector("[data-site-footer]");
-  if (headerMount) headerMount.innerHTML = renderNav(activePage);
-  if (footerMount) footerMount.innerHTML = renderFooter();
+  if (headerMount) headerMount.innerHTML = renderNav(activePage, global);
+  if (footerMount) footerMount.innerHTML = renderFooter(global);
 
   document.querySelectorAll("[data-year]").forEach((el) => {
     el.textContent = String(new Date().getFullYear());

@@ -79,6 +79,13 @@
             </button>
           </div>
           <div class="nav-group">
+            <span class="nav-label">Site</span>
+            <button type="button" data-tab="content">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+              Site content
+            </button>
+          </div>
+          <div class="nav-group">
             <span class="nav-label">Marketing</span>
             <button type="button" data-tab="media">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -292,6 +299,41 @@
                 Browse, preview, or delete assets. Drag any item into a flyer editor on the Email marketing tab.
               </p>
               <div data-media-grid><div class="loading">Loading…</div></div>
+            </div>
+          </section>
+
+          <!-- Site content CMS -->
+          <section class="panel hidden" data-panel="content">
+            <div class="cms-layout" data-content-panel>
+              <aside class="cms-sidebar card">
+                <h2>Pages</h2>
+                <p class="muted">Edit text and images, save a draft, then publish to the live site.</p>
+                <nav class="cms-page-nav" aria-label="Content pages">
+                  <button type="button" class="active" data-content-page="global">Global</button>
+                  <button type="button" data-content-page="home">Home page</button>
+                  <button type="button" data-content-page="about">About page</button>
+                  <button type="button" data-content-page="contact">Contact page</button>
+                  <button type="button" data-content-page="lessons">How we operate</button>
+                  <button type="button" data-content-page="reservations">Reservations page</button>
+                </nav>
+                <div class="cms-actions">
+                  <button type="button" class="btn btn-secondary btn-full" data-content-save>Save draft</button>
+                  <button type="button" class="btn btn-primary btn-full" data-content-publish>Publish</button>
+                </div>
+                <p class="cms-status muted" data-content-status>Loading…</p>
+              </aside>
+              <div class="cms-main card">
+                <div data-content-form class="cms-form"></div>
+              </div>
+              <div class="cms-picker hidden" data-cms-picker>
+                <div class="cms-picker-dialog card">
+                  <header class="cms-picker-head">
+                    <h2>Choose media</h2>
+                    <button type="button" class="btn btn-ghost" data-cms-picker-close>Close</button>
+                  </header>
+                  <div data-cms-picker-grid></div>
+                </div>
+              </div>
             </div>
           </section>
 

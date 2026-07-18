@@ -4,6 +4,23 @@
 // =============================================================================
 
 import { isSiteMediaId, mergeMediaLibrary } from "./site-media-catalog.js";
+import {
+  CONTENT_SLUGS,
+  DEFAULT_SITE_CONTENT,
+  mergePageContent,
+} from "./site-content-schema.js";
+
+const MOCK_CONTENT = Object.fromEntries(
+  CONTENT_SLUGS.map((slug) => [
+    slug,
+    {
+      draft: structuredClone(DEFAULT_SITE_CONTENT[slug]),
+      published: structuredClone(DEFAULT_SITE_CONTENT[slug]),
+      updated_at: new Date().toISOString(),
+      published_at: new Date().toISOString(),
+    },
+  ])
+);
 
 export function isMockMode() {
   return new URLSearchParams(window.location.search).get("mock") === "1";
@@ -531,6 +548,37 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
       MOCK_SCHEDULES = MOCK_SCHEDULES.filter((s) => s.id !== body.id);
       return { ok: true, id: body.id };
     }
+    if (action === "save_site_content") {
+      const slug = body.slug;
+      const row = MOCK_CONTENT[slug];
+      if (!row) return { error: "Unknown content page.", status: 400 };
+      row.draft = mergePageContent(slug, body.draft || {});
+      row.updated_at = new Date().toISOString();
+      return {
+        ok: true,
+        slug,
+        draft: row.draft,
+        published: row.published,
+        updated_at: row.updated_at,
+        published_at: row.published_at,
+      };
+    }
+    if (action === "publish_site_content") {
+      const slug = body.slug;
+      const row = MOCK_CONTENT[slug];
+      if (!row) return { error: "Unknown content page.", status: 400 };
+      row.published = structuredClone(row.draft);
+      row.published_at = new Date().toISOString();
+      row.updated_at = row.published_at;
+      return {
+        ok: true,
+        slug,
+        draft: row.draft,
+        published: row.published,
+        updated_at: row.updated_at,
+        published_at: row.published_at,
+      };
+    }
     return { error: "Unknown action" };
   }
 
@@ -585,6 +633,25 @@ export async function mockApi(action, params = {}, method = "GET", body = {}) {
     case "media": {
       const kind = params.kind;
       return mergeMediaLibrary(MOCK_UPLOADED_MEDIA, kind);
+    }
+    case "list_site_content":
+      return {
+        pages: CONTENT_SLUGS.map((slug) => ({
+          slug,
+          updated_at: MOCK_CONTENT[slug].updated_at,
+          published_at: MOCK_CONTENT[slug].published_at,
+        })),
+      };
+    case "get_site_content": {
+      const row = MOCK_CONTENT[params.slug];
+      if (!row) return { error: "Content page not found.", status: 404 };
+      return {
+        slug: params.slug,
+        draft: row.draft,
+        published: row.published,
+        updated_at: row.updated_at,
+        published_at: row.published_at,
+      };
     }
     case "bounced_contacts":
       return MOCK_BOUNCED;

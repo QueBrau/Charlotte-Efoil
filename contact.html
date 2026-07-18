@@ -29,9 +29,9 @@
     <main>
       <section class="page-hero">
         <div class="container">
-          <p class="eyebrow">Contact Us</p>
-          <h1>We love helping our customers.</h1>
-          <p class="page-lead">Contact us with any questions or for more information. We're based in Charlotte, NC.</p>
+          <p class="eyebrow" data-cms-text="contact.hero.eyebrow">Contact Us</p>
+          <h1 data-cms-text="contact.hero.title">We love helping our customers.</h1>
+          <p class="page-lead" data-cms-text="contact.hero.lead">Contact us with any questions or for more information. We're based in Charlotte, NC.</p>
         </div>
       </section>
 
@@ -40,24 +40,24 @@
           <aside class="form-aside" data-reveal>
             <div class="contact-info-card">
               <span class="contact-label">Phone</span>
-              <a href="tel:7044218778">704-421-8778</a>
+              <a href="tel:7044218778" data-cms-href="global.phone" data-cms-text="global.phone">704-421-8778</a>
             </div>
             <div class="contact-info-card">
               <span class="contact-label">Email</span>
-              <a href="mailto:hello@CharlotteEfoil.com">hello@CharlotteEfoil.com</a>
+              <a href="mailto:hello@CharlotteEfoil.com" data-cms-href="global.email" data-cms-text="global.email">hello@CharlotteEfoil.com</a>
             </div>
             <div class="contact-info-card">
               <span class="contact-label">Instagram</span>
-              <a href="https://www.instagram.com/charlotteefoil" target="_blank" rel="noopener noreferrer">@charlotteefoil</a>
+              <a href="https://www.instagram.com/charlotteefoil" target="_blank" rel="noopener noreferrer" data-cms-href="global.instagram_url" data-cms-text="global.instagram_handle">@charlotteefoil</a>
             </div>
             <div class="contact-info-card">
               <span class="contact-label">Location</span>
-              <p>Charlotte, NC<br />Serving Lake Norman &amp; surrounding areas</p>
+              <p data-cms-html="contact.location">Charlotte, NC<br />Serving Lake Norman &amp; surrounding areas</p>
             </div>
             <a class="btn btn-secondary btn-full" href="reservation-request.html">Request Reservation</a>
           </aside>
 
-          <form class="reservation-form" data-form data-form-type="contact" data-success="Thanks! We'll be in touch soon!" data-reveal>
+          <form class="reservation-form" data-form data-form-type="contact" data-success="Thanks! We'll be in touch soon!" data-reveal data-cms-attr="data-success:contact.form_success">
             <div class="hp-field" aria-hidden="true">
               <label for="contact-company">Company</label>
               <input id="contact-company" name="company" type="text" tabindex="-1" autocomplete="off" />
@@ -82,8 +82,11 @@
     </main>
     <div data-site-footer></div>
     <script type="module">
+      import { initSiteContent } from "/js/content.js";
       import { initShell } from "/js/shell.js";
-      initShell("contact");
+      const pages = await initSiteContent("contact");
+      window.__ceGlobal = pages.global;
+      initShell("contact", pages.global);
     </script>
   </body>
 </html>

@@ -18,6 +18,12 @@ import {
   deleteMediaBlob,
 } from "./_shared/media.mjs";
 import { isSiteMediaId, mergeMediaLibrary } from "../../js/site-media-catalog.js";
+import {
+  getContentRow,
+  listContentRows,
+  saveContentDraft,
+  publishContent,
+} from "./_shared/site-content.mjs";
 
 /** Constant-time-ish comparison to avoid trivial timing leaks. */
 function safeEqual(a, b) {
@@ -865,6 +871,16 @@ export default async (req) => {
           const result = await deleteSchedule(supabase, req);
           return json(result, result.status || (result.error ? 400 : 200));
         }
+        case "save_site_content": {
+          const body = await readBody(req);
+          const result = await saveContentDraft(supabase, body.slug, body.draft);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
+        case "publish_site_content": {
+          const body = await readBody(req);
+          const result = await publishContent(supabase, body.slug);
+          return json(result, result.status || (result.error ? 400 : 200));
+        }
         default:
           return json({ error: "Unknown action" }, 400);
       }
@@ -903,6 +919,13 @@ export default async (req) => {
         return json(await listMedia(supabase, req));
       case "schedules":
         return json(await listSchedules(supabase));
+      case "list_site_content":
+        return json({ pages: await listContentRows(supabase) });
+      case "get_site_content": {
+        const slug = url.searchParams.get("slug");
+        const result = await getContentRow(supabase, slug);
+        return json(result, result.status || (result.error ? 400 : 200));
+      }
       default:
         return json({ error: "Unknown action" }, 400);
     }

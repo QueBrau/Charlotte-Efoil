@@ -124,7 +124,8 @@ revoke all on function public.ingest_tracking(jsonb) from public, anon, authenti
 grant execute on function public.ingest_tracking(jsonb) to service_role;
 
 -- Surface average time-on-page (ms) alongside views.
-create or replace view public.analytics_top_pages as
+drop view if exists public.analytics_top_pages;
+create view public.analytics_top_pages as
 select
   pv.path,
   count(*)                                          as views,

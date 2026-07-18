@@ -8,6 +8,7 @@ import Chart from "chart.js/auto";
 import { isMockMode, mockApi, showDemoBanner } from "./admin-mock.js";
 import { NEWSLETTER_TEMPLATES } from "./newsletter-templates.js";
 import { initHomeTabs, renderHome, resizeHomeCharts } from "./admin-home.js";
+import { initContentPanel } from "./admin-content.js";
 
 Chart.defaults.color = "#6b7c93";
 Chart.defaults.borderColor = "#e6ebf2";
@@ -19,7 +20,7 @@ const PALETTE = ["#4fb0d4", "#46c78f", "#e8b04b", "#b57edc", "#e87b7b", "#7bc4e8
 
 let rangeDays = 30;
 let activeTab = "overview";
-const charts = {};
+let loadContentPanel = null;
 
 const PAGE_META = {
   overview: {
@@ -51,6 +52,11 @@ const PAGE_META = {
     title: "Media library",
     subtitle: "Logos, photos, and videos for email flyers",
     meta: "Asset management",
+  },
+  content: {
+    title: "Site content",
+    subtitle: "Edit website text and images without touching code",
+    meta: "Content management",
   },
   email: {
     title: "Email marketing",
@@ -1806,6 +1812,19 @@ async function loadPanel(id) {
         await loadMediaSection();
         await refreshFlyerMediaLibrary();
         break;
+      case "content":
+        if (!loadContentPanel) {
+          loadContentPanel = initContentPanel({
+            api,
+            apiPost,
+            fetchMediaLibrary,
+            mediaDisplayUrl,
+            esc,
+            fmtDate,
+          });
+        }
+        await loadContentPanel();
+        break;
       case "email":
         initCampaignForm();
         initScheduleForm();
@@ -1832,7 +1851,7 @@ function initTabs() {
   });
 
   const initial = location.hash.replace("#", "") || "overview";
-  const valid = ["overview", "traffic", "visitors", "behavior", "contacts", "media", "email"];
+  const valid = ["overview", "traffic", "visitors", "behavior", "contacts", "media", "content", "email"];
   showTab(valid.includes(initial) ? initial : "overview");
 }
 

@@ -12,6 +12,7 @@
     <meta
       name="description"
       content="CharlotteEfoil. The Charlotte area's only mobile eFoil rental and lesson experience on Lake Norman, Lake Wylie, and beyond. Call 704-421-8778."
+      data-cms-meta="home.seo_description"
     />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="CharlotteEfoil | Efoil Lessons" />
@@ -63,7 +64,7 @@
             fetchpriority="high"
             disablepictureinpicture
           >
-            <source src="/videos/hero-efoil.mp4" type="video/mp4" />
+            <source src="/videos/hero-efoil.mp4" type="video/mp4" data-cms-src="home.hero.video_src" />
           </video>
           <button
             type="button"
@@ -87,14 +88,14 @@
         </div>
 
         <div class="hero-content container">
-          <p class="eyebrow">Carving your way to an experience like no other</p>
-          <h1>Come fly with us over the water.</h1>
-          <p class="hero-lead">
+          <p class="eyebrow" data-cms-text="home.hero.eyebrow">Carving your way to an experience like no other</p>
+          <h1 data-cms-text="home.hero.title">Come fly with us.</h1>
+          <p class="hero-lead" data-cms-text="home.hero.lead">
             You can't buy happiness but you can rent it. Private eFoil lessons, family outings,
             and corporate adventures across the Charlotte lakes and beyond.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="reservation-request.html">Request a Reservation</a>
+            <a class="btn btn-primary" href="reservation-request.html" data-cms-href="home.hero.cta_primary_href" data-cms-text="home.hero.cta_primary_label">Request a Reservation</a>
             <a class="btn btn-ghost" href="tel:7044218778">Call 704-421-8778</a>
           </div>
         </div>
@@ -108,21 +109,21 @@
       <section class="section wave-section" data-parallax-layer="0.08">
         <div class="container split-section">
           <div class="split-copy" data-reveal>
-            <p class="eyebrow">Wave Hello</p>
-            <h2>The Charlotte area's only place to experience flight over water.</h2>
-            <p>
+            <p class="eyebrow" data-cms-text="home.wave.eyebrow">Wave Hello</p>
+            <h2 data-cms-text="home.wave.title">The Charlotte area's only place to experience flight over water.</h2>
+            <p data-cms-text="home.wave.body">
               Our goal is to make this unique experience accessible to everyone with low hourly
               lesson pricing, location adaptability, and expert guided instruction on top of the line
               Waydoo Flyer EVO products.
             </p>
-            <ul class="check-list">
+            <ul class="check-list" data-cms-lines="home.wave.checklist">
               <li>Low hourly lesson pricing</li>
               <li>Location adaptability</li>
               <li>Guided instruction</li>
               <li>Private lessons &amp; full day family outings</li>
               <li>eFoil sales &amp; purchase demonstrations</li>
             </ul>
-            <a class="text-link" href="/reservation-request.html#pricing">View pricing &rarr;</a>
+            <a class="text-link" href="/reservation-request.html#pricing" data-cms-href="home.wave.pricing_link_href" data-cms-text="home.wave.pricing_link_label">View pricing &rarr;</a>
           </div>
           <div class="split-visual" data-reveal>
             <div class="image-card">
@@ -133,6 +134,8 @@
                 height="1125"
                 loading="lazy"
                 decoding="async"
+                data-cms-src="home.wave.image_src"
+                data-cms-alt="home.wave.image_alt"
               />
             </div>
           </div>
@@ -142,16 +145,16 @@
       <section class="section section-dark fleet-section">
         <div class="container">
           <div class="section-header center" data-reveal>
-            <p class="eyebrow">Our Fleet</p>
-            <h2>Waydoo Flyer EVO boards built for every rider</h2>
-            <p>
+            <p class="eyebrow" data-cms-text="home.fleet_intro.eyebrow">Our Fleet</p>
+            <h2 data-cms-text="home.fleet_intro.title">Waydoo Flyer EVO boards built for every rider</h2>
+            <p data-cms-text="home.fleet_intro.body">
               We ride the Waydoo Flyer EVO series, modular eFoils with Smart Flight Assistance,
               tuned for beginners, progression, and pure exhilaration.
             </p>
           </div>
 
-          <div class="fleet-grid">
-            <article class="fleet-card" data-reveal>
+          <div class="fleet-grid" data-cms-list="home.fleet">
+            <article class="fleet-card" data-reveal data-cms-item="0">
               <div class="fleet-image">
                 <img
                   src="/photos/waydoo-evo-max-plus.webp"
@@ -160,16 +163,19 @@
                   height="480"
                   loading="lazy"
                   decoding="async"
+                  data-cms-field="image_src"
+                  data-cms-attr="src"
+                  data-cms-alt="home.fleet.0.image_alt"
                 />
               </div>
               <div class="fleet-body">
-                <span class="fleet-tag">Beginner</span>
-                <h3>Flyer EVO Max Plus</h3>
-                <p>
+                <span class="fleet-tag" data-cms-field="tag">Beginner</span>
+                <h3 data-cms-field="title">Flyer EVO Max Plus</h3>
+                <p data-cms-field="body">
                   Stable, family friendly, and built for first flights. The 130L board delivers
                   high buoyancy and smooth takeoffs with Smart Flight Assistance.
                 </p>
-                <ul>
+                <ul data-cms-field="bullets">
                   <li>130L board for stability</li>
                   <li>6000W propulsion</li>
                   <li>Up to 135 min ride time</li>
@@ -177,7 +183,7 @@
               </div>
             </article>
 
-            <article class="fleet-card featured" data-reveal>
+            <article class="fleet-card featured" data-reveal data-cms-item="1">
               <div class="fleet-image">
                 <img
                   src="/photos/waydoo-evo-pro-plus.webp"
@@ -186,16 +192,18 @@
                   height="480"
                   loading="lazy"
                   decoding="async"
+                  data-cms-field="image_src"
+                  data-cms-attr="src"
                 />
               </div>
               <div class="fleet-body">
-                <span class="fleet-tag">All riders</span>
-                <h3>Flyer EVO Pro Plus</h3>
-                <p>
+                <span class="fleet-tag" data-cms-field="tag">All riders</span>
+                <h3 data-cms-field="title">Flyer EVO Pro Plus</h3>
+                <p data-cms-field="body">
                   Balanced control for every skill level. The 90L Pro Plus combines responsive
                   handling with intelligent ride support for smooth progression.
                 </p>
-                <ul>
+                <ul data-cms-field="bullets">
                   <li>90L board volume</li>
                   <li>Smart Flight Assistance System</li>
                   <li>Up to 32 mph top speed</li>
@@ -203,7 +211,7 @@
               </div>
             </article>
 
-            <article class="fleet-card" data-reveal>
+            <article class="fleet-card" data-reveal data-cms-item="2">
               <div class="fleet-image">
                 <img
                   src="/photos/waydoo-evo-lite.png"
@@ -212,16 +220,18 @@
                   height="480"
                   loading="lazy"
                   decoding="async"
+                  data-cms-field="image_src"
+                  data-cms-attr="src"
                 />
               </div>
               <div class="fleet-body">
-                <span class="fleet-tag">Progression</span>
-                <h3>Flyer EVO Lite</h3>
-                <p>
+                <span class="fleet-tag" data-cms-field="tag">Progression</span>
+                <h3 data-cms-field="title">Flyer EVO Lite</h3>
+                <p data-cms-field="body">
                   Accessible and agile for riders building confidence. A lighter, more nimble
                   platform that makes skill progression feel natural on the water.
                 </p>
-                <ul>
+                <ul data-cms-field="bullets">
                   <li>90L lightweight board</li>
                   <li>4000W propulsion</li>
                   <li>Ideal for skill progression</li>
@@ -235,27 +245,27 @@
       <section class="section" data-parallax-layer="0.1">
         <div class="container">
           <div class="section-header" data-reveal>
-            <p class="eyebrow">Experiences</p>
-            <h2>Choose your adventure</h2>
+            <p class="eyebrow" data-cms-text="home.experiences_intro.eyebrow">Experiences</p>
+            <h2 data-cms-text="home.experiences_intro.title">Choose your adventure</h2>
           </div>
-          <div class="experience-grid">
-            <a class="experience-card" href="/flight-lessons.html" data-reveal>
+          <div class="experience-grid" data-cms-list="home.experiences">
+            <a class="experience-card" href="/flight-lessons.html" data-reveal data-cms-item="0" data-cms-field="href" data-cms-attr="href">
               <span class="experience-num">01</span>
-              <h3>Private Efoil Lessons</h3>
-              <p>90 minute one on one sessions with expert instruction through our 4 step learning process.</p>
-              <span class="text-link">Learn how it works &rarr;</span>
+              <h3 data-cms-field="title">Private Efoil Lessons</h3>
+              <p data-cms-field="body">90 minute one on one sessions with expert instruction through our 4 step learning process.</p>
+              <span class="text-link" data-cms-field="link_label">Learn how it works &rarr;</span>
             </a>
-            <a class="experience-card" href="reservation-request.html" data-reveal>
+            <a class="experience-card" href="reservation-request.html" data-reveal data-cms-item="1" data-cms-field="href" data-cms-attr="href">
               <span class="experience-num">02</span>
-              <h3>Full Day Family Outings</h3>
-              <p>Morning and afternoon sessions, flexible scheduling, and up to 24 riders for weekend gatherings.</p>
-              <span class="text-link">See reservation details &rarr;</span>
+              <h3 data-cms-field="title">Full Day Family Outings</h3>
+              <p data-cms-field="body">Morning and afternoon sessions, flexible scheduling, and up to 24 riders for weekend gatherings.</p>
+              <span class="text-link" data-cms-field="link_label">See reservation details &rarr;</span>
             </a>
-            <a class="experience-card" href="/reservation-request.html#corporate" data-reveal>
+            <a class="experience-card" href="/reservation-request.html#corporate" data-reveal data-cms-item="2" data-cms-field="href" data-cms-attr="href">
               <span class="experience-num">03</span>
-              <h3>Corporate Outings</h3>
-              <p>Half day and full day team experiences with pontoon support, lunch, and up to 5 eFoils.</p>
-              <span class="text-link">Explore corporate packages &rarr;</span>
+              <h3 data-cms-field="title">Corporate Outings</h3>
+              <p data-cms-field="body">Half day and full day team experiences with pontoon support, lunch, and up to 5 eFoils.</p>
+              <span class="text-link" data-cms-field="link_label">Explore corporate packages &rarr;</span>
             </a>
           </div>
         </div>
@@ -264,33 +274,33 @@
       <section class="section locations-section">
         <div class="container locations-inner" data-reveal>
           <div>
-            <p class="eyebrow">Where We Fly</p>
-            <h2>Serving Charlotte lakes &amp; East Coast destinations</h2>
-            <p>
+            <p class="eyebrow" data-cms-text="home.locations.eyebrow">Where We Fly</p>
+            <h2 data-cms-text="home.locations.title">Serving Charlotte lakes &amp; East Coast destinations</h2>
+            <p data-cms-text="home.locations.body">
               Lake Norman, Mountain Island Lake, Lake Wylie, and other destinations per request.
               We travel up to 6 hours one way from Charlotte, NC including Hilton Head, Myrtle Beach,
               and Atlantic Ocean launches.
             </p>
-            <p class="location-note">
+            <p class="location-note" data-cms-text="home.locations.public_launch">
               Public launch: Ramsey Creek Park, 18441 Nantz Rd, Cornelius, NC 28078
             </p>
           </div>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <strong>90+</strong>
-              <span>Minute sessions</span>
+          <div class="stat-grid" data-cms-list="home.locations.stats">
+            <div class="stat-card" data-cms-item="0">
+              <strong data-cms-field="value">90+</strong>
+              <span data-cms-field="label">Minute sessions</span>
             </div>
-            <div class="stat-card">
-              <strong>7</strong>
-              <span>Days a week</span>
+            <div class="stat-card" data-cms-item="1">
+              <strong data-cms-field="value">7</strong>
+              <span data-cms-field="label">Days a week</span>
             </div>
-            <div class="stat-card">
-              <strong>6hr</strong>
-              <span>Travel radius</span>
+            <div class="stat-card" data-cms-item="2">
+              <strong data-cms-field="value">6hr</strong>
+              <span data-cms-field="label">Travel radius</span>
             </div>
-            <div class="stat-card">
-              <strong>Waydoo</strong>
-              <span>Flyer EVO fleet</span>
+            <div class="stat-card" data-cms-item="3">
+              <strong data-cms-field="value">Waydoo</strong>
+              <span data-cms-field="label">Flyer EVO fleet</span>
             </div>
           </div>
         </div>
@@ -299,12 +309,12 @@
       <section class="cta-banner">
         <div class="container cta-banner-inner" data-reveal>
           <div>
-            <p class="eyebrow">Ready to fly?</p>
-            <h2>We are committed to adventure. Are you?</h2>
+            <p class="eyebrow" data-cms-text="home.cta.eyebrow">Ready to fly?</p>
+            <h2 data-cms-text="home.cta.title">We are committed to adventure. Are you?</h2>
           </div>
           <div class="cta-banner-actions">
-            <a class="btn btn-primary" href="reservation-request.html">Request a Reservation</a>
-            <a class="btn btn-outline-light" href="contact.html">Contact Us</a>
+            <a class="btn btn-primary" href="reservation-request.html" data-cms-href="home.cta.primary_href" data-cms-text="home.cta.primary_label">Request a Reservation</a>
+            <a class="btn btn-outline-light" href="contact.html" data-cms-href="home.cta.secondary_href" data-cms-text="home.cta.secondary_label">Contact Us</a>
             <a
               class="btn btn-outline-light btn-with-icon"
               href="https://www.instagram.com/charlotteefoil"
@@ -325,8 +335,11 @@
 
     <div data-site-footer></div>
     <script type="module">
+      import { initSiteContent } from "/js/content.js";
       import { initShell, initParallax, initHeroVideo } from "/js/shell.js";
-      initShell("welcome");
+      const pages = await initSiteContent("welcome");
+      window.__ceGlobal = pages.global;
+      initShell("welcome", pages.global);
       initParallax();
       initHeroVideo();
     </script>

@@ -29,9 +29,9 @@
     <main>
       <section class="page-hero">
         <div class="container">
-          <p class="eyebrow">About Us</p>
-          <h1>Meet your flight crew.</h1>
-          <p class="page-lead">Led by Daniel, we believe in safe family fun and are committed to you and yours.</p>
+          <p class="eyebrow" data-cms-text="about.hero.eyebrow">About Us</p>
+          <h1 data-cms-text="about.hero.title">Meet your flight crew.</h1>
+          <p class="page-lead" data-cms-text="about.hero.lead">Led by Daniel, we believe in safe family fun and are committed to you and yours.</p>
         </div>
       </section>
 
@@ -46,37 +46,40 @@
               playsinline
               preload="metadata"
             >
-              <source src="/videos/dan.mov" type="video/mp4" />
-              <source src="/videos/dan.mov" type="video/quicktime" />
+              <source src="/videos/dan.mov" type="video/mp4" data-cms-src="about.video_src" />
+              <source src="/videos/dan.mov" type="video/quicktime" data-cms-src="about.video_src" />
             </video>
             <blockquote>
-              <p>"Are you ready to fly?"</p>
-              <cite>Daniel, Fearless Leader</cite>
+              <p data-cms-text="about.quote">"Are you ready to fly?"</p>
+              <cite data-cms-text="about.quote_cite">Daniel, Fearless Leader</cite>
             </blockquote>
           </div>
           <div class="about-copy" data-reveal>
-            <h2>Your fearless leader, Daniel</h2>
-            <p>CharlotteEfoil is the only mobile eFoil rental business in the Charlotte area. We live, work, and play here. We're grateful for the responsibility of producing a safe, fun experience for everyone to enjoy.</p>
-            <p>We look forward to this fun challenge and can't wait to see many of you out foiling. Carving a way to an experience like no other!</p>
+            <h2 data-cms-text="about.heading">Your fearless leader, Daniel</h2>
+            <p data-cms-text="about.paragraphs.0">CharlotteEfoil is the only mobile eFoil rental business in the Charlotte area. We live, work, and play here. We're grateful for the responsibility of producing a safe, fun experience for everyone to enjoy.</p>
+            <p data-cms-text="about.paragraphs.1">We look forward to this fun challenge and can't wait to see many of you out foiling. Carving a way to an experience like no other!</p>
             <div class="crew-grid crew-grid--single">
-              <div class="crew-card"><strong>Daniel</strong><span>Fearless Leader</span></div>
+              <div class="crew-card"><strong data-cms-text="about.crew_name">Daniel</strong><span data-cms-text="about.crew_role">Fearless Leader</span></div>
             </div>
-            <a class="btn btn-primary" href="reservation-request.html">Come Fly With Us</a>
+            <a class="btn btn-primary" href="reservation-request.html" data-cms-href="about.cta_href" data-cms-text="about.cta_label">Come Fly With Us</a>
           </div>
         </div>
       </section>
 
       <section class="cta-banner">
         <div class="container cta-banner-inner" data-reveal>
-          <h2>We are committed to adventure. Are you?</h2>
-          <a class="btn btn-outline-light" href="contact.html">Contact Us</a>
+          <h2 data-cms-text="about.banner_title">We are committed to adventure. Are you?</h2>
+          <a class="btn btn-outline-light" href="contact.html" data-cms-href="about.banner_href" data-cms-text="about.banner_label">Contact Us</a>
         </div>
       </section>
     </main>
     <div data-site-footer></div>
     <script type="module">
+      import { initSiteContent } from "/js/content.js";
       import { initShell } from "/js/shell.js";
-      initShell("about");
+      const pages = await initSiteContent("about");
+      window.__ceGlobal = pages.global;
+      initShell("about", pages.global);
     </script>
   </body>
 </html>
