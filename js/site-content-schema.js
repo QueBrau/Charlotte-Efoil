@@ -30,7 +30,7 @@ export const DEFAULT_SITE_CONTENT = {
       eyebrow: "Carving your way to an experience like no other",
       title: "Come fly with us over the water.",
       lead:
-        "You can't buy happiness but you can rent it. Private eFoil lessons, family outings, and corporate adventures across the Charlotte lakes and beyond.",
+        "You can't buy happiness but you can rent it. Private eFoil lessons, family outings, and adventures across the Charlotte area and beyond.",
       video_src: "/videos/hero-efoil.mp4",
       cta_primary_label: "Request a Reservation",
       cta_primary_href: "/reservation-request.html",
@@ -40,6 +40,8 @@ export const DEFAULT_SITE_CONTENT = {
       title: "The Charlotte area's only place to experience flight over water.",
       body:
         "Our goal is to make this unique experience accessible to everyone with low hourly lesson pricing, location adaptability, and expert guided instruction on top of the line Waydoo Flyer EVO products.",
+      service_area:
+        "Serving Lake Norman, Mountain Island Lake, Lake Wylie, and other East Coast destinations per request. We will travel up to 6 hours one way from Charlotte North Carolina to your destination.",
       checklist: [
         "Low hourly lesson pricing",
         "Location adaptability",
@@ -65,7 +67,7 @@ export const DEFAULT_SITE_CONTENT = {
         body:
           "Stable, family friendly, and built for first flights. The 130L board delivers high buoyancy and smooth takeoffs with Smart Flight Assistance.",
         bullets: ["130L board for stability", "6000W propulsion", "Up to 135 min ride time"],
-        image_src: "/photos/waydoo-evo-max-plus.webp",
+        image_src: "/products/flyer-evo-max-plus-package/hero.webp",
         image_alt: "Waydoo Flyer EVO Max Plus eFoil board",
       },
       {
@@ -74,7 +76,7 @@ export const DEFAULT_SITE_CONTENT = {
         body:
           "Balanced control for every skill level. The 90L Pro Plus combines responsive handling with intelligent ride support for smooth progression.",
         bullets: ["90L board volume", "Smart Flight Assistance System", "Up to 32 mph top speed"],
-        image_src: "/photos/waydoo-evo-pro-plus.webp",
+        image_src: "/products/flyer-evo-pro-plus-package/hero.webp",
         image_alt: "Waydoo Flyer EVO Pro Plus eFoil board",
       },
       {
@@ -83,7 +85,7 @@ export const DEFAULT_SITE_CONTENT = {
         body:
           "Accessible and agile for riders building confidence. A lighter, more nimble platform that makes skill progression feel natural on the water.",
         bullets: ["90L lightweight board", "4000W propulsion", "Ideal for skill progression"],
-        image_src: "/photos/waydoo-evo-lite.png",
+        image_src: "/products/flyer-evo-lite-package/hero.webp",
         image_alt: "Waydoo Flyer EVO Lite eFoil board",
       },
     ],
@@ -95,20 +97,14 @@ export const DEFAULT_SITE_CONTENT = {
       {
         title: "Private Efoil Lessons",
         body: "90 minute one on one sessions with expert instruction through our 4 step learning process.",
-        href: "/flight-lessons.html",
-        link_label: "Learn how it works →",
+        href: "/reservation-request.html",
+        link_label: "Request a reservation →",
       },
       {
         title: "Full Day Family Outings",
         body: "Morning and afternoon sessions, flexible scheduling, and up to 24 riders for weekend gatherings.",
         href: "/reservation-request.html",
-        link_label: "See reservation details →",
-      },
-      {
-        title: "Corporate Outings",
-        body: "Half day and full day team experiences with pontoon support, lunch, and up to 5 eFoils.",
-        href: "/reservation-request.html#corporate",
-        link_label: "Explore corporate packages →",
+        link_label: "Request a reservation →",
       },
     ],
     locations: {
@@ -130,7 +126,7 @@ export const DEFAULT_SITE_CONTENT = {
       primary_label: "Request a Reservation",
       primary_href: "/reservation-request.html",
       secondary_label: "Contact Us",
-      secondary_href: "/contact.html",
+      secondary_href: "/reservation-request.html#contact",
     },
   },
   about: {
@@ -152,7 +148,7 @@ export const DEFAULT_SITE_CONTENT = {
     cta_label: "Come Fly With Us",
     cta_href: "/reservation-request.html",
     banner_title: "We are committed to adventure. Are you?",
-    banner_href: "/contact.html",
+    banner_href: "/reservation-request.html#contact",
     banner_label: "Contact Us",
   },
   contact: {
@@ -227,43 +223,13 @@ export const DEFAULT_SITE_CONTENT = {
     ],
     pricing_note:
       "Destination trips and purchase demos available. Call 704-421-8778 for custom quotes.",
-    corporate: {
-      eyebrow: "Corporate Outings",
-      title: "Carve your way to an experience like no other.",
-      lead:
-        "A full or half day company outing your group will talk about for years. Flying over water with your peers. CharlotteEfoil is redefining how teams come together.",
+    contact: {
+      eyebrow: "Contact Us",
+      title: "We love helping our customers.",
+      lead: "Contact us with any questions or for more information. We're based in Charlotte, NC.",
+      location: "Charlotte, NC<br />Serving Lake Norman & surrounding areas",
+      form_success: "Thanks! We'll be in touch soon.",
     },
-    corporate_packages: [
-      {
-        title: "Full Day Experience",
-        price: "$2,800",
-        subtitle: "7 hours · Up to 10 participants",
-        bullets: [
-          "Pontoon adventure",
-          "Lunch & beverages",
-          "5 eFoils & up to 14 batteries",
-          "Instructor guide & CharlotteEfoil swag",
-        ],
-      },
-      {
-        title: "Half Day Experience",
-        price: "$2,400",
-        subtitle: "4 hours · Up to 10 participants",
-        bullets: ["Pontoon, lunch & beverages", "5 eFoils & up to 10 batteries", "Instructor guide"],
-      },
-      {
-        title: "Half Day, 10 Riders",
-        price: "$1,500",
-        subtitle: "5 hours · Instructor, 5 eFoils, 14 batteries",
-        bullets: [],
-      },
-      {
-        title: "Half Day, 5 Riders",
-        price: "$750",
-        subtitle: "4 hours · Instructor, 5 eFoils, 10 batteries",
-        bullets: [],
-      },
-    ],
   },
 };
 

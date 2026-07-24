@@ -3,6 +3,15 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   appType: "mpa",
+  server: {
+    proxy: {
+      "/waydoo": {
+        target: "http://127.0.0.1:3456",
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+  },
   build: {
     target: "es2020",
     cssMinify: true,

@@ -1,12 +1,13 @@
 import { initAnalytics, trackEvent } from "/js/analytics.js";
+import { initMotion } from "/js/motion.js";
 import { phoneDigits } from "/js/site-content-schema.js";
 
 const NAV_ITEMS = [
   { href: "/", label: "Welcome", page: "welcome" },
+  { href: "/waydoo", label: "Waydoo", page: "waydoo" },
   { href: "/reservation-request.html", label: "Reservations", page: "reservation-request" },
   { href: "/flight-lessons.html", label: "How We Operate", page: "flight-lessons" },
   { href: "/about.html", label: "About Us", page: "about" },
-  { href: "/contact.html", label: "Contact Us", page: "contact" },
 ];
 
 const INSTAGRAM_URL = "https://www.instagram.com/charlotteefoil";
@@ -77,12 +78,12 @@ export function renderFooter(global = {}) {
         <div>
           <h3>Explore</h3>
           <ul>
+            <li><a href="/waydoo">Waydoo Shop</a></li>
             <li><a href="/reservation-request.html#pricing">Pricing</a></li>
             <li><a href="/flight-lessons.html">How We Operate</a></li>
             <li><a href="/reservation-request.html">Reservations</a></li>
-            <li><a href="/reservation-request.html#corporate">Corporate Outings</a></li>
             <li><a href="/about.html">About Us</a></li>
-            <li><a href="/contact.html">Contact</a></li>
+            <li><a href="/reservation-request.html#contact">Contact</a></li>
           </ul>
         </div>
         <div>
@@ -116,7 +117,7 @@ export function initShell(activePage, globalOverrides = null) {
   initNavigation();
   initHeaderScroll();
   initForms();
-  initReveal();
+  initMotion();
   initMobileActionBar();
   initDesktopNavPlacement();
   initAnalytics();
@@ -313,22 +314,6 @@ function initForms() {
       }
     });
   });
-}
-
-function initReveal() {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.12 }
-  );
-
-  document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
 }
 
 export function initParallax() {

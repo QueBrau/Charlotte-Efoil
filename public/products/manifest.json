@@ -1,0 +1,2068 @@
+{
+  "generatedAt": "2026-07-23T00:31:24.916Z",
+  "source": "https://www.waydoo.com",
+  "products": [
+    {
+      "slug": "flyer-evo-max-plus-package",
+      "title": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+      "hero": "/products/flyer-evo-max-plus-package/hero.webp",
+      "card": "/products/flyer-evo-max-plus-package/thumb.webp",
+      "gallery": [
+        "/products/flyer-evo-max-plus-package/gallery-1.webp",
+        "/products/flyer-evo-max-plus-package/gallery-2.webp",
+        "/products/flyer-evo-max-plus-package/gallery-3.webp",
+        "/products/flyer-evo-max-plus-package/gallery-4.webp",
+        "/products/flyer-evo-max-plus-package/gallery-5.webp",
+        "/products/flyer-evo-max-plus-package/gallery-6.webp",
+        "/products/flyer-evo-max-plus-package/gallery-7.webp",
+        "/products/flyer-evo-max-plus-package/gallery-8.webp"
+      ],
+      "videos": [
+        {
+          "url": "https://cdn.shopify.com/videos/c/o/v/03c582a6e40041babb36b20bbaa266da.mp4",
+          "type": "file",
+          "filename": "video-1.json",
+          "sortOrder": 1
+        }
+      ],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/hero.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 5,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-5.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 6,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-6.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 7,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-7.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 8,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-package/gallery-8.webp",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 9,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "video",
+          "url": "https://cdn.shopify.com/videos/c/o/v/03c582a6e40041babb36b20bbaa266da.mp4",
+          "altText": "Waydoo Flyer EVO Max Plus: Stable eFoil for Beginners",
+          "sortOrder": 10,
+          "isPrimary": false,
+          "referenceFile": "/products/flyer-evo-max-plus-package/video-1.json"
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/flyer-evo-max-plus-package/hero.webp",
+          "contentHash": "71a8b15bf0dc5f9a703b53baaabd8b3dd6b3797ff175b1a85c5ab466537e1d2d",
+          "bytes": 351744,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-1.webp",
+          "contentHash": "96003afe4db90c9f357eaf6a07f2b1eb25225b6b7b1dc965aa1997409076d42d",
+          "bytes": 233136,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-2.webp",
+          "contentHash": "3bcfd13df1c157977eaf485daba345464c95f24c69003e4fcc9b7ca42dd4eeb9",
+          "bytes": 247866,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-3.webp",
+          "contentHash": "98267830b903de4455c09ed015f73a6911625f234b5517839449502d63e749c7",
+          "bytes": 239144,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-4.webp",
+          "contentHash": "e772f9e980bc874bedaab5d029f8e7eee431cc3596ef152cf0b0c71c125b8be2",
+          "bytes": 263564,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-5.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-5.webp",
+          "contentHash": "253a78763c52178f4dce4bf4d2134c4917abfe0969224d985af0653bcde394ed",
+          "bytes": 327750,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-6.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-6.webp",
+          "contentHash": "f9e785e3754fb1c9cbc514507107198f76396c2525e874be37c149abb2d2936c",
+          "bytes": 46078,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-7.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-7.webp",
+          "contentHash": "61e36927f018d58ee5f9b0b4050af5c924546917b91036f7080a319699b54431",
+          "bytes": 54536,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-8.webp",
+          "url": "/products/flyer-evo-max-plus-package/gallery-8.webp",
+          "contentHash": "6ed99223976b9acbd33c6ec23e29a60b9a76eab0e1d968bf59eae632512a3c25",
+          "bytes": 49170,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/flyer-evo-max-plus-package/thumb.webp",
+          "bytes": 43680,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "flyer-evo-pro-plus-package",
+      "title": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+      "hero": "/products/flyer-evo-pro-plus-package/hero.webp",
+      "card": "/products/flyer-evo-pro-plus-package/thumb.webp",
+      "gallery": [
+        "/products/flyer-evo-pro-plus-package/gallery-1.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-2.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-3.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-4.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-5.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-6.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-7.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-8.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-9.webp",
+        "/products/flyer-evo-pro-plus-package/gallery-10.webp"
+      ],
+      "videos": [
+        {
+          "url": "https://cdn.shopify.com/videos/c/o/v/b19a899a879142a58dc4e7a3e067b922.mp4",
+          "type": "file",
+          "filename": "video-1.json",
+          "sortOrder": 1
+        }
+      ],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/hero.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 5,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-5.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 6,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-6.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 7,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-7.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 8,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-8.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 9,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-9.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 10,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-10.webp",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 11,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "video",
+          "url": "https://cdn.shopify.com/videos/c/o/v/b19a899a879142a58dc4e7a3e067b922.mp4",
+          "altText": "Waydoo Flyer EVO Pro Plus: Balanced Control eFoil for All Riders",
+          "sortOrder": 12,
+          "isPrimary": false,
+          "referenceFile": "/products/flyer-evo-pro-plus-package/video-1.json"
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/flyer-evo-pro-plus-package/hero.webp",
+          "contentHash": "397f7b5f712b150f2768b5a9ca62540ee55c5f8c63c91a9758af501f6e49c048",
+          "bytes": 338336,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-1.webp",
+          "contentHash": "b095e8c63cd4f85d1865045c9766ce9814877a00c6581d65fe8e5f5a872263f4",
+          "bytes": 96324,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-2.webp",
+          "contentHash": "9c8c7fe8b0f04025b3e6ecf06eafc783806868ee3ee1d328c11698742edefa94",
+          "bytes": 46000,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-3.webp",
+          "contentHash": "b1e249d432589cc19ddebea1412304429226efa507844ec45bcfc890869c3226",
+          "bytes": 103634,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-4.webp",
+          "contentHash": "527abd1d9c9736e19fbc8abc9583a267a64a9452b9e3828c556674cf28a95857",
+          "bytes": 133768,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-5.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-5.webp",
+          "contentHash": "0d6cf22951de66ca4a26d78db725d8c1bf0e36a778d19372c8242e55b4a79c1b",
+          "bytes": 225768,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-6.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-6.webp",
+          "contentHash": "0719d1a1092ba7d94844e4dfc66e2c4fd6a0a7443ec141a3eb27e61a778b2dbc",
+          "bytes": 400570,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-7.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-7.webp",
+          "contentHash": "5963413a3b7df35d82c91b7de703e531c1432f09af61e937ba0005e7061ba5cf",
+          "bytes": 251660,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-8.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-8.webp",
+          "contentHash": "cd370181ee0b19ee020c18641e73d4e724403d178662513822841b885ce68a58",
+          "bytes": 240744,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-9.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-9.webp",
+          "contentHash": "898e6d72735acffa796709f4f416b1dac9256b285418f543ea59580f02b03f87",
+          "bytes": 52458,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-10.webp",
+          "url": "/products/flyer-evo-pro-plus-package/gallery-10.webp",
+          "contentHash": "d409f0039407bd39e6cfb694de32896195a626cf4a0b7cb8bec87c8fbabef3cb",
+          "bytes": 50674,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/flyer-evo-pro-plus-package/thumb.webp",
+          "bytes": 39928,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "flyer-evo-lite-package",
+      "title": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+      "hero": "/products/flyer-evo-lite-package/hero.webp",
+      "card": "/products/flyer-evo-lite-package/thumb.webp",
+      "gallery": [
+        "/products/flyer-evo-lite-package/gallery-1.webp",
+        "/products/flyer-evo-lite-package/gallery-2.webp",
+        "/products/flyer-evo-lite-package/gallery-3.webp",
+        "/products/flyer-evo-lite-package/gallery-4.webp",
+        "/products/flyer-evo-lite-package/gallery-5.webp",
+        "/products/flyer-evo-lite-package/gallery-6.webp",
+        "/products/flyer-evo-lite-package/gallery-7.webp",
+        "/products/flyer-evo-lite-package/gallery-8.webp"
+      ],
+      "videos": [
+        {
+          "url": "https://cdn.shopify.com/videos/c/o/v/315354281fd04df2828bffbe43f3d26d.mp4",
+          "type": "file",
+          "filename": "video-1.json",
+          "sortOrder": 1
+        }
+      ],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/hero.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 5,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-5.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 6,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-6.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 7,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-7.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 8,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-package/gallery-8.webp",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 9,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "video",
+          "url": "https://cdn.shopify.com/videos/c/o/v/315354281fd04df2828bffbe43f3d26d.mp4",
+          "altText": "Waydoo Flyer EVO Lite: Accessible eFoil for Skill Progression",
+          "sortOrder": 10,
+          "isPrimary": false,
+          "referenceFile": "/products/flyer-evo-lite-package/video-1.json"
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/flyer-evo-lite-package/hero.webp",
+          "contentHash": "fb5af6c855360491816cc8b6ad7b1fdf16ccd13750796614c59be1d77cff6baf",
+          "bytes": 332880,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-1.webp",
+          "contentHash": "24648610a06098bdb87352a00cac18bff29ee0b52b19dcccfdc539240d622fc6",
+          "bytes": 115014,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-2.webp",
+          "contentHash": "dffff3b2a4cea80ec09381f5f6ac4748d0b37102458ed2f50a8b965cb2f13722",
+          "bytes": 104298,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-3.webp",
+          "contentHash": "770b0506212e161c9c2e1bbcaa9176067f3b1a0f5758acd2c52232182bcdb217",
+          "bytes": 156020,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-4.webp",
+          "contentHash": "e3126035406335322c449fcc249be07c520be2d6c9f7384582e5469e0f6d2109",
+          "bytes": 175806,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-5.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-5.webp",
+          "contentHash": "27f5e397988422376e937268f2f47ae432007ca900c64bc575d4e8a8cb28b362",
+          "bytes": 104456,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-6.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-6.webp",
+          "contentHash": "8dc2fe9c1d9c6280f246d4cfb5760f8fa3797080a558bbb7b8ba63b54b509352",
+          "bytes": 45574,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-7.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-7.webp",
+          "contentHash": "33685eb69f30a8a0af6382911c8bc3c81b959cb34453d44b1c7da7c28eca1af3",
+          "bytes": 55314,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-8.webp",
+          "url": "/products/flyer-evo-lite-package/gallery-8.webp",
+          "contentHash": "123007242db12553a6d63b06ac98d605704a1f5d81a2e6a9f3f9cec03bb22fc1",
+          "bytes": 290370,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/flyer-evo-lite-package/thumb.webp",
+          "bytes": 39452,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "flyer-evo-max-plus-board",
+      "title": "EVO Max Plus Board 130L",
+      "hero": "/products/flyer-evo-max-plus-board/hero.webp",
+      "card": "/products/flyer-evo-max-plus-board/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-max-plus-board/hero.webp",
+          "altText": "EVO Max Plus Board 130L",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/flyer-evo-max-plus-board/hero.webp",
+          "contentHash": "867eea2619b3385ee9d3fe9b30e7bf1445d210c03b04b53dd7001c70afacb8a1",
+          "bytes": 74626,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/flyer-evo-max-plus-board/thumb.webp",
+          "bytes": 9274,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "flyer-evo-pro-plus-board",
+      "title": "EVO Pro Plus Board 90L",
+      "hero": "/products/flyer-evo-pro-plus-board/hero.webp",
+      "card": "/products/flyer-evo-pro-plus-board/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-pro-plus-board/hero.webp",
+          "altText": "EVO Pro Plus Board 90L",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/flyer-evo-pro-plus-board/hero.webp",
+          "contentHash": "401c437a9a0e1c582ee5719def66a3095aad5636b87b3fd87feba62dad08c17a",
+          "bytes": 88038,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/flyer-evo-pro-plus-board/thumb.webp",
+          "bytes": 20270,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "flyer-evo-lite-board",
+      "title": "EVO Lite Board 90L",
+      "hero": "/products/flyer-evo-lite-board/hero.webp",
+      "card": "/products/flyer-evo-lite-board/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/flyer-evo-lite-board/hero.webp",
+          "altText": "EVO Lite Board 90L",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/flyer-evo-lite-board/hero.webp",
+          "contentHash": "10e8a44ca54aa39469c2f178c887a95c00fad764b108a44ea1fa441c52a5159f",
+          "bytes": 66348,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/flyer-evo-lite-board/thumb.webp",
+          "bytes": 8168,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "powerflight-battery-28ah",
+      "title": "Waydoo Flyer EVO Powerflight Battery",
+      "hero": "/products/powerflight-battery-28ah/hero.webp",
+      "card": "/products/powerflight-battery-28ah/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/powerflight-battery-28ah/hero.webp",
+          "altText": "Waydoo Flyer EVO Powerflight Battery",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/powerflight-battery-28ah/hero.webp",
+          "contentHash": "e26cd53226b05bb5d6d1113c42451a390c84fcf58f498d64056e27e7bc46936b",
+          "bytes": 73756,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/powerflight-battery-28ah/thumb.webp",
+          "bytes": 12890,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "powerflight-battery-22ah",
+      "title": "Waydoo Flyer EVO Powerflight Battery",
+      "hero": "/products/powerflight-battery-22ah/hero.webp",
+      "card": "/products/powerflight-battery-22ah/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/powerflight-battery-22ah/hero.webp",
+          "altText": "Waydoo Flyer EVO Powerflight Battery",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/powerflight-battery-22ah/hero.webp",
+          "contentHash": "e26cd53226b05bb5d6d1113c42451a390c84fcf58f498d64056e27e7bc46936b",
+          "bytes": 73756,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/powerflight-battery-22ah/thumb.webp",
+          "bytes": 12890,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "powerflight-fast-charger",
+      "title": "EVO Powerflight Charger",
+      "hero": "/products/powerflight-fast-charger/hero.webp",
+      "card": "/products/powerflight-fast-charger/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/powerflight-fast-charger/hero.webp",
+          "altText": "EVO Powerflight Charger",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/powerflight-fast-charger/hero.webp",
+          "contentHash": "76b0663b2ab9360d0254e4b5b5c7328697b1b7e5fdfbfbd250f2b1d261b06e73",
+          "bytes": 74454,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/powerflight-fast-charger/thumb.webp",
+          "bytes": 12142,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "powerflight-standard-charger",
+      "title": "EVO Inverter Charger",
+      "hero": "/products/powerflight-standard-charger/hero.webp",
+      "card": "/products/powerflight-standard-charger/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/powerflight-standard-charger/hero.webp",
+          "altText": "EVO Inverter Charger",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/powerflight-standard-charger/hero.webp",
+          "contentHash": "57252d24f9639c0b9c3e0fcb7d76f39c7c5138c91e64e4bd903b6b0f74e5552f",
+          "bytes": 62440,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/powerflight-standard-charger/thumb.webp",
+          "bytes": 15086,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "carbon-mast-60cm",
+      "title": "EVO 27\" Mast",
+      "hero": "/products/carbon-mast-60cm/hero.webp",
+      "card": "/products/carbon-mast-60cm/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/carbon-mast-60cm/hero.webp",
+          "altText": "EVO 27\" Mast",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/carbon-mast-60cm/hero.webp",
+          "contentHash": "ba9b63f6c3e776379c9a806d3acf6a14eaeea549fcea313c013e49ed976470dc",
+          "bytes": 35526,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/carbon-mast-60cm/thumb.webp",
+          "bytes": 7034,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "carbon-mast-75cm",
+      "title": "EVO Carbon 31\" Mast",
+      "hero": "/products/carbon-mast-75cm/hero.webp",
+      "card": "/products/carbon-mast-75cm/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/carbon-mast-75cm/hero.webp",
+          "altText": "EVO Carbon 31\" Mast",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/carbon-mast-75cm/hero.webp",
+          "contentHash": "05761cd11e641a7b6ee5b741564adbf39335e73b5e18597ea5f09fac928f50fe",
+          "bytes": 7106,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/carbon-mast-75cm/thumb.webp",
+          "bytes": 3102,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "carbon-mast-90cm",
+      "title": "EVO 35\" Mast",
+      "hero": "/products/carbon-mast-90cm/hero.webp",
+      "card": "/products/carbon-mast-90cm/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/carbon-mast-90cm/hero.webp",
+          "altText": "EVO 35\" Mast",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/carbon-mast-90cm/hero.webp",
+          "contentHash": "dde2e6ef622ed634fc7f4ba7238c0291db86b25b212768d1cb231d6c7650e654",
+          "bytes": 33072,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/carbon-mast-90cm/thumb.webp",
+          "bytes": 6452,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "front-wing-1300",
+      "title": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+      "hero": "/products/front-wing-1300/hero.webp",
+      "card": "/products/front-wing-1300/thumb.webp",
+      "gallery": [
+        "/products/front-wing-1300/gallery-1.webp",
+        "/products/front-wing-1300/gallery-2.webp",
+        "/products/front-wing-1300/gallery-3.webp",
+        "/products/front-wing-1300/gallery-4.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1300/hero.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1300/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1300/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1300/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1300/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 5,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/front-wing-1300/hero.webp",
+          "contentHash": "8e183c3c6f3e2bb696ab40fffcf59909d7c1c3c7c2c5fd2db89faf62fc775231",
+          "bytes": 9700,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/front-wing-1300/gallery-1.webp",
+          "contentHash": "a1e0f92b8d87addb4093be51d8ff70dfd1f17989c86a30d6eb80c396978910e5",
+          "bytes": 29546,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/front-wing-1300/gallery-2.webp",
+          "contentHash": "dc3cd1caf2139366c4d725eaa42c4c9ecaa8b7f4d8964b586c5f7bf526739c33",
+          "bytes": 34766,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/front-wing-1300/gallery-3.webp",
+          "contentHash": "a410eb72ce2de99e91bc799925ecb1a38b212bd787c59510383574152490ca35",
+          "bytes": 36082,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/front-wing-1300/gallery-4.webp",
+          "contentHash": "11555eacec68bd389519c1d0d78bf7bcb7d2a3dc474fd3531e3230c6fde000e8",
+          "bytes": 21906,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/front-wing-1300/thumb.webp",
+          "bytes": 4404,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "front-wing-1100",
+      "title": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+      "hero": "/products/front-wing-1100/hero.webp",
+      "card": "/products/front-wing-1100/thumb.webp",
+      "gallery": [
+        "/products/front-wing-1100/gallery-1.webp",
+        "/products/front-wing-1100/gallery-2.webp",
+        "/products/front-wing-1100/gallery-3.webp",
+        "/products/front-wing-1100/gallery-4.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1100/hero.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1100/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1100/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1100/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-1100/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 5,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/front-wing-1100/hero.webp",
+          "contentHash": "8e183c3c6f3e2bb696ab40fffcf59909d7c1c3c7c2c5fd2db89faf62fc775231",
+          "bytes": 9700,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/front-wing-1100/gallery-1.webp",
+          "contentHash": "a1e0f92b8d87addb4093be51d8ff70dfd1f17989c86a30d6eb80c396978910e5",
+          "bytes": 29546,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/front-wing-1100/gallery-2.webp",
+          "contentHash": "dc3cd1caf2139366c4d725eaa42c4c9ecaa8b7f4d8964b586c5f7bf526739c33",
+          "bytes": 34766,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/front-wing-1100/gallery-3.webp",
+          "contentHash": "a410eb72ce2de99e91bc799925ecb1a38b212bd787c59510383574152490ca35",
+          "bytes": 36082,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/front-wing-1100/gallery-4.webp",
+          "contentHash": "11555eacec68bd389519c1d0d78bf7bcb7d2a3dc474fd3531e3230c6fde000e8",
+          "bytes": 21906,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/front-wing-1100/thumb.webp",
+          "bytes": 4404,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "front-wing-900",
+      "title": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+      "hero": "/products/front-wing-900/hero.webp",
+      "card": "/products/front-wing-900/thumb.webp",
+      "gallery": [
+        "/products/front-wing-900/gallery-1.webp",
+        "/products/front-wing-900/gallery-2.webp",
+        "/products/front-wing-900/gallery-3.webp",
+        "/products/front-wing-900/gallery-4.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-900/hero.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-900/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-900/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-900/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/front-wing-900/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 5,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/front-wing-900/hero.webp",
+          "contentHash": "8e183c3c6f3e2bb696ab40fffcf59909d7c1c3c7c2c5fd2db89faf62fc775231",
+          "bytes": 9700,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/front-wing-900/gallery-1.webp",
+          "contentHash": "a1e0f92b8d87addb4093be51d8ff70dfd1f17989c86a30d6eb80c396978910e5",
+          "bytes": 29546,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/front-wing-900/gallery-2.webp",
+          "contentHash": "dc3cd1caf2139366c4d725eaa42c4c9ecaa8b7f4d8964b586c5f7bf526739c33",
+          "bytes": 34766,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/front-wing-900/gallery-3.webp",
+          "contentHash": "a410eb72ce2de99e91bc799925ecb1a38b212bd787c59510383574152490ca35",
+          "bytes": 36082,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/front-wing-900/gallery-4.webp",
+          "contentHash": "11555eacec68bd389519c1d0d78bf7bcb7d2a3dc474fd3531e3230c6fde000e8",
+          "bytes": 21906,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/front-wing-900/thumb.webp",
+          "bytes": 4404,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "rear-wing-320",
+      "title": "EVO Gliding Tail 320",
+      "hero": "/products/rear-wing-320/hero.webp",
+      "card": "/products/rear-wing-320/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/rear-wing-320/hero.webp",
+          "altText": "EVO Gliding Tail 320",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/rear-wing-320/hero.webp",
+          "contentHash": "6409917c6a3dc8988abcf80046757f0a5896819ebac1903403f51b66de1f1a41",
+          "bytes": 70492,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/rear-wing-320/thumb.webp",
+          "bytes": 15322,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "rear-wing-280",
+      "title": "EVO Gliding Tail 322",
+      "hero": "/products/rear-wing-280/hero.webp",
+      "card": "/products/rear-wing-280/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/rear-wing-280/hero.webp",
+          "altText": "EVO Gliding Tail 322",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/rear-wing-280/hero.webp",
+          "contentHash": "b008b706e1d8423a98529c32d4812a26fe96a11a186ab65b8168ed5611f7982a",
+          "bytes": 7266,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/rear-wing-280/thumb.webp",
+          "bytes": 3288,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "propulsion-6000w",
+      "title": "EVO Propulsion Unit (Performance)",
+      "hero": "/products/propulsion-6000w/hero.webp",
+      "card": "/products/propulsion-6000w/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/propulsion-6000w/hero.webp",
+          "altText": "EVO Propulsion Unit (Performance)",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/propulsion-6000w/hero.webp",
+          "contentHash": "765a368a9f6274f4806b9097e782267f1fa29ddb26f9daf48ee2217318a7e739",
+          "bytes": 21826,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/propulsion-6000w/thumb.webp",
+          "bytes": 5486,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "propulsion-4000w",
+      "title": "EVO Propulsion Unit (Standard)",
+      "hero": "/products/propulsion-4000w/hero.webp",
+      "card": "/products/propulsion-4000w/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/propulsion-4000w/hero.webp",
+          "altText": "EVO Propulsion Unit (Standard)",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/propulsion-4000w/hero.webp",
+          "contentHash": "e02177c75fcb336a3d006988ed7c0c9cda141fcca25508401e8fed5dc1571c55",
+          "bytes": 22724,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/propulsion-4000w/thumb.webp",
+          "bytes": 5422,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "wireless-hand-controller",
+      "title": "EVO Remote",
+      "hero": "/products/wireless-hand-controller/hero.webp",
+      "card": "/products/wireless-hand-controller/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/wireless-hand-controller/hero.webp",
+          "altText": "EVO Remote",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/wireless-hand-controller/hero.webp",
+          "contentHash": "4b8e0ffddecf48b0e15991b3602b24f7683277ea8a51de5bb93887c379c19c92",
+          "bytes": 71066,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/wireless-hand-controller/thumb.webp",
+          "bytes": 10816,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "controller-wrist-leash",
+      "title": "EVO Remote",
+      "hero": "/products/controller-wrist-leash/hero.webp",
+      "card": "/products/controller-wrist-leash/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/controller-wrist-leash/hero.webp",
+          "altText": "EVO Remote",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/controller-wrist-leash/hero.webp",
+          "contentHash": "4b8e0ffddecf48b0e15991b3602b24f7683277ea8a51de5bb93887c379c19c92",
+          "bytes": 71066,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/controller-wrist-leash/thumb.webp",
+          "bytes": 10816,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "board-travel-bag",
+      "title": "Flyer EVO Board Bag",
+      "hero": "/products/board-travel-bag/hero.webp",
+      "card": "/products/board-travel-bag/thumb.webp",
+      "gallery": [
+        "/products/board-travel-bag/gallery-1.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/board-travel-bag/hero.webp",
+          "altText": "Flyer EVO Board Bag",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/board-travel-bag/gallery-1.webp",
+          "altText": "Flyer EVO Board Bag",
+          "sortOrder": 2,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/board-travel-bag/hero.webp",
+          "contentHash": "f5ee31dc68b9c47a1b615661ad6873291b85385dc328b843525433073cab9756",
+          "bytes": 58100,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/board-travel-bag/gallery-1.webp",
+          "contentHash": "b6fa34d8eca48ec94a78489d71e43c8c48c63d946af27118cfc5967c9316548a",
+          "bytes": 78406,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/board-travel-bag/thumb.webp",
+          "bytes": 8600,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "battery-transport-bag",
+      "title": "EVO Battery Bag",
+      "hero": "/products/battery-transport-bag/hero.webp",
+      "card": "/products/battery-transport-bag/thumb.webp",
+      "gallery": [
+        "/products/battery-transport-bag/gallery-1.webp",
+        "/products/battery-transport-bag/gallery-2.webp",
+        "/products/battery-transport-bag/gallery-3.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/battery-transport-bag/hero.webp",
+          "altText": "EVO Battery Bag",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/battery-transport-bag/gallery-1.webp",
+          "altText": "EVO Battery Bag",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/battery-transport-bag/gallery-2.webp",
+          "altText": "EVO Battery Bag",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/battery-transport-bag/gallery-3.webp",
+          "altText": "EVO Battery Bag",
+          "sortOrder": 4,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/battery-transport-bag/hero.webp",
+          "contentHash": "b1146e9dc68257718e664f7e59a2c0d3da0cece956a6871bb65e89115b15b9a0",
+          "bytes": 406712,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/battery-transport-bag/gallery-1.webp",
+          "contentHash": "44035d144d347a6958086a3256dda39325a9f2f0e07f2d283b915d1de091436d",
+          "bytes": 117170,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/battery-transport-bag/gallery-2.webp",
+          "contentHash": "802f888150f56a5ad6eef601feb85fae5ee6b743c0b801b0d4f14c7555454bd8",
+          "bytes": 155038,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/battery-transport-bag/gallery-3.webp",
+          "contentHash": "945ca3d33a0d94ec8735957c3602cfdf5e8bf5923b75225fcdc199a162fb4f33",
+          "bytes": 176070,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/battery-transport-bag/thumb.webp",
+          "bytes": 28726,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "board-cover-universal",
+      "title": "Waydoo Flyer EVO Propulsion Unit Bag",
+      "hero": "/products/board-cover-universal/hero.webp",
+      "card": "/products/board-cover-universal/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/board-cover-universal/hero.webp",
+          "altText": "Waydoo Flyer EVO Propulsion Unit Bag",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/board-cover-universal/hero.webp",
+          "contentHash": "9ed1670d08fa08b423f04d66679a79e62434ec3b5ce3f7b127f3994c5f38e9b0",
+          "bytes": 95640,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/board-cover-universal/thumb.webp",
+          "bytes": 12444,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "wing-cover-set",
+      "title": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+      "hero": "/products/wing-cover-set/hero.webp",
+      "card": "/products/wing-cover-set/thumb.webp",
+      "gallery": [
+        "/products/wing-cover-set/gallery-1.webp",
+        "/products/wing-cover-set/gallery-2.webp",
+        "/products/wing-cover-set/gallery-3.webp",
+        "/products/wing-cover-set/gallery-4.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/wing-cover-set/hero.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/wing-cover-set/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/wing-cover-set/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/wing-cover-set/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/wing-cover-set/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Front Wings (Voyager & Glider Series)",
+          "sortOrder": 5,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/wing-cover-set/hero.webp",
+          "contentHash": "8e183c3c6f3e2bb696ab40fffcf59909d7c1c3c7c2c5fd2db89faf62fc775231",
+          "bytes": 9700,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/wing-cover-set/gallery-1.webp",
+          "contentHash": "a1e0f92b8d87addb4093be51d8ff70dfd1f17989c86a30d6eb80c396978910e5",
+          "bytes": 29546,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/wing-cover-set/gallery-2.webp",
+          "contentHash": "dc3cd1caf2139366c4d725eaa42c4c9ecaa8b7f4d8964b586c5f7bf526739c33",
+          "bytes": 34766,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/wing-cover-set/gallery-3.webp",
+          "contentHash": "a410eb72ce2de99e91bc799925ecb1a38b212bd787c59510383574152490ca35",
+          "bytes": 36082,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/wing-cover-set/gallery-4.webp",
+          "contentHash": "11555eacec68bd389519c1d0d78bf7bcb7d2a3dc474fd3531e3230c6fde000e8",
+          "bytes": 21906,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/wing-cover-set/thumb.webp",
+          "bytes": 4404,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "impact-vest",
+      "title": "Waydoo Impact Vest",
+      "hero": "/products/impact-vest/hero.webp",
+      "card": "/products/impact-vest/thumb.webp",
+      "gallery": [
+        "/products/impact-vest/gallery-1.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/impact-vest/hero.webp",
+          "altText": "Waydoo Impact Vest",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/impact-vest/gallery-1.webp",
+          "altText": "Waydoo Impact Vest",
+          "sortOrder": 2,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/impact-vest/hero.webp",
+          "contentHash": "3cd4e9d28f6dc95f63a61a6471539c76eea2f9c322857d4ac01be12b195d91d7",
+          "bytes": 63368,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/impact-vest/gallery-1.webp",
+          "contentHash": "fba3a3bfa514b5d31ddc758e21e022dcc60030d6d9914bd99e2b97cd121119fa",
+          "bytes": 53316,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/impact-vest/thumb.webp",
+          "bytes": 29584,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "efoil-helmet",
+      "title": "Waydoo Impact Vest",
+      "hero": "/products/efoil-helmet/hero.webp",
+      "card": "/products/efoil-helmet/thumb.webp",
+      "gallery": [
+        "/products/efoil-helmet/gallery-1.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/efoil-helmet/hero.webp",
+          "altText": "Waydoo Impact Vest",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/efoil-helmet/gallery-1.webp",
+          "altText": "Waydoo Impact Vest",
+          "sortOrder": 2,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/efoil-helmet/hero.webp",
+          "contentHash": "3cd4e9d28f6dc95f63a61a6471539c76eea2f9c322857d4ac01be12b195d91d7",
+          "bytes": 63368,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/efoil-helmet/gallery-1.webp",
+          "contentHash": "fba3a3bfa514b5d31ddc758e21e022dcc60030d6d9914bd99e2b97cd121119fa",
+          "bytes": 53316,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/efoil-helmet/thumb.webp",
+          "bytes": 29584,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "board-leash",
+      "title": "Waydoo Flyer EVO Tail Extended Rod (comes with bolts)",
+      "hero": "/products/board-leash/hero.webp",
+      "card": "/products/board-leash/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/board-leash/hero.webp",
+          "altText": "Waydoo Flyer EVO Tail Extended Rod (comes with bolts)",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/board-leash/hero.webp",
+          "contentHash": "fba3b7281e477f580bec5147380f5d07dcb186f211730da6eac8b07e51875461",
+          "bytes": 43022,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/board-leash/thumb.webp",
+          "bytes": 4854,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "mast-plate-hardware-kit",
+      "title": "EVO Carbon 31\" Mast",
+      "hero": "/products/mast-plate-hardware-kit/hero.webp",
+      "card": "/products/mast-plate-hardware-kit/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/mast-plate-hardware-kit/hero.webp",
+          "altText": "EVO Carbon 31\" Mast",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/mast-plate-hardware-kit/hero.webp",
+          "contentHash": "05761cd11e641a7b6ee5b741564adbf39335e73b5e18597ea5f09fac928f50fe",
+          "bytes": 7106,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/mast-plate-hardware-kit/thumb.webp",
+          "bytes": 3102,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "propeller-service-kit",
+      "title": "EVO Propeller",
+      "hero": "/products/propeller-service-kit/hero.webp",
+      "card": "/products/propeller-service-kit/thumb.webp",
+      "gallery": [
+        "/products/propeller-service-kit/gallery-1.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/propeller-service-kit/hero.webp",
+          "altText": "EVO Propeller",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/propeller-service-kit/gallery-1.webp",
+          "altText": "EVO Propeller",
+          "sortOrder": 2,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/propeller-service-kit/hero.webp",
+          "contentHash": "de99518f2651d4cf4fa96225ce2c6d7c0dc1650b01a764de54d1ebf9edf0315c",
+          "bytes": 34034,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/propeller-service-kit/gallery-1.webp",
+          "contentHash": "5165ca6003c34ec797a83f904209c54afdbc9cb112261adda7121826e1faeecb",
+          "bytes": 36326,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/propeller-service-kit/thumb.webp",
+          "bytes": 4104,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "foil-tool-kit",
+      "title": "Waydoo Flyer EVO Scooter Kit",
+      "hero": "/products/foil-tool-kit/hero.webp",
+      "card": "/products/foil-tool-kit/thumb.webp",
+      "gallery": [
+        "/products/foil-tool-kit/gallery-1.webp",
+        "/products/foil-tool-kit/gallery-2.webp",
+        "/products/foil-tool-kit/gallery-3.webp",
+        "/products/foil-tool-kit/gallery-4.webp",
+        "/products/foil-tool-kit/gallery-5.webp",
+        "/products/foil-tool-kit/gallery-6.webp",
+        "/products/foil-tool-kit/gallery-7.webp"
+      ],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/hero.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 1,
+          "isPrimary": true
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-1.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 2,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-2.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 3,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-3.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 4,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-4.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 5,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-5.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 6,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-6.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 7,
+          "isPrimary": false
+        },
+        {
+          "mediaType": "image",
+          "url": "/products/foil-tool-kit/gallery-7.webp",
+          "altText": "Waydoo Flyer EVO Scooter Kit",
+          "sortOrder": 8,
+          "isPrimary": false
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/foil-tool-kit/hero.webp",
+          "contentHash": "69066d236b05b053aff48fa3d0af7abab5d5556b24d582779d3e9330a3918d51",
+          "bytes": 55314,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-1.webp",
+          "url": "/products/foil-tool-kit/gallery-1.webp",
+          "contentHash": "548ed1a425ea88e6b0dc32f6c77b4fd9e40f88917e82156755ac0ac2e50e248e",
+          "bytes": 131240,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-2.webp",
+          "url": "/products/foil-tool-kit/gallery-2.webp",
+          "contentHash": "b987b7d9525b5ad2576662740dc7ca9c75b38462fe11e46a1d3c20a8357ae6e9",
+          "bytes": 117324,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-3.webp",
+          "url": "/products/foil-tool-kit/gallery-3.webp",
+          "contentHash": "a0367ce48d851bf081c68c8a8c63a0b165c39e03e3cb74c627b61010eaef4439",
+          "bytes": 21696,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-4.webp",
+          "url": "/products/foil-tool-kit/gallery-4.webp",
+          "contentHash": "f9c1e5ccf5e9c97cca6955996620de3984eb01cceb29a15d133d78acb0880358",
+          "bytes": 21452,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-5.webp",
+          "url": "/products/foil-tool-kit/gallery-5.webp",
+          "contentHash": "cda00a7900241e9a174b597dbcbce479313ddb484bd9135e2a801a0d25385cb2",
+          "bytes": 55648,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-6.webp",
+          "url": "/products/foil-tool-kit/gallery-6.webp",
+          "contentHash": "07983c3c0351c58cfe86f62ce24ccadb8da5b11a78a618fd85ac36da17f46feb",
+          "bytes": 37248,
+          "skipped": false
+        },
+        {
+          "filename": "gallery-7.webp",
+          "url": "/products/foil-tool-kit/gallery-7.webp",
+          "contentHash": "8a40be6566ff2a9e31f4857981b0402688c6d5b61065b4562df351dfcef3d9f2",
+          "bytes": 39770,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/foil-tool-kit/thumb.webp",
+          "bytes": 8710,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "slug": "gps-ride-tracker-mount",
+      "title": "EVO Remote",
+      "hero": "/products/gps-ride-tracker-mount/hero.webp",
+      "card": "/products/gps-ride-tracker-mount/thumb.webp",
+      "gallery": [],
+      "videos": [],
+      "media": [
+        {
+          "mediaType": "image",
+          "url": "/products/gps-ride-tracker-mount/hero.webp",
+          "altText": "EVO Remote",
+          "sortOrder": 1,
+          "isPrimary": true
+        }
+      ],
+      "files": [
+        {
+          "filename": "hero.webp",
+          "url": "/products/gps-ride-tracker-mount/hero.webp",
+          "contentHash": "4b8e0ffddecf48b0e15991b3602b24f7683277ea8a51de5bb93887c379c19c92",
+          "bytes": 71066,
+          "skipped": false
+        },
+        {
+          "filename": "thumb.webp",
+          "url": "/products/gps-ride-tracker-mount/thumb.webp",
+          "bytes": 10816,
+          "skipped": false
+        }
+      ]
+    }
+  ],
+  "mapping": {
+    "flyer-evo-max-plus-package": [
+      "waydoo-flyer-evo-efoil-evo-max-plus"
+    ],
+    "flyer-evo-pro-plus-package": [
+      "flyer-evo-efoil"
+    ],
+    "flyer-evo-lite-package": [
+      "waydoo-flyer-evo-efoil-evo-lite"
+    ],
+    "flyer-evo-max-plus-board": [
+      "waydoo-flyer-evo-board-max-plus",
+      "waydoo-flyer-evo-efoil-evo-max-plus"
+    ],
+    "flyer-evo-pro-plus-board": [
+      "waydoo-flyer-evo-board-pro-plus",
+      "flyer-evo-efoil"
+    ],
+    "flyer-evo-lite-board": [
+      "waydoo-flyer-evo-board-lite",
+      "waydoo-flyer-evo-efoil-evo-lite"
+    ],
+    "powerflight-battery-28ah": [
+      "waydoo-flyer-evo-battery"
+    ],
+    "powerflight-battery-22ah": [
+      "waydoo-flyer-evo-battery"
+    ],
+    "powerflight-fast-charger": [
+      "waydoo-flyer-evo-powerflight-charger"
+    ],
+    "powerflight-standard-charger": [
+      "waydoo-flyer-evo-powerflight-invertable-charger"
+    ],
+    "carbon-mast-60cm": [
+      "waydoo-flyer-evo-27-mast"
+    ],
+    "carbon-mast-75cm": [
+      "waydoo-flyer-evo-31-mast"
+    ],
+    "carbon-mast-90cm": [
+      "waydoo-flyer-evo-35-mast"
+    ],
+    "front-wing-1300": [
+      "waydoo-flyer-evo-front-wings"
+    ],
+    "front-wing-1100": [
+      "waydoo-flyer-evo-front-wings"
+    ],
+    "front-wing-900": [
+      "waydoo-flyer-evo-front-wings"
+    ],
+    "rear-wing-320": [
+      "waydoo-flyer-evo-gliding-tail-320"
+    ],
+    "rear-wing-280": [
+      "waydoo-flyer-evo-gliding-tail-322"
+    ],
+    "propulsion-6000w": [
+      "waydoo-flyer-evo-propulsion-unit-performance",
+      "evo-propulsion-unit-elite"
+    ],
+    "propulsion-4000w": [
+      "waydoo-flyer-evo-propulsion-unit-standard"
+    ],
+    "wireless-hand-controller": [
+      "waydoo-flyer-evo-remote"
+    ],
+    "controller-wrist-leash": [
+      "waydoo-flyer-evo-remote"
+    ],
+    "board-travel-bag": [
+      "flyer-evo-board-bag-90l"
+    ],
+    "battery-transport-bag": [
+      "waydoo-battery-bag-for-evo",
+      "battery-fire-proof-bag"
+    ],
+    "board-cover-universal": [
+      "waydoo-flyer-evo-propulsion-unit-bag"
+    ],
+    "wing-cover-set": [
+      "waydoo-flyer-evo-front-wings"
+    ],
+    "impact-vest": [
+      "waydoo-impact-vest"
+    ],
+    "efoil-helmet": [
+      "waydoo-impact-vest"
+    ],
+    "board-leash": [
+      "waydoo-flyer-evo-tali-extended-rod-comes-with-bolts"
+    ],
+    "mast-plate-hardware-kit": [
+      "waydoo-flyer-evo-31-mast"
+    ],
+    "propeller-service-kit": [
+      "evo-propeller",
+      "waydoo-evo-folding-propeller",
+      "waydoo-flyer-evo-jet-drive"
+    ],
+    "foil-tool-kit": [
+      "scooter-kit"
+    ],
+    "gps-ride-tracker-mount": [
+      "waydoo-flyer-evo-remote"
+    ]
+  }
+}

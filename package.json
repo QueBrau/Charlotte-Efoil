@@ -4,8 +4,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -n site,waydoo -c blue,magenta \"vite\" \"npm run dev --prefix store\"",
+    "dev:site": "vite",
+    "dev:waydoo": "npm run dev --prefix store",
     "build:templates": "node scripts/compile-newsletter-templates.mjs",
+    "import:waydoo-media": "node scripts/waydoo-media-importer/index.mjs",
+    "import:waydoo-media:refresh": "node scripts/waydoo-media-importer/index.mjs --refresh",
+    "generate:product-media-seed": "node scripts/generate-product-media-seed.mjs",
+    "seed:store": "node scripts/run-store-seed.mjs",
     "build": "npm run build:templates && vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -15,13 +21,19 @@
     "@aws-sdk/client-sesv2": "^3.1079.0",
     "@netlify/blobs": "^10.7.9",
     "@supabase/supabase-js": "^2.45.4",
+    "animejs": "^4.5.0",
     "chart.js": "^4.5.1",
     "grapesjs": "^0.23.2",
     "grapesjs-preset-newsletter": "^1.0.2"
   },
   "devDependencies": {
     "@netlify/functions": "^2.8.1",
+    "axios": "^1.18.1",
+    "cheerio": "^1.2.0",
+    "concurrently": "^9.2.4",
     "mjml": "^5.4.0",
+    "pg": "^8.16.3",
+    "sharp": "^0.34.5",
     "vite": "^6.3.5",
     "vitest": "^4.1.10"
   }

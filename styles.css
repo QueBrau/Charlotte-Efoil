@@ -359,6 +359,7 @@ h1, h2, h3 {
   z-index: 2;
   pointer-events: auto;
   padding: calc(var(--header-h) + 3rem) 0 5rem;
+  --hero-headline-lift: clamp(4rem, 12vh, 8rem);
   color: var(--white);
   will-change: transform, opacity;
 }
@@ -367,6 +368,12 @@ h1, h2, h3 {
   max-width: 11ch;
   margin: 0 0 1.25rem;
   font-size: clamp(2.8rem, 7vw, 5.2rem);
+}
+
+.hero-content h1::after {
+  content: "";
+  display: block;
+  height: var(--hero-headline-lift);
 }
 
 .hero-lead {
@@ -507,8 +514,15 @@ h1, h2, h3 {
 
 .experience-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.experiences-section {
+  padding-top: clamp(2.25rem, 4.5vw, 3.5rem);
+  padding-bottom: clamp(4rem, 8vw, 6.5rem);
 }
 
 .experience-card {
@@ -969,7 +983,7 @@ h1, h2, h3 {
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
   gap: 2.5rem;
-  align-items: center;
+  align-items: start;
 }
 
 .about-visual {
@@ -1133,16 +1147,31 @@ h1, h2, h3 {
 
 .footer-bottom p { margin: 0; }
 
-/* Reveal animation */
-[data-reveal] {
+/* Motion (anime.js) */
+[data-reveal]:not(.is-visible) {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transform: translateY(28px);
 }
 
 [data-reveal].is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+}
+
+.hero-content h1 [data-word] {
+  display: inline-block;
+}
+
+.motion-enabled .hero-scroll-line {
+  animation: none;
+  transform-origin: top center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* Responsive */
@@ -1263,6 +1292,7 @@ h1, h2, h3 {
 
   .hero-content {
     padding: calc(var(--header-h) + 2rem) 0 4.5rem;
+    --hero-headline-lift: clamp(3rem, 9vh, 5.5rem);
   }
 
   .hero-content h1 {
